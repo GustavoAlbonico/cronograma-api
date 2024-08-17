@@ -1,0 +1,18 @@
+spring:
+  jpa:
+    database: POSTGRESQL
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cronograma
+    username: postgres
+    password: postgress
+    driverClassName: org.postgresql.Driver
+  security:
+    token:
+    secret: "faltatempo"
