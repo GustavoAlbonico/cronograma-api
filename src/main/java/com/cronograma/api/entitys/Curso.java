@@ -30,7 +30,7 @@ public class Curso {
     private Integer status;
 
     @ManyToMany
-    @JoinTable(name = "curso_fase",joinColumns = @JoinColumn,inverseJoinColumns = @JoinColumn)
+    @JoinTable(name = "curso_fase",joinColumns = @JoinColumn(name = "curso_id"),inverseJoinColumns = @JoinColumn(name = "fase_id"))
     private Set<Fase> fases = new HashSet<>();
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
