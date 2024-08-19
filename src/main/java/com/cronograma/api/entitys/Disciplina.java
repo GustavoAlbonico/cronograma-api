@@ -55,4 +55,21 @@ public class Disciplina {
 
     @OneToMany(mappedBy = "disciplina")
     private Set<DiaCronograma> diasCronograma = new HashSet<>();
+
+    @Override
+    public String toString() {
+        return "Disciplina{" + '\'' +
+                "id=" + id + '\'' +
+                ", nome='" + nome + '\'' +
+                ", cargaHoraria=" + cargaHoraria + '\'' +
+                ", cargaHorariaDiaria=" + cargaHorariaDiaria + '\'' +
+                ", corHexadecimal='" + corHexadecimal + '\'' +
+                ", dataCriacao=" + dataCriacao + '\'' +
+                ", status=" + status + '\'' +
+                ", curso=" + curso + '\'' +
+                ", fase=" + fase + '\'' +
+                ", professor=" + professor + '\'' +
+                ", diasCronograma=" + diasCronograma + '\'' +
+                '}';
+    }
 }
