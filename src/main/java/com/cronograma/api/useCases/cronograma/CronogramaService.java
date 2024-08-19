@@ -2,6 +2,7 @@ package com.cronograma.api.useCases.cronograma;
 
 import com.cronograma.api.entitys.DiaSemanaDisponivel;
 import com.cronograma.api.entitys.Disciplina;
+import com.cronograma.api.entitys.Professor;
 import com.cronograma.api.entitys.enums.DiaSemanaEnum;
 import com.cronograma.api.useCases.cronograma.domains.CronogramaRequestDom;
 import com.cronograma.api.useCases.cronograma.domains.CronogramaResponseDom;
@@ -22,56 +23,82 @@ public class CronogramaService {
 
     public List<String> gerarCronograma(CronogramaRequestDom cronograma){
 
-        Set<DiaSemanaEnum> diasSemanaLetivos =
-                buscarQuantidadeDeDiasLetivosPorSemana(cronograma.dataInicial(),cronograma.dataFinal(),1L);//FASEID
+        double quantidadeDiasDeAulasDisponiveisPorCronograma =
+                buscarQuantidadeDiasDeAulasDisponiveisPorCronograma(cronograma.dataInicial(),cronograma.dataFinal());
+        double quantidadeDiasDeAulaLetivosNecessarios =
+                buscarQuantidadeDiasAulaLetivosNecessarios(1L);//FASEID
+        int quantidadeDiasDeAulaLetivosPorSemana =
+                buscarQuantidadeDeDiasLetivosPorSemana(quantidadeDiasDeAulasDisponiveisPorCronograma,quantidadeDiasDeAulaLetivosNecessarios);
+
+        validarQuantidadeDiasDeAulaLetivosDisponiveisPelosProfessores(1L,1L,quantidadeDiasDeAulaLetivosPorSemana); // A TRATAR
 
         List<String> listaString = new ArrayList<>();
         return listaString;
     }
 
-    private Set<DiaSemanaEnum> buscarQuantidadeDeDiasLetivosPorSemana(LocalDate cronogramaDataInicial, LocalDate cronogramaDataFinal,Long faseId){
+    public boolean validarQuantidadeDiasDeAulaLetivosDisponiveisPelosProfessores(Long cursoId, Long faseId,double quantidadeDiasDeAulaLetivosPorSemana) {
+        Optional<Set<DiaSemanaEnum>> diasDaSemanaEncontrados =
+                disciplinaRepository.buscarDiasDaSemanaDisponiveisRelacionadosProfessoresPorCursoIdPorFaseId(cursoId, faseId);
+        Set<DiaSemanaEnum> diasDaSemanaDisponiveisPorProfessores = diasDaSemanaEncontrados.get();
 
-        Map<DiaSemanaEnum,Integer> diasAulaPorDiaDaSemana = new LinkedHashMap<>();
+        if (quantidadeDiasDeAulaLetivosPorSemana > diasDaSemanaDisponiveisPorProfessores.size()) {
 
-        Double diasAulasDisponiveisSegundaASexta = 0.0;
-        Double diasAulasDisponiveisSegundaASabado = 0.0;
+            double quantidadeDiaDaSemanaAdicional = quantidadeDiasDeAulaLetivosPorSemana -  diasDaSemanaDisponiveisPorProfessores.size();
+
+            Set<DiaSemanaEnum> diasDaSemanaSugestoes = Arrays.stream(DiaSemanaEnum.values())
+                    .filter(diaSemanaEnum -> diaSemanaEnum != DiaSemanaEnum.DOMINGO)
+                    .filter(diaSemanaEnum -> (!diasDaSemanaDisponiveisPorProfessores.contains(diaSemanaEnum)))
+                    .collect(Collectors.toSet());
+            //retornar a mensagem falando quantos dias da semana precisam
+            // ser disponibilizado a mais e os dias possiveis a ser adicionado
+            //e informando o curso e fase
+
+            System.out.println(quantidadeDiaDaSemanaAdicional);
+
+            for (DiaSemanaEnum dia :diasDaSemanaSugestoes){
+                System.out.println(dia);
+            }
+        }
+        return true;
+    }
+
+    private int buscarQuantidadeDeDiasLetivosPorSemana(double quantidadeDiasDeAulasDisponiveisPorCronograma, double quantidadeDiasDeAulaLetivosNecessarios){
+        double mediaDiasDeAulaDisponiveisPorDiaDaSemana = quantidadeDiasDeAulasDisponiveisPorCronograma / (DiaSemanaEnum.values().length - 1); //tirando domingo
+
+        int quantidadeDeDiasLetivosPorSemana = 0;
+        double diasAulaLetivosNecessariosAuxiliar = 0.0;
+
+        while (diasAulaLetivosNecessariosAuxiliar < quantidadeDiasDeAulaLetivosNecessarios){
+            quantidadeDeDiasLetivosPorSemana++;
+            diasAulaLetivosNecessariosAuxiliar+= mediaDiasDeAulaDisponiveisPorDiaDaSemana;
+        }
+
+        return quantidadeDeDiasLetivosPorSemana;
+    }
+
+    private double buscarQuantidadeDiasAulaLetivosNecessarios(Long faseId){
+        Optional<Set<Disciplina>> disciplinasEncontradas = disciplinaRepository.findByFaseId(faseId);//faseId
+        Set<Disciplina> listaDisciplinas = disciplinasEncontradas.get();
+
+        return  listaDisciplinas.stream()
+                .map(disciplina ->
+                        (disciplina.getCargaHoraria() / disciplina.getCargaHorariaDiaria()))
+                .mapToDouble(Double::doubleValue)
+                .sum();
+    }
+
+    private double buscarQuantidadeDiasDeAulasDisponiveisPorCronograma(LocalDate cronogramaDataInicial,LocalDate cronogramaDataFinal){
+        double quantidadeDiasDeAulasDisponiveisPorCronograma = 0.0;
 
         LocalDate dataInicialAuxiliar = cronogramaDataInicial;
         while(dataInicialAuxiliar.isBefore(cronogramaDataFinal)){
             DayOfWeek dayOfWeek = dataInicialAuxiliar.getDayOfWeek();
             if(!dayOfWeek.equals(DayOfWeek.SUNDAY)){
-                DiaSemanaEnum diaDaSemana = DiaSemanaEnum.dayOfWeekParaDiaSemanaEnum(dayOfWeek);
-                diasAulaPorDiaDaSemana.merge(diaDaSemana, 1, Integer::sum);
-                if(!dayOfWeek.equals(DayOfWeek.SATURDAY)){
-                    diasAulasDisponiveisSegundaASexta++;
-                }
-                diasAulasDisponiveisSegundaASabado++;
+                quantidadeDiasDeAulasDisponiveisPorCronograma++;
             }
             dataInicialAuxiliar = dataInicialAuxiliar.plusDays(1);
         }
 
-        for(Map.Entry<DiaSemanaEnum,Integer> entry : diasAulaPorDiaDaSemana.entrySet()){
-            System.out.println(entry.getKey() + " " + entry.getValue());
-        }
-
-        System.out.println("Segunda a Sexta" +diasAulasDisponiveisSegundaASexta);
-        System.out.println("Segunda a Sabado" + diasAulasDisponiveisSegundaASabado);
-
-//        Optional<Set<Disciplina>> disciplinasEncontradas = disciplinaRepository.findByFaseId(faseId);//faseId
-//        Set<Disciplina> listaDisciplinas = disciplinasEncontradas.get();
-//
-//        Map<Disciplina,Double> diasAulaPorDisciplina = listaDisciplinas.stream().collect(Collectors.toMap( //SE NAO USAR JA FAZER A SOMA AQUI
-//                disciplina -> disciplina,
-//                disciplina -> disciplina.getCargaHoraria() / disciplina.getCargaHorariaDiaria()
-//        ));
-//
-//        Double diasAulaTotalDisciplinas =
-//                diasAulaPorDisciplina.values().stream()
-//                        .mapToDouble(Double::doubleValue)
-//                        .sum();
-
-
-        Set<DiaSemanaEnum> lista = new HashSet<>();
-        return lista;
+        return quantidadeDiasDeAulasDisponiveisPorCronograma;
     }
 }
