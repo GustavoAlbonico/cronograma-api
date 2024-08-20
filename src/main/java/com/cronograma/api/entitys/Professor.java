@@ -1,17 +1,20 @@
 package com.cronograma.api.entitys;
 
+import com.cronograma.api.entitys.enums.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@SQLDelete(sql = "UPDATE professor SET status = 0 WHERE id=?")
+@SQLDelete(sql = "UPDATE usuario SET status_enum = 'INATIVO' WHERE id=?")
+@SQLRestriction("status_enum = 'ATIVO'")
 @Getter
 @Setter
 public class Professor {
@@ -22,17 +25,16 @@ public class Professor {
 
     @Column(nullable = false)
     private String nomeCompleto;
+
     @Column(nullable = false, length = 11)
     private String cpf;
 
     @Column(nullable = false, length = 50)
     private String telefone;
 
-    @Column(nullable = false,columnDefinition = "DATE DEFAULT CURRENT_DATE")
-    private LocalDate dataCriacao;
-
-    @Column(nullable = false,columnDefinition = "INTEGER DEFAULT 1")
-    private Integer status;
+    @Column(nullable = false,columnDefinition = "VARCHAR(255) DEFAULT 'ATIVO'")
+    @Enumerated(EnumType.STRING)
+    private StatusEnum statusEnum;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToOne
@@ -41,9 +43,6 @@ public class Professor {
 
     @OneToMany(mappedBy = "professor")
     private Set<DiaSemanaDisponivel> diasSemanaDisponivel =  new HashSet<>();
-
-    @OneToMany(mappedBy = "professor")
-    private Set<DataExcecao> datasExcecao = new HashSet<>();
 
     @OneToMany(mappedBy = "professor")
     private Set<Disciplina> disciplinas = new HashSet<>();

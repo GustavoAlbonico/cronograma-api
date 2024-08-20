@@ -1,17 +1,20 @@
 package com.cronograma.api.entitys;
 
+import com.cronograma.api.entitys.enums.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@SQLDelete(sql = "UPDATE coordenador SET status = 0 WHERE id=?")
+@SQLDelete(sql = "UPDATE usuario SET status_enum = 'INATIVO' WHERE id=?")
+@SQLRestriction("status_enum = 'ATIVO'")
 @Getter
 @Setter
 public class Coordenador {
@@ -29,11 +32,9 @@ public class Coordenador {
     @Column(nullable = false, length = 50)
     private String telefone;
 
-    @Column(nullable = false,columnDefinition = "DATE DEFAULT CURRENT_DATE")
-    private LocalDate dataCriacao;
-
-    @Column(nullable = false,columnDefinition = "INTEGER DEFAULT 1")
-    private Integer status;
+    @Column(nullable = false,columnDefinition = "VARCHAR(255) DEFAULT 'ATIVO'")
+    @Enumerated(EnumType.STRING)
+    private StatusEnum statusEnum;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToOne
