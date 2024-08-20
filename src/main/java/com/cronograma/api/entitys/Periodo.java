@@ -1,8 +1,6 @@
 package com.cronograma.api.entitys;
 
-import com.cronograma.api.entitys.enums.DiaSemanaEnum;
 import com.cronograma.api.entitys.enums.StatusEnum;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,28 +8,29 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @SQLDelete(sql = "UPDATE usuario SET status_enum = 'INATIVO' WHERE id=?")
 @SQLRestriction("status_enum = 'ATIVO'")
 @Getter
 @Setter
-public class DiaSemanaDisponivel {
+public class Periodo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    DiaSemanaEnum diaSemanaEnum;
+    private LocalDate dataInicial;
+
+    @Column(nullable = false)
+    private LocalDate dataFinal;
 
     @Column(nullable = false,columnDefinition = "VARCHAR(255) DEFAULT 'ATIVO'")
     @Enumerated(EnumType.STRING)
     private StatusEnum statusEnum;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Professor professor;
+    @OneToMany(mappedBy = "periodo")
+    private Set<Cronograma> cronogramas;
 }

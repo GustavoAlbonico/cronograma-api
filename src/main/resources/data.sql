@@ -2,12 +2,13 @@
 TRUNCATE TABLE usuario RESTART IDENTITY CASCADE;
 TRUNCATE TABLE professor RESTART IDENTITY CASCADE;
 TRUNCATE TABLE coordenador RESTART IDENTITY CASCADE;
-TRUNCATE TABLE data_excecao RESTART IDENTITY CASCADE;
+TRUNCATE TABLE data_bloqueada RESTART IDENTITY CASCADE;
 TRUNCATE TABLE dia_semana_disponivel RESTART IDENTITY CASCADE;
 TRUNCATE TABLE fase RESTART IDENTITY CASCADE;
 TRUNCATE TABLE curso RESTART IDENTITY CASCADE;
 TRUNCATE TABLE curso_fase RESTART IDENTITY CASCADE;
 TRUNCATE TABLE disciplina RESTART IDENTITY CASCADE;
+TRUNCATE TABLE periodo RESTART IDENTITY CASCADE;
 
 
 --INSERTS
@@ -113,17 +114,14 @@ VALUES
   ('SEXTA_FEIRA', 16),
   ('SEGUNDA_FEIRA', 16);
 
--- DATA EXCECAO
-INSERT INTO  data_excecao
-  (motivo, data, professor_id)
+-- DATA BLOQUEADA
+INSERT INTO data_bloqueada
+  (motivo, data, usuario_id)
 VALUES
-  ('Preciso de folga', '2024-10-22', 1),
-  ('Tirar o dente', '2024-11-05', 1),
-  ('A padroa falou para pedir', '2024-12-08', 2),
-  ('Reunião do meu filho', '2024-09-17', 3),
-  ('Vovó morreu', '2024-09-28', 7),
-  ('Não quero trabalhar nesse dia', '2024-08-10', 8);
-
+  ('Natal','2024-12-25', 2),
+  ('Feriado','2024-09-20', 2),
+  ('Feriado1','2024-10-08', 2),
+  ('Feriado2','2024-08-19', 2);
 
 --COORDENADOR
 INSERT INTO coordenador
@@ -159,39 +157,45 @@ VALUES
 
 --DISCIPLINA
 INSERT INTO disciplina
-  (carga_horaria, cor_hexadecimal, nome, carga_horaria_diaria, fase_id, curso_id, professor_id)
+  (nome, carga_horaria, carga_horaria_diaria, cor_hexadecimal, extensao_boolean_enum, curso_id, fase_id, professor_id)
 VALUES
-  (76, '#00FF00', 'Engenharia de requisitos', 4, 1, 1, 1),
-  (76, '#800080', 'Modelagem de dados', 4, 1, 1, 2),
-  (152, '#964b00', 'Introdução a programação de computadores', 4, 1, 1, 3),
-  (40, '#56070c', 'Fundamentos de pesquisa', 4, 1, 1, 4),
-  (36, '#Ffa500', 'Introdução a Computação', 4, 1, 1, 5),
+  ('Engenharia de requisitos', 76, 4, '#00FF00', 'NAO', 1, 1, 1),
+  ('Modelagem de dados', 76, 4, '#800080', 'NAO', 1, 1, 2),
+  ('Introdução a programação de computadores', 152, 4, '#964b00', 'NAO', 1, 1, 3),
+  ('Fundamentos de pesquisa', 40, 4, '#56070c', 'NAO', 1, 1, 4),
+  ('Introdução a Computação', 36, 4, '#Ffa500', 'NAO', 1, 1, 5),
 
-  (76, '#1E90FF', 'Programação Orientada a Objetos', 4, 2, 1, 6),
-  (40, '#006400', 'Estrutura de dados', 4, 2, 1, 7),
-  (36, '#DAA520', 'UI/UX Design de sistema', 4, 2, 1, 8),
-  (76, '#8A2BE2', 'SGBD', 4, 2, 1, 9),
-  (76, '#FF1493', 'Análise Orientada a Objetos', 4, 2, 1, 10),
-  (76, '#F0E68C', 'Desenvolvimento Web', 4, 2, 1, 11),
+  ('Programação Orientada a Objetos', 76, 4, '#1E90FF', 'NAO', 1, 2, 6),
+  ('Estrutura de dados', 40, 4, '#006400', 'NAO', 1, 2, 7),
+  ('UI/UX Design de sistema', 36, 4, '#DAA520', 'NAO', 1, 2, 8),
+  ('SGBD', 76, 4, '#8A2BE2', 'NAO', 1, 2, 9),
+  ('Análise Orientada a Objetos', 76, 4, '#FF1493', 'NAO', 1, 2, 10),
+  ('Desenvolvimento Web', 76, 4, '#F0E68C', 'NAO', 1, 2, 11),
 
-  (76, '#FF8C00', 'Cloud & ITOps', 4, 3, 1, 12),
-  (40, '#9933FF', 'Tecnologias e sistemas de informação gerencial', 4, 3, 1, 13),
-  (36, '#FF3333', 'Arquitetura de software', 4, 3, 1, 14),
-  (76, '#6666FF', 'Desenvolvimento Back End', 4, 3, 1, 15),
-  (76, '#666600', 'Qualidade e testes de software', 4, 3, 1, 16),
-  (76, '#330000', 'Desenvolvimento Front End', 4, 3, 1, 1),
+  ('Cloud & ITOps', 76, 4, '#FF8C00', 'NAO', 1, 3, 12),
+  ('Tecnologias e sistemas de informação gerencial', 40, 4, '#9933FF', 'NAO', 1, 3, 13),
+  ('Arquitetura de software', 36, 4, '#FF3333', 'NAO', 1, 3, 14),
+  ('Desenvolvimento Back End', 76, 4, '#6666FF', 'NAO', 1, 3, 15),
+  ('Qualidade e testes de software', 76, 4, '#666600', 'NAO', 1, 3, 16),
+  ('Desenvolvimento Front End', 76, 4, '#330000', 'NAO', 1, 3, 1),
 
-  (156, '#99004C', 'Desenvolvimento Web', 4, 4, 1, 2),
-  (76, '#003300', 'Desenvolvimento de sistemas embarcados', 4, 4, 1, 3),
-  (76, '#FF6666', 'Engenharia de software', 4, 4, 1, 4),
-  (36, '#003319', 'Fundamentos de projeto', 4, 4, 1, 5),
-  (36, '#660033', 'Codificação de segurança da informação', 4, 4, 1, 6),
-  (20, '#00FF80', 'Soluções para startup', 4, 4, 1, 7),
+  ('Desenvolvimento Web', 156, 4, '#99004C', 'NAO', 1, 4, 2),
+  ('Desenvolvimento de sistemas embarcados', 76, 4, '#003300', 'NAO', 1, 4, 3),
+  ('Engenharia de software', 76, 4, '#FF6666', 'NAO', 1, 4, 4),
+  ('Fundamentos de projeto', 36, 4, '#003319', 'NAO', 1, 4, 5),
+  ('Codificação de segurança da informação', 36, 4, '#660033', 'NAO', 1, 4, 6),
+  ('Soluções para startup', 20, 4, '#00FF80', 'NAO', 1, 4, 7),
 
-  (36, '#FFB266', 'Legilação aplicada a informação', 4, 5, 1, 8),
-  (40, '#4C0099', 'Metodologia do trabalho cientifico', 4, 5, 1, 9),
-  (76, '#99FFFF', 'Topicos especiais em ADS', 4, 5, 1, 10),
-  (76, '#FF66B2', 'Desenvolvimento de Aplicação(Projeto)', 4, 5, 1, 11),
-  (76, '#6A5ACD', 'Desenvolvimento para dispositivos móveis', 4, 5, 1, 12),
-  (40, '#20B2AA', 'Desenvolvimento de aplicação(Sistema)', 4, 5, 1, 13),
-  (36, '#32CD32', 'Certificações em ADS', 4, 5, 1, 14);
+  ('Legislação aplicada a informação', 36, 4, '#FFB266', 'NAO', 1, 5, 8),
+  ('Metodologia do trabalho cientifico', 40, 4, '#4C0099', 'NAO', 1, 5, 9),
+  ('Tópicos especiais em ADS', 76, 4, '#99FFFF', 'NAO', 1, 5, 10),
+  ('Desenvolvimento de Aplicação(Projeto)', 76, 4, '#FF66B2', 'NAO', 1, 5, 11),
+  ('Desenvolvimento para dispositivos móveis', 76, 4, '#6A5ACD', 'NAO', 1, 5, 12),
+  ('Desenvolvimento de aplicação(Sistema)', 40, 4, '#20B2AA', 'NAO', 1, 5, 13),
+  ('Certificações em ADS', 36, 4, '#32CD32', 'NAO', 1, 5, 14);
+
+-- PERIODO
+INSERT INTO  periodo
+  (data_inicial, data_final)
+VALUES
+  ('2024-07-29', '2024-12-12');
