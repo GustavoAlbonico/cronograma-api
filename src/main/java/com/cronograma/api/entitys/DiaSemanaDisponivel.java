@@ -34,4 +34,14 @@ public class DiaSemanaDisponivel {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Professor professor;
+
+    @Override
+    public String toString() {
+        return "DiaSemanaDisponivel{" +
+                "id=" + id +
+                ", diaSemanaEnum=" + diaSemanaEnum +
+                ", statusEnum=" + statusEnum +
+                ", professor=" + professor +
+                '}';
+    }
 }

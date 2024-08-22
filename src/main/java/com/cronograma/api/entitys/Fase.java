@@ -35,4 +35,15 @@ public class Fase {
 
     @OneToMany(mappedBy = "fase")
     private Set<Disciplina> disciplinas = new HashSet<>();
+
+    @Override
+    public String toString() {
+        return "Fase{" +
+                "id=" + id +
+                ", numero=" + numero +
+                ", statusEnum=" + statusEnum +
+                ", cursos=" + cursos +
+                ", disciplinas=" + disciplinas +
+                '}';
+    }
 }
