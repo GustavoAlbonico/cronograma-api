@@ -46,4 +46,13 @@ public class Professor {
 
     @OneToMany(mappedBy = "professor")
     private Set<Disciplina> disciplinas = new HashSet<>();
+
+    @Override
+    public String toString() {
+        return "Professor{" +
+                "id=" + id +
+                ", nomeCompleto='" + nomeCompleto + '\'' +
+                ", diasSemanaDisponivel=" + diasSemanaDisponivel +
+                '}';
+    }
 }

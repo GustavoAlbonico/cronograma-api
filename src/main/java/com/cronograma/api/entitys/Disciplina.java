@@ -67,6 +67,7 @@ public class Disciplina {
                 "id=" + id +
                 ", nome='" + nome + '\'' +
                 ", cargaHoraria=" + cargaHoraria +
+                ", professor=" + professor +
                 '}';
     }
 }

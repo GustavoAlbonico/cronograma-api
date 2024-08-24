@@ -158,4 +158,4 @@ VALUES
 INSERT INTO  periodo
   (data_inicial, data_final)
 VALUES
-  ('2024-07-29', '2024-12-12');
+  ('2024-07-29', '2024-12-13');

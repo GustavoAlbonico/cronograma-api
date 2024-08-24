@@ -41,7 +41,6 @@ public class DiaSemanaDisponivel {
                 "id=" + id +
                 ", diaSemanaEnum=" + diaSemanaEnum +
                 ", statusEnum=" + statusEnum +
-                ", professor=" + professor +
                 '}';
     }
 }

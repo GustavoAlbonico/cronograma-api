@@ -34,7 +34,7 @@ public class CronogramaService {
     private ProfessorRepository professorRepository;
 
 
-    public List<String> gerarCronograma(CronogramaRequestDom cronograma){
+    public Set<CronogramaDisciplinaDom> gerarCronograma(CronogramaRequestDom cronograma){
 
         //vai pegar a disciplina do professor X junto disso os dias que precisa essa disciplina
         //e os dias que esse professor tem disponivel com a quantidade de dias disponiveis pelo periodo
@@ -70,52 +70,54 @@ public class CronogramaService {
 
         Set<CronogramaDisciplinaDom> cronogramaFaseOficial = new HashSet<>();
 
-
         for (CronogramaDisciplinaDiasAulaDom disciplinaDiasAula : disciplinasDiasAula) {
-            DiaSemanaEnum diaSemanaEnumAuxiliar = DiaSemanaEnum.SEGUNDA_FEIRA;
+              DiaSemanaEnum diaSemanaEnum = disciplinaDiasAula.disciplina().getProfessor().getDiasSemanaDisponivel()
+                        .stream()
+                        .findFirst()
+                        .get().getDiaSemanaEnum();
 
-            for (int x = 0 ; x < disciplinaDiasAula.disciplinaQuantidadeDiasAulaPorSemana().get(diaSemanaEnumAuxiliar); x++){
+            for (double x = 0.0 ; x < Math.ceil(disciplinaDiasAula.disciplinaQuantidadeDiasAulaPorSemana().get(diaSemanaEnum)); x++){
                 CronogramaDisciplinaDom cronogramaDisciplinaAntigo = new CronogramaDisciplinaDom();
+                boolean primeiraVerificacao = true;
                 double quantidadeDiasRestantesMelhorAproveitamento = 0.0;
 
-                for (DiaSemanaEnum diaSemanaEnum : disciplinaDiasAula.disciplinaQuantidadeDiasAulaPorSemana().keySet()) {
-                    diaSemanaEnumAuxiliar = diaSemanaEnum;
-                    boolean professorPossuiEsseDiaSemanaDispivel = disciplinaDiasAula
-                            .disciplina()
-                            .getProfessor()
-                            .getDiasSemanaDisponivel()
-                            .stream().anyMatch(diaSemana -> (diaSemana.getDiaSemanaEnum().equals(diaSemanaEnum)));
-    //FAZER SELECT
-                    //TALVEZ MUDAR PARA FAZER CONTROLANDO A HORA
-                    if (professorPossuiEsseDiaSemanaDispivel) {
+                for(DiaSemanaDisponivel diaSemanaDisponivel : disciplinaDiasAula.disciplina().getProfessor().getDiasSemanaDisponivel()){
+                    diaSemanaEnum = diaSemanaDisponivel.getDiaSemanaEnum();
+                    final double PORCENTAGEM_DIAS_AULA_OCUPADOS =
+                            disciplinaDiasAula.disciplinaQuantidadeDiasAulaPorSemana().get(diaSemanaDisponivel.getDiaSemanaEnum()) * 100;
 
-                        double quantidadeDiasRestantes =
-                                quantidadeAulasPorDiaDaSemana.get(diaSemanaEnum) -
-                                        disciplinaDiasAula.quantidadeDiasAulaNecessariosPorDisciplina();
+                    if(primeiraVerificacao){
+                        quantidadeDiasRestantesMelhorAproveitamento = (PORCENTAGEM_DIAS_AULA_OCUPADOS > 75) ? 100.0 : 0.0;
+                        primeiraVerificacao = false;
+                    }
 
-                        if (quantidadeDiasRestantes >= 0 && quantidadeDiasRestantesMelhorAproveitamento < quantidadeDiasRestantes) {
-                            quantidadeDiasRestantesMelhorAproveitamento = quantidadeDiasRestantes;
-                            CronogramaDisciplinaDom cronogramaDisciplina =
-                                    new CronogramaDisciplinaDom(disciplinaDiasAula.disciplina(), diaSemanaEnum, quantidadeDiasRestantes);
+                    final double QUANTIDADE_DIAS_AULA_NECESSARIOS_POR_DIA_SEMANA =
+                            disciplinaDiasAula.quantidadeDiasAulaNecessariosPorDisciplina() / Math.ceil(disciplinaDiasAula.disciplinaQuantidadeDiasAulaPorSemana().get(diaSemanaDisponivel.getDiaSemanaEnum()));
 
-                            boolean diaDaSemanaEmUso = false;
-                            double quantidadeDiasAulaRestante = 0.0;
-                            if(!cronogramaFaseOficial.isEmpty()){
-                                 diaDaSemanaEmUso = cronogramaFaseOficial.stream()
-                                        .anyMatch(cronogramaDisciplinaMath -> (cronogramaDisciplinaMath.getDiaSemanaEnum().equals(diaSemanaEnum)));
+                    final double QUANTIDADE_DIAS_AULA_RESTANTES =
+                            quantidadeAulasPorDiaDaSemana.get(diaSemanaDisponivel.getDiaSemanaEnum()) - QUANTIDADE_DIAS_AULA_NECESSARIOS_POR_DIA_SEMANA;
 
-                                 quantidadeDiasAulaRestante = cronogramaFaseOficial.stream()
-                                        .filter(cronogramaDisciplinaMath -> (cronogramaDisciplinaMath.getDiaSemanaEnum().equals(diaSemanaEnum)))
-                                        .mapToDouble(CronogramaDisciplinaDom::getQuantidadeDiasAulaRestante)
-                                        .sum();
-                            }
+                    if ((QUANTIDADE_DIAS_AULA_RESTANTES >= 0) &&
+                            ((PORCENTAGEM_DIAS_AULA_OCUPADOS > 75) ? (quantidadeDiasRestantesMelhorAproveitamento > QUANTIDADE_DIAS_AULA_RESTANTES) : (quantidadeDiasRestantesMelhorAproveitamento < QUANTIDADE_DIAS_AULA_RESTANTES))
+                    ) {
 
-                            if(!diaDaSemanaEmUso || quantidadeDiasAulaRestante >= disciplinaDiasAula.quantidadeDiasAulaNecessariosPorDisciplina()){
+                        quantidadeDiasRestantesMelhorAproveitamento = QUANTIDADE_DIAS_AULA_RESTANTES;
+                        CronogramaDisciplinaDom cronogramaDisciplina =
+                                new CronogramaDisciplinaDom(disciplinaDiasAula.disciplina(), diaSemanaDisponivel.getDiaSemanaEnum(), QUANTIDADE_DIAS_AULA_RESTANTES);
+
+                        final boolean DIA_DA_SEMANA_EM_USO = cronogramaFaseOficial.stream()
+                                .anyMatch(cronogramaDisciplinaMath -> (cronogramaDisciplinaMath.getDiaSemanaEnum().equals(diaSemanaDisponivel.getDiaSemanaEnum())));
+
+                        final double DISCIPLINA_QUANTIDADE_DIAS_AULA_RESTANTES = cronogramaFaseOficial.stream()
+                                .filter(cronogramaDisciplinaMath -> (cronogramaDisciplinaMath.getDiaSemanaEnum().equals(diaSemanaDisponivel.getDiaSemanaEnum())))
+                                .mapToDouble(CronogramaDisciplinaDom::getQuantidadeDiasAulaRestante)
+                                .sum();
+
+                        if(!DIA_DA_SEMANA_EM_USO || DISCIPLINA_QUANTIDADE_DIAS_AULA_RESTANTES >= QUANTIDADE_DIAS_AULA_NECESSARIOS_POR_DIA_SEMANA){
                                 cronogramaFaseOficial.add(cronogramaDisciplina);
                                 cronogramaFaseOficial.remove(cronogramaDisciplinaAntigo);
 
                                 cronogramaDisciplinaAntigo = cronogramaDisciplina;
-                            }
                         }
                     }
                 }//fim for diasemana
@@ -123,11 +125,17 @@ public class CronogramaService {
         }//fim map
 
         for(CronogramaDisciplinaDom cronogramaDisciplina : cronogramaFaseOficial){
-            System.out.println(cronogramaDisciplina);
+            System.out.println(cronogramaDisciplina.getDisciplina().getNome() + " "
+                    + cronogramaDisciplina.getDisciplina().getCargaHoraria() + " "
+                    + cronogramaDisciplina.getDiaSemanaEnum() + " "
+                    + cronogramaDisciplina.getQuantidadeDiasAulaRestante());
+            cronogramaDisciplina.getDisciplina().getProfessor().getDiasSemanaDisponivel()
+                    .stream()
+                    .forEach(diaSemanaDisponivel -> System.out.println(diaSemanaDisponivel.getDiaSemanaEnum()));
+            System.out.println("\n");
         }
 
-        List<String> listaString = new ArrayList<>();
-        return listaString;
+        return cronogramaFaseOficial;
     }
 
     private Periodo buscarPeriodoAtivoAtual() {
@@ -146,7 +154,7 @@ public class CronogramaService {
     }
 
     private Map<DiaSemanaEnum,Integer> buscarQuantidadeAulasDisponveisPorDiaDaSemana(LocalDate dataInicial, LocalDate dataFinal){
-        Map<DiaSemanaEnum,Integer> quantidadeAulasPorDiaDaSemana = new LinkedHashMap<>();
+        Map<DiaSemanaEnum,Integer> quantidadeAulasPorDiaDaSemana = new HashMap<>();
 
         LocalDate dataInicialAuxiliar = dataInicial;
         while(dataInicialAuxiliar.isBefore(dataFinal)){
@@ -164,17 +172,17 @@ public class CronogramaService {
     private Set<CronogramaDisciplinaDiasAulaDom> buscarQuantidadeAulasPorDisciplina(Long faseId, Map<DiaSemanaEnum,Integer> quantidadeAulasPorDiaDaSemana){
         Set<Disciplina> disciplinasEncontradas =
                 disciplinaRepository.buscarDisciplinasPorFaseIdOrdenandoPorQtdDiaDisponivelProfessor(faseId).get();//faseId
-        Set<CronogramaDisciplinaDiasAulaDom> disciplinasDiasAula = new HashSet<>();
+        Set<CronogramaDisciplinaDiasAulaDom> disciplinasDiasAula = new LinkedHashSet<>();
 
         for (Disciplina disciplina : disciplinasEncontradas){
-            Map<DiaSemanaEnum, Double> mapDisciplinaQuantidadeDiasAulaPorSemana = new HashMap<>();
+            Map<DiaSemanaEnum, Double> mapDisciplinaQuantidadeDiasAulaPorSemana = new LinkedHashMap<>();
 
             double quantidadeDiasAulaNecessariosPorDisciplina =
                     Math.floor(disciplina.getCargaHoraria() / disciplina.getCargaHorariaDiaria());
 
             for(Map.Entry<DiaSemanaEnum,Integer> entry : quantidadeAulasPorDiaDaSemana.entrySet()){
                double disciplinaQuantidadeDiasAulaPorSemana =
-                       Math.ceil(quantidadeDiasAulaNecessariosPorDisciplina / entry.getValue());
+                       quantidadeDiasAulaNecessariosPorDisciplina / entry.getValue();
 
                 mapDisciplinaQuantidadeDiasAulaPorSemana
                         .put(entry.getKey(),disciplinaQuantidadeDiasAulaPorSemana);
