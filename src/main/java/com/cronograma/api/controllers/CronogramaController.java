@@ -23,7 +23,7 @@ public class CronogramaController {
     @PostMapping("/gerar")
     public ResponseEntity<?> gerarCronograma(@RequestBody CronogramaRequestDom cronograma) {
 
-        Set<CronogramaDisciplinaDom> response = cronogramaService.gerarCronograma(cronograma);
+        List<CronogramaDisciplinaDom> response = cronogramaService.gerarCronograma(cronograma);
         return ResponseEntity.status(200).body(response);
     }
 }

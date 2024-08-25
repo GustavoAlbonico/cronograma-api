@@ -11,16 +11,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CronogramaDisciplinaDom{
+public class CronogramaDisciplinaDetalhadoDom{
 
     private Disciplina disciplina;
     private DiaSemanaEnum diaSemanaEnum;
-
-    @Override
-    public String toString() {
-        return "CronogramaDisciplinaDom{" +
-                "disciplina=" + disciplina +
-                ", diaSemanaEnum=" + diaSemanaEnum +
-                '}';
-    }
+    private double quantidadeDiasAulaRestantesPorDiaSemana;
+    private double quantidadeDiasAulaRestantesNecessariosPorDisciplina;
+    private double disciplinaPorcentagemOcupacaoDiasAulaPorDiaSemana;
 }
