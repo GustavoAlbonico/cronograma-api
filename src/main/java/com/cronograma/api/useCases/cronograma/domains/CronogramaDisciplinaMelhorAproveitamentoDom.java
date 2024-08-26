@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CronogramaDisciplinaDetalhadoDom{
+public class CronogramaDisciplinaMelhorAproveitamentoDom {
 
     private Disciplina disciplina;
     private DiaSemanaEnum diaSemanaEnum;
