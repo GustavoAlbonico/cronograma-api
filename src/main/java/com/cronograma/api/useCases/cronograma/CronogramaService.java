@@ -54,6 +54,7 @@ public class CronogramaService {
         //verificar se existe conflito
 
         Periodo periodoAtivo = buscarPeriodoAtivoAtual(); // fora do loop
+        ///AAAAAAAAAAAAAAAAAAAAA
 
         //validacao da quantidade de dias disponiveis por periodo X disciplinas + data exececao
 
