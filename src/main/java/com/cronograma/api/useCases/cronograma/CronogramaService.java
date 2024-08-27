@@ -3,10 +3,7 @@ package com.cronograma.api.useCases.cronograma;
 import com.cronograma.api.entitys.*;
 import com.cronograma.api.entitys.enums.DiaSemanaEnum;
 import com.cronograma.api.entitys.enums.StatusEnum;
-import com.cronograma.api.useCases.cronograma.domains.CronogramaDisciplinaConflitanteDom;
-import com.cronograma.api.useCases.cronograma.domains.CronogramaDisciplinaMelhorAproveitamentoDom;
-import com.cronograma.api.useCases.cronograma.domains.CronogramaDisciplinaDom;
-import com.cronograma.api.useCases.cronograma.domains.CronogramaRequestDom;
+import com.cronograma.api.useCases.cronograma.domains.*;
 import com.cronograma.api.useCases.disciplina.implement.repositorys.DisciplinaRepository;
 import com.cronograma.api.useCases.fase.implement.repositorys.FaseRepository;
 import com.cronograma.api.useCases.periodo.implement.repositorys.PeriodoRepository;
@@ -67,9 +64,18 @@ public class CronogramaService {
         //LOOP FASE INICIO
 //        Map<Disciplina,DiaSemanaEnum> disciplinasComDiasSemanaConflitantes = new HashMap<>();
         List<CronogramaDisciplinaConflitanteDom> disciplinasComDiasSemanaConflitantes = new ArrayList<>();
+        List<CronogramaDisciplinaConflitanteDom> disciplinasComDiasSemanaConflitantesVerificadas = new ArrayList<>();
+        CronogramaDisciplinaConflitanteDom disciplinaConflitanteAtual = null;
 
         List<CronogramaDisciplinaDom> cronogramaFaseOficial =
-                gerarCronogramaPorFase(cronograma.cursoId(),2L,quantidadeAulasPorDiaDaSemana,disciplinasComDiasSemanaConflitantes);
+                gerarCronogramaPorFase(
+                        cronograma.cursoId(),
+                        2L,
+                        quantidadeAulasPorDiaDaSemana,
+                        disciplinasComDiasSemanaConflitantes,
+                        0,
+                        disciplinasComDiasSemanaConflitantesVerificadas,
+                        disciplinaConflitanteAtual);
 
         for(CronogramaDisciplinaDom cronogramaDisciplina : cronogramaFaseOficial){
             System.out.println(cronogramaDisciplina.getDisciplina().getNome() + " "
@@ -85,9 +91,17 @@ public class CronogramaService {
         return cronogramaFaseOficial;
     }
 
-    private List<CronogramaDisciplinaDom> gerarCronogramaPorFase(Long cursoId, Long faseId, Map<DiaSemanaEnum,Double> quantidadeAulasPorDiaDaSemana, List<CronogramaDisciplinaConflitanteDom> disciplinasComDiasSemanaConflitantes) {
+    private List<CronogramaDisciplinaDom> gerarCronogramaPorFase(Long cursoId,
+                                                                 Long faseId,
+                                                                 Map<DiaSemanaEnum,Double> quantidadeAulasPorDiaDaSemana,
+                                                                 List<CronogramaDisciplinaConflitanteDom> disciplinasComDiasSemanaConflitantes,
+                                                                 int nivelConflito,
+                                                                 List<CronogramaDisciplinaConflitanteDom> disciplinasComDiasSemanaConflitantesVerificadas,
+                                                                 CronogramaDisciplinaConflitanteDom disciplinaConflitanteAtual)
+    {
         Map<DiaSemanaEnum,Double> quantidadeAulasPorDiaDaSemanaAuxiliar = new HashMap<>(quantidadeAulasPorDiaDaSemana);
-
+        nivelConflito ++;
+        System.out.println(nivelConflito);//NIVEL 3 BUGADO
         final Map<DiaSemanaEnum,Double> QUANTIDADE_AULAS_POR_DIA_SEMANA_ORIGINAL = Map.copyOf(quantidadeAulasPorDiaDaSemana);
 
         Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorPeriodo =
@@ -160,8 +174,21 @@ public class CronogramaService {
                             !disciplinaMelhorAproveitamentoPrecisaVariosDiasDiasSemana;
 
                     if(EXISTE_CONFLITO){
-                        buscarDisciplinaComDiaSemanaConflitante(cronogramaDisciplinasPorFase,entry.getKey(),disciplinasComDiasSemanaConflitantes);
-                        return gerarCronogramaPorFase(cursoId, faseId, quantidadeAulasPorDiaDaSemana, disciplinasComDiasSemanaConflitantes);
+                        disciplinaConflitanteAtual = buscarDisciplinaComDiaSemanaConflitante(
+                                cronogramaDisciplinasPorFase,
+                                entry.getKey(),
+                                disciplinasComDiasSemanaConflitantes
+                                ,nivelConflito,
+                                disciplinasComDiasSemanaConflitantesVerificadas,
+                                disciplinaConflitanteAtual);
+
+                        return gerarCronogramaPorFase(cursoId,
+                                faseId,
+                                quantidadeAulasPorDiaDaSemana,
+                                disciplinasComDiasSemanaConflitantes,
+                                disciplinaConflitanteAtual == null ? nivelConflito - 1 : nivelConflito,
+                                disciplinasComDiasSemanaConflitantesVerificadas,
+                                disciplinaConflitanteAtual);
                     }
             }//fim while
         }//fim map
@@ -188,33 +215,55 @@ public class CronogramaService {
                 .put(cronogramaDisciplinaMelhorAproveitamento.getDisciplina(),QUANTIDADE_DIAS_AULA_RESTANTES_NECESSARIOS_POR_DISCIPLINA);
     }
 
-    private void buscarDisciplinaComDiaSemanaConflitante(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorFase,
+    private CronogramaDisciplinaConflitanteDom buscarDisciplinaComDiaSemanaConflitante(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorFase,
                                                          Disciplina disciplina,
-                                                         List<CronogramaDisciplinaConflitanteDom> disciplinasComDiasSemanaConflitantes)
+                                                         List<CronogramaDisciplinaConflitanteDom> disciplinasComDiasSemanaConflitantes,
+                                                         int nivelConflito,
+                                                         List<CronogramaDisciplinaConflitanteDom> disciplinasComDiasSemanaConflitantesVerificadas,
+                                                         CronogramaDisciplinaConflitanteDom disciplinaConflitanteAtual)
     {
         for (CronogramaDisciplinaDom cronogramaDisciplina : cronogramaDisciplinasPorFase) {
           for (DiaSemanaDisponivel diaSemanaDisponivel : disciplina.getProfessor().getDiasSemanaDisponivel()){
               if(cronogramaDisciplina.getDiaSemanaEnum().equals(diaSemanaDisponivel.getDiaSemanaEnum())){
-                  final boolean MUDAR_DIA_SEMANA_CONFLITANTE = disciplinasComDiasSemanaConflitantes.stream()
-                          .anyMatch(disciplinaConflitante ->
-                                  disciplinaConflitante.disciplina().equals(disciplina) &&
-                                  disciplinaConflitante.diaSemanaEnumConflitante().equals(diaSemanaDisponivel.getDiaSemanaEnum()));//REMOVER
+                  if(cronogramaDisciplina.getDisciplina().getProfessor().getDiasSemanaDisponivel().size() > 1) {
 
-                  if((cronogramaDisciplina.getDisciplina().getProfessor().getDiasSemanaDisponivel().size() > 1)  && !MUDAR_DIA_SEMANA_CONFLITANTE) {
-                      disciplinasComDiasSemanaConflitantes
-                              .add(new CronogramaDisciplinaConflitanteDom(
-                                  disciplina,
-                                  cronogramaDisciplina.getDisciplina(),
-                                  cronogramaDisciplina.getDiaSemanaEnum()));
-                      return;
+                      final boolean CONFLITO_VERIFICADO = disciplinasComDiasSemanaConflitantesVerificadas.stream()
+                              .anyMatch(disciplinaConflitanteVerificada -> (
+                                      disciplinaConflitanteVerificada.disciplina().equals(disciplina) &&
+                                      disciplinaConflitanteVerificada.disciplinaConflitante().equals(cronogramaDisciplina.getDisciplina()) &&
+                                      disciplinaConflitanteVerificada.diaSemanaEnumConflitante().equals(cronogramaDisciplina.getDiaSemanaEnum()) &&
+                                      disciplinaConflitanteVerificada.nivelConflitoPai() == nivelConflito - 1 &&
+                                      disciplinaConflitanteVerificada.nivelConflitoFilho() == nivelConflito
+                              ));
+
+                      if (CONFLITO_VERIFICADO){
+                          continue;
+                      }
+
+                      CronogramaDisciplinaConflitanteDom disciplinaConflitante =
+                              new CronogramaDisciplinaConflitanteDom(
+                              disciplina,
+                              cronogramaDisciplina.getDisciplina(),
+                              cronogramaDisciplina.getDiaSemanaEnum(),
+                              nivelConflito - 1,
+                              nivelConflito);
+
+                      disciplinasComDiasSemanaConflitantes.add(disciplinaConflitante);
+                      return disciplinaConflitante;
                   }
               }
           }
         }
 
-        System.out.println(disciplina.getNome() + " " + disciplina.getCargaHoraria());
-        disciplina.getProfessor().getDiasSemanaDisponivel().stream().forEach(a -> System.out.println(a.getDiaSemanaEnum()));
-        throw new RuntimeException("Conflito");
+        if(nivelConflito == 1){//voltou ao inicio
+            System.out.println(disciplina.getNome() + " " + disciplina.getCargaHoraria());
+            disciplina.getProfessor().getDiasSemanaDisponivel().stream().forEach(a -> System.out.println(a.getDiaSemanaEnum()));
+            throw new RuntimeException("Conflito");
+        }
+
+        disciplinasComDiasSemanaConflitantesVerificadas.add(disciplinaConflitanteAtual);
+        disciplinasComDiasSemanaConflitantes.remove(disciplinaConflitanteAtual);
+        return null;
     }
 
     private void removerDiasDaSemanaConflitantes(Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorPeriodo,List<CronogramaDisciplinaConflitanteDom> disciplinasComDiasSemanaConflitantes){
