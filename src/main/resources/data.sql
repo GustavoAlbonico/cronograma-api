@@ -18,7 +18,7 @@ INSERT INTO usuario
   (email, senha, nivel_acesso_enum)
 VALUES
     ('teste@gmail.com', '123', 'ADMINISTRADOR'),
-    ('moda@example.com', 'senha456', 'COORDENADOR'),
+    ('moda@example.com', 'senha456', 'COORDENADOR'),--2
     --moda
     ('gabriel.valga@example.com', 'senha123', 'PROFESSOR'),
     ('marina.casagrande@example.com', 'senha123', 'PROFESSOR'),
@@ -30,20 +30,25 @@ VALUES
     ('maria.matias@example.com', 'senha123', 'PROFESSOR'),
     ('polyane.reis@example.com', 'senha123', 'PROFESSOR'),
     ('ellen.fabrini@example.com', 'senha123', 'PROFESSOR'),
-    ('eduardo.ribeiro@example.com', 'senha123', 'PROFESSOR'),
+    ('eduardo.ribeiro@example.com', 'senha123', 'PROFESSOR'),--13
+
+    ('katiane.araujo@example.com', 'senha123', 'PROFESSOR'),
+    ('josilene.della@example.com', 'senha123', 'PROFESSOR'), --15
+
     --ads
     ('fernando.gabriel@example.com', 'senha123', 'PROFESSOR'),
     ('marcelo.mazon@example.com', 'senha123', 'PROFESSOR'),
     ('christine.vieira@example.com', 'senha123', 'PROFESSOR'),
     ('dayana.ricken@example.com', 'senha123', 'PROFESSOR'),
-    ('jossuan@example.com', 'senha123', 'PROFESSOR'),
+    ('jossuan@example.com', 'senha123', 'PROFESSOR'), --19
 
-    ('lucas.bonfantecoordenador@example.com', 'senha456', 'COORDENADOR'), -- 19
+
+    ('lucas.bonfantecoordenador@example.com', 'senha456', 'COORDENADOR'), -- 20
 
     ('daniel.goulart@example.com', 'senha123', 'PROFESSOR'),
     ('rogerio.cortina@example.com', 'senha123', 'PROFESSOR'),
     ('muriel.benhardt@example.com', 'senha123', 'PROFESSOR'),
-    ('roberto.medeiros@example.com', 'senha123', 'PROFESSOR');
+    ('roberto.medeiros@example.com', 'senha123', 'PROFESSOR');--24
 
 
 --    ('jorge.silva@example.com', 'senha123', 'PROFESSOR'),
@@ -72,17 +77,20 @@ VALUES
   ('01234567890', 'Ellen Fabrini', '44994700610', 12),
   ('12345566000', 'Eduardo Ribeiro', '44994700611', 13), -- 11
 
---ADS
-  ('23456789012', 'Dayana Ricken', '44994700612', 14),
-  ('34567890123', 'Fernando Gabriel', '44994700613', 15),
-  ('45678901234', 'Marcelo Mazon', '44994700614', 16),
-  ('56789012345', 'Christine Vieira', '44994700615', 17),
-  ('67890123456', 'Jossuan Diniz', '44994700616', 18), -- 16
+  ('01234501010', 'Katiane Araújo', '44994700610', 14),
+  ('01010167890', 'Josilene Della', '44994700610', 15), --13
 
-  ('30067890123', 'Daniel Goulart', '44994700613', 20),
-  ('45008901234', 'Rogério Cortina', '44994700614', 21),
-  ('56009012345', 'Muriel Bernhardt', '44994700615', 22),
-  ('67012012056', 'Roberto Fermino Medeiros', '44994700616', 23);
+--ADS
+  ('23456789012', 'Dayana Ricken', '44994700612', 16),
+  ('34567890123', 'Fernando Gabriel', '44994700613', 17),
+  ('45678901234', 'Marcelo Mazon', '44994700614', 18),
+  ('56789012345', 'Christine Vieira', '44994700615', 19),
+  ('67890123456', 'Jossuan Diniz', '44994700616', 20), -- 18
+
+  ('30067890123', 'Daniel Goulart', '44994700613', 21),
+  ('45008901234', 'Rogério Cortina', '44994700614', 22),
+  ('56009012345', 'Muriel Bernhardt', '44994700615', 23),
+  ('67012012056', 'Roberto Fermino Medeiros', '44994700616', 24); --22
 
 -- DIA DA SEMANA DISPONIVEL
 INSERT INTO dia_semana_disponivel
@@ -120,39 +128,46 @@ VALUES
 
   ('SEXTA_FEIRA', 11), --Eduardo Ribeiro
 
- --ADS
-  ('SEGUNDA_FEIRA', 12),
-  ('TERCA_FEIRA', 12),--Dayana Ricken
-  ('SABADO', 12),
+  ('QUARTA_FEIRA', 12), --Katiane Araújo
 
-  ('SEGUNDA_FEIRA', 13), --Fernando Gabriel
-  ('QUARTA_FEIRA', 13),
+  ('SEXTA_FEIRA', 13), --Josilene Della
 
-  ('TERCA_FEIRA', 14),
-  ('SEGUNDA_FEIRA', 14), --Marcelo Mazon
-  ('SEXTA_FEIRA', 14),
+    --VARIOS CURSOS
+  ('SEGUNDA_FEIRA', 14),
+  ('TERCA_FEIRA', 14),--Dayana Ricken
+  ('QUINTA_FEIRA', 14),
   ('SABADO', 14),
 
-  ('QUARTA_FEIRA', 15),--Christine Vieira
-  ('SEXTA_FEIRA', 15),
+   --ADS
 
-  ('SEGUNDA_FEIRA', 16),--Jossuan Diniz
-  ('QUINTA_FEIRA', 16),
+  ('SEGUNDA_FEIRA', 15), --Fernando Gabriel
+  ('QUARTA_FEIRA', 15),
 
-  ('SEGUNDA_FEIRA', 17),--Daniel Goulart
-  ('TERCA_FEIRA', 17),
+  ('TERCA_FEIRA', 16),
+  ('SEGUNDA_FEIRA', 16), --Marcelo Mazon
+  ('SEXTA_FEIRA', 16),
+  ('SABADO', 16),
 
-  ('SEGUNDA_FEIRA', 18),--Rogério Cortina
-  ('TERCA_FEIRA', 18),
+  ('QUARTA_FEIRA', 17),--Christine Vieira
+  ('SEXTA_FEIRA', 17),
 
-  ('QUARTA_FEIRA', 19),
-  ('QUINTA_FEIRA', 19), --Muriel Bernhardt
-  ('SEXTA_FEIRA', 19),
+  ('SEGUNDA_FEIRA', 18),--Jossuan Diniz
+  ('QUINTA_FEIRA', 18),
 
+  ('SEGUNDA_FEIRA', 19),--Daniel Goulart
+  ('TERCA_FEIRA', 19),
+
+  ('SEGUNDA_FEIRA', 20),--Rogério Cortina
   ('TERCA_FEIRA', 20),
-  ('QUINTA_FEIRA',20), --Gabriel Valga
-  ('SEXTA_FEIRA', 20),
-  ('SABADO',20);
+
+  ('QUARTA_FEIRA', 21),
+  ('QUINTA_FEIRA', 21), --Muriel Bernhardt
+  ('SEXTA_FEIRA', 21),
+
+  ('TERCA_FEIRA', 22),
+  ('QUINTA_FEIRA',22), --Roberto Fermino Medeiros
+  ('SEXTA_FEIRA', 22),
+  ('SABADO',22);
 
 --ADS
 
@@ -170,7 +185,7 @@ INSERT INTO coordenador
   (nome_completo, cpf, telefone, usuario_id)
 VALUES
   ('MODA', '15264859523', '48595962856', 2),
-  ('Lucas', '21524859523', '48595962856', 19);
+  ('Lucas', '21524859523', '48595962856', 20);
 
 --FASE
 INSERT INTO fase
@@ -224,21 +239,31 @@ VALUES
   ('Desenho Técnico de Moda - INICIO', 40, 4, '#00FF80', 'NAO', 1, 4, 3),
   ('Pesquisa de Mercado - FINAL', 40, 4, '#00FF80', 'NAO', 1, 4, 11),
 
---ADS
-  ('Fundamentos da Pesquisa', 40, 4, '#99004C', 'NAO', 2, 1, 12),
-  ('Introdução a Computação', 36, 4, '#003300', 'NAO',2, 1, 13),
-  ('Modelagem de Dados', 76, 4, '#FF6666', 'NAO', 2, 1, 14),
-  ('Introdução a Programação de Computadores', 152, 4, '#003319', 'NAO', 2, 1, 15),
-  ('Engenharia de Requisitos', 76, 4, '#660033', 'SIM', 2, 1, 16),
-  ('Extensão em Análise e Desenvolvimento de Sistemas I', 45, 4, '#00FF80', 'SIM', 2, 1, 12),
+  ('Desenvolvimento de Portfólio', 40, 4, '#99004C', 'NAO', 1, 6, 1),
+  ('Produção Audiovisual', 40, 4, '#003300', 'NAO', 1, 6, 1),
+  ('Desenvolvimento e Produção de Coleção - INICIO', 40, 4, '#FF6666', 'NAO', 1, 6, 6),
+  ('Styling - Final', 40, 4, '#003319', 'NAO', 1, 6, 10),
+  ('Desenvolvimento e Apresentação de Coleção', 80, 4, '#660033', 'SIM', 1, 6, 12),
+  ('Desenvolvimento e Produção de Coleção - INICIO', 40, 4, '#00FF80', 'NAO', 1, 6, 3),
+  ('Metodologia do Trabalho Científico - FINAL', 40, 4, '#00FF80', 'NAO', 1, 6, 14),
+  ('Desenvolvimento e Produção de Coleção ', 40, 4, '#00FF80', 'NAO', 1, 6, 5),
+  ('Desenvolvimento e Produção de Coleção ', 40, 4, '#00FF80', 'NAO', 1, 6, 13),
 
-  ('Estrutura de Dados', 40, 4, '#99004C', 'NAO', 2, 2, 14),
-  ('UX/UI Design de Sistema', 36, 4, '#003300', 'NAO',2, 2, 17),
-  ('Programação Orientada a Objetos', 76, 4, '#FF6666', 'NAO', 2, 2, 18),
-  ('Análise Orientada a Objetos', 76, 4, '#003319', 'NAO', 2, 2, 19),
-  ('Desenvolvimento Web', 76, 4, '#660033', 'SIM', 2, 2, 20),
-  ('Sistema Gerenciador de Banco de Dados ', 76, 4, '#00FF80', 'NAO', 2, 2, 14),
-  ('Extensão em Análise e Desenvolvimento de Sistemas II', 45, 4, '#00FF80', 'SIM', 2, 2, 14);
+--ADS
+  ('Fundamentos da Pesquisa', 40, 4, '#99004C', 'NAO', 2, 1, 14),
+  ('Introdução a Computação', 36, 4, '#003300', 'NAO',2, 1, 15),
+  ('Modelagem de Dados', 76, 4, '#FF6666', 'NAO', 2, 1, 16),
+  ('Introdução a Programação de Computadores', 152, 4, '#003319', 'NAO', 2, 1, 17),
+  ('Engenharia de Requisitos', 76, 4, '#660033', 'SIM', 2, 1, 18),
+  ('Extensão em Análise e Desenvolvimento de Sistemas I', 45, 4, '#00FF80', 'SIM', 2, 1, 14),
+
+  ('Estrutura de Dados', 40, 4, '#99004C', 'NAO', 2, 2, 16),
+  ('UX/UI Design de Sistema', 36, 4, '#003300', 'NAO',2, 2, 19),
+  ('Programação Orientada a Objetos', 76, 4, '#FF6666', 'NAO', 2, 2, 20),
+  ('Análise Orientada a Objetos', 76, 4, '#003319', 'NAO', 2, 2, 21),
+  ('Desenvolvimento Web', 76, 4, '#660033', 'SIM', 2, 2, 22),
+  ('Sistema Gerenciador de Banco de Dados ', 76, 4, '#00FF80', 'NAO', 2, 2, 16),
+  ('Extensão em Análise e Desenvolvimento de Sistemas II', 45, 4, '#00FF80', 'SIM', 2, 2, 16);
 
 -- PERIODO
 INSERT INTO  periodo
