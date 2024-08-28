@@ -27,12 +27,13 @@ public interface DisciplinaRepository extends JpaRepository<Disciplina, Long> {
     @Query(value =
         "SELECT disciplina.* " +
         "FROM disciplina " +
-        "JOIN professor prof ON prof.id = disciplina.professor_id " +
-        "JOIN dia_semana_disponivel diaSemanaDis ON diasemanadis.professor_id = prof.id " +
+        "LEFT JOIN professor prof ON prof.id = disciplina.professor_id " +
+        "LEFT JOIN dia_semana_disponivel diaSemanaDis ON diasemanadis.professor_id = prof.id " +
         "WHERE disciplina.curso_id = :cursoId " +
         "AND disciplina.fase_id = :faseId " +
         "GROUP BY disciplina.id " +
-        "ORDER BY COUNT(diasemanadis.dia_semana_enum) ASC;"
+        "ORDER BY (CASE WHEN disciplina.professor_id IS NULL THEN 1 ELSE 0 END) ASC," +
+                  "COUNT(diasemanadis.dia_semana_enum) ASC;"
     ,nativeQuery = true)
     Optional<Set<Disciplina>> buscarDisciplinasPorFaseIdOrdenandoPorQtdDiaDisponivelProfessor(@Param("cursoId") Long cursoId,@Param("faseId") Long faseId);
 

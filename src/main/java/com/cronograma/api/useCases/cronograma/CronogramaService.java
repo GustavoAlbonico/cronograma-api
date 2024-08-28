@@ -403,6 +403,26 @@ public class CronogramaService {
         Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorPeriodo = new LinkedHashMap<>();
 
         for (Disciplina disciplina : disciplinasEncontradas){
+            if (disciplina.getProfessor() == null){
+                Set<DiaSemanaDisponivel> diasSemanaDisponiveis = new HashSet<>();
+
+                for (DiaSemanaEnum diaSemanaEnum : DiaSemanaEnum.values()){
+                    if (!diaSemanaEnum.equals(DiaSemanaEnum.DOMINGO)){
+                        DiaSemanaDisponivel diaSemanaDisponivel = new DiaSemanaDisponivel();
+                        diaSemanaDisponivel.setDiaSemanaEnum(diaSemanaEnum);
+                        diaSemanaDisponivel.setStatusEnum(StatusEnum.ATIVO);
+
+                        diasSemanaDisponiveis.add(diaSemanaDisponivel);
+                    }
+                }
+                Professor contratando = new Professor();
+                contratando.setNomeCompleto("Contratando");
+                contratando.setStatusEnum(StatusEnum.ATIVO);
+                contratando.setDiasSemanaDisponivel(diasSemanaDisponiveis);
+
+                disciplina.setProfessor(contratando);
+            }
+
            final double QUANTIDADE_DIAS_AULA_NECESSARIOS_POR_DISCIPLINA =
                     Math.floor(disciplina.getCargaHoraria() / disciplina.getCargaHorariaDiaria());
 
@@ -417,7 +437,7 @@ public class CronogramaService {
        Set<Fase> fasesEncontradas = faseRepository.buscarFasesPorCursoOndeExisteProfessorId(cursoId).get();
        Map<Fase,Set<DiaSemanaEnum>> diasDaSemanaFaltantesPorFase =  new HashMap<>();
 
-       for(Fase fase: fasesEncontradas){
+       for(Fase fase: fasesEncontradas){//VERIFICAR ESSA VALIDACAO
            Set<DiaSemanaEnum> diasSemanaEnum = disciplinaRepository.
                    buscarDiasDaSemanaQuePossuemProfessorPorDisciplinas(cursoId, fase.getId()).get();
 

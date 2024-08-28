@@ -188,7 +188,7 @@ VALUES
   ('QUINTA_FEIRA', 27), --Cledemilson dos Santos
   ('SEXTA_FEIRA', 27),
 
-  ('TERCA_FEIRA', 28);--Lucas Bonfante Rebelo
+  ('SABADO', 28);--Lucas Bonfante Rebelo
 
 --ADS
 
@@ -305,14 +305,14 @@ VALUES
   ('Desenvolvimento Full Stack', 76, 4, '#00FF80', 'NAO', 2, 4, 22),
   ('Extensão em Análise e Desenvolvimento de Sistemas IIII', 45, 4, '#00FF80', 'SIM', 2, 4, 25),
 
-  ('Tópicos Especiais em ADS', 40, 4, '#99004C', 'NAO', 2, 5, 26),
-  ('Desenvolvimento para dispositivos móveis', 36, 4, '#003300', 'NAO',2, 5, null),
-  ('Metodologia do Trabalho Científico', 76, 4, '#FF6666', 'NAO', 2, 5, 14),
+  ('Tópicos Especiais em ADS', 76, 4, '#99004C', 'NAO', 2, 5, 26),
+  ('Desenvolvimento para dispositivos móveis', 76, 4, '#003300', 'NAO',2, 5, null),
+  ('Metodologia do Trabalho Científico', 40, 4, '#FF6666', 'NAO', 2, 5, 14),
   ('Desenvolvimento de aplicação (Sistema)', 76, 4, '#003319', 'NAO', 2, 5, 22),
-  ('Legislação Aplicada a Informação', 76, 4, '#660033', 'NAO', 2, 5, 27),
-  ('Desenvolvimento de Aplicação (Projeto)', 76, 4, '#00FF80', 'NAO', 2, 5, 21),
-  ('Certificações em ADS', 45, 4, '#00FF80', 'NAO', 2, 5, 27),
-  ('InovADS (integradora)', 45, 4, '#00FF80', 'NAO', 2, 5, 28);
+  ('Legislação Aplicada a Informação', 36, 4, '#660033', 'NAO', 2, 5, 27),
+  ('Desenvolvimento de Aplicação (Projeto)', 40, 4, '#00FF80', 'NAO', 2, 5, 21),
+  ('Certificações em ADS', 36, 4, '#00FF80', 'NAO', 2, 5, 27),
+  ('InovADS (integradora)', 20, 4, '#00FF80', 'NAO', 2, 5, 28);
 
 -- PERIODO
 INSERT INTO  periodo
