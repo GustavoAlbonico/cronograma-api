@@ -3,5 +3,6 @@ import java.time.LocalDate;
 
 public record CronogramaRequestDom(
         Long periodoId,
-        Long cursoId) {
+        Long cursoId,
+        Long faseId) { //remover fase apenas para teste
 }

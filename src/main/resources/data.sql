@@ -48,16 +48,15 @@ VALUES
     ('daniel.goulart@example.com', 'senha123', 'PROFESSOR'),
     ('rogerio.cortina@example.com', 'senha123', 'PROFESSOR'),
     ('muriel.benhardt@example.com', 'senha123', 'PROFESSOR'),
-    ('roberto.medeiros@example.com', 'senha123', 'PROFESSOR');--24
+    ('roberto.medeiros@example.com', 'senha123', 'PROFESSOR'),--24
 
 
---    ('jorge.silva@example.com', 'senha123', 'PROFESSOR'),
---    ('jailson.torquarto@example.com', 'senha123', 'PROFESSOR'),
---    ('bruno.kurzawe@example.com', 'senha123', 'PROFESSOR'),
---    ('cledemilson.santos@example.com', 'senha123', 'PROFESSOR'),
---    ('roni.edson@example.com', 'senha123', 'PROFESSOR'),
---    ('roseli.neto@example.com', 'senha123', 'PROFESSOR'),
---    ('liliane.fernandes@example.com', 'senha123', 'PROFESSOR'),
+    ('jorge.henrique.silva@example.com', 'senha123', 'PROFESSOR'),
+    ('roni.edson@example.com', 'senha123', 'PROFESSOR'),
+    ('bruno.kurzawe@example.com', 'senha123', 'PROFESSOR'),
+    ('liliane.fernandes@example.com', 'senha123', 'PROFESSOR'),
+    ('cledemilson.santos@example.com', 'senha123', 'PROFESSOR'),
+    ('lucas.bonfanteprofessor@example.com', 'senha123', 'PROFESSOR');--30
 
 --PROFESSOR
 INSERT INTO professor
@@ -90,7 +89,14 @@ VALUES
   ('30067890123', 'Daniel Goulart', '44994700613', 21),
   ('45008901234', 'Rogério Cortina', '44994700614', 22),
   ('56009012345', 'Muriel Bernhardt', '44994700615', 23),
-  ('67012012056', 'Roberto Fermino Medeiros', '44994700616', 24); --22
+  ('67012012056', 'Roberto Fermino Medeiros', '44994700616', 24), --22
+
+  ('67007799056', 'Jorge Henrique da Silva Naspolini', '44994700616', 25),
+  ('00012012056', 'Roni Edson dos Santos', '44994700616', 26),
+  ('11012012056', 'Bruno Kurzawe', '44994700616', 27),
+  ('67011012056', 'Liliane Fernandes', '44994700616', 28),
+  ('62222012056', 'Cledemilson dos Santos', '44994700616', 29),
+  ('67012014456', 'Lucas Bonfante Rebelo', '44994700616', 30);-- 28
 
 -- DIA DA SEMANA DISPONIVEL
 INSERT INTO dia_semana_disponivel
@@ -165,9 +171,24 @@ VALUES
   ('SEXTA_FEIRA', 21),
 
   ('TERCA_FEIRA', 22),
+  ('QUARTA_FEIRA', 22),
   ('QUINTA_FEIRA',22), --Roberto Fermino Medeiros
   ('SEXTA_FEIRA', 22),
-  ('SABADO',22);
+  ('SABADO',22),
+
+  ('QUARTA_FEIRA', 23),-- Jorge Henrique da Silva Naspolini
+  ('SEXTA_FEIRA', 23),
+
+  ('QUINTA_FEIRA', 24),--Roni Edson dos Santos
+
+  ('SABADO', 25), --Bruno Kurzawe
+
+  ('SEGUNDA_FEIRA', 26), --Liliane Fernandes
+
+  ('QUINTA_FEIRA', 27), --Cledemilson dos Santos
+  ('SEXTA_FEIRA', 27),
+
+  ('TERCA_FEIRA', 28);--Lucas Bonfante Rebelo
 
 --ADS
 
@@ -216,7 +237,10 @@ VALUES
 
 --ADS
   (2,1),
-  (2,2);
+  (2,2),
+  (2,3),
+  (2,4),
+  (2,5);
 
 --DISCIPLINA
 INSERT INTO disciplina
@@ -254,16 +278,41 @@ VALUES
   ('Introdução a Computação', 36, 4, '#003300', 'NAO',2, 1, 15),
   ('Modelagem de Dados', 76, 4, '#FF6666', 'NAO', 2, 1, 16),
   ('Introdução a Programação de Computadores', 152, 4, '#003319', 'NAO', 2, 1, 17),
-  ('Engenharia de Requisitos', 76, 4, '#660033', 'SIM', 2, 1, 18),
+  ('Engenharia de Requisitos', 76, 4, '#660033', 'NAO', 2, 1, 18),
   ('Extensão em Análise e Desenvolvimento de Sistemas I', 45, 4, '#00FF80', 'SIM', 2, 1, 14),
 
   ('Estrutura de Dados', 40, 4, '#99004C', 'NAO', 2, 2, 16),
   ('UX/UI Design de Sistema', 36, 4, '#003300', 'NAO',2, 2, 19),
   ('Programação Orientada a Objetos', 76, 4, '#FF6666', 'NAO', 2, 2, 20),
   ('Análise Orientada a Objetos', 76, 4, '#003319', 'NAO', 2, 2, 21),
-  ('Desenvolvimento Web', 76, 4, '#660033', 'SIM', 2, 2, 22),
+  ('Desenvolvimento Web', 76, 4, '#660033', 'NAO', 2, 2, 22),
   ('Sistema Gerenciador de Banco de Dados ', 76, 4, '#00FF80', 'NAO', 2, 2, 16),
-  ('Extensão em Análise e Desenvolvimento de Sistemas II', 45, 4, '#00FF80', 'SIM', 2, 2, 16);
+  ('Extensão em Análise e Desenvolvimento de Sistemas II', 45, 4, '#00FF80', 'SIM', 2, 2, 16),
+
+  ('Arquitetura de Software', 40, 4, '#99004C', 'NAO', 2, 3, 20),
+  ('Tecnologias e Sistemas de Informação Gerencial', 36, 4, '#003300', 'NAO',2, 3, 16),
+  ('Desenvolvimento Back End', 76, 4, '#FF6666', 'NAO', 2, 3, 22),
+  ('Cloud & ITOps', 76, 4, '#003319', 'NAO', 2, 3, 15),
+  ('Qualidade e testes de software', 76, 4, '#660033', 'NAO', 2, 3, 21),
+  ('Desenvolvimento Front End', 76, 4, '#00FF80', 'NAO', 2, 3, 23),
+  ('Extensão em Análise e Desenvolvimento de Sistemas III', 45, 4, '#00FF80', 'SIM', 2, 3, 22),
+
+  ('Desenvolvimento para sistemas embarcados', 40, 4, '#99004C', 'NAO', 2, 4, 15),
+  ('Gerenciamento de projetos de software', 36, 4, '#003300', 'NAO',2, 4, 18),
+  ('Engenharia de software', 76, 4, '#FF6666', 'NAO', 2, 4, 19),
+  ('Desenvolvimento Full Stack', 76, 4, '#003319', 'NAO', 2, 4, 23),
+  ('Codificação segura', 76, 4, '#660033', 'NAO', 2, 4, 24),
+  ('Desenvolvimento Full Stack', 76, 4, '#00FF80', 'NAO', 2, 4, 22),
+  ('Extensão em Análise e Desenvolvimento de Sistemas IIII', 45, 4, '#00FF80', 'SIM', 2, 4, 25),
+
+  ('Tópicos Especiais em ADS', 40, 4, '#99004C', 'NAO', 2, 5, 26),
+  ('Desenvolvimento para dispositivos móveis', 36, 4, '#003300', 'NAO',2, 5, null),
+  ('Metodologia do Trabalho Científico', 76, 4, '#FF6666', 'NAO', 2, 5, 14),
+  ('Desenvolvimento de aplicação (Sistema)', 76, 4, '#003319', 'NAO', 2, 5, 22),
+  ('Legislação Aplicada a Informação', 76, 4, '#660033', 'NAO', 2, 5, 27),
+  ('Desenvolvimento de Aplicação (Projeto)', 76, 4, '#00FF80', 'NAO', 2, 5, 21),
+  ('Certificações em ADS', 45, 4, '#00FF80', 'NAO', 2, 5, 27),
+  ('InovADS (integradora)', 45, 4, '#00FF80', 'NAO', 2, 5, 28);
 
 -- PERIODO
 INSERT INTO  periodo

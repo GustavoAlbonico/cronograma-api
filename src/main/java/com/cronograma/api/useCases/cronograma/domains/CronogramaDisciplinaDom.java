@@ -15,6 +15,7 @@ public class CronogramaDisciplinaDom{
 
     private Disciplina disciplina;
     private DiaSemanaEnum diaSemanaEnum;
+    private int ordemPrioridadePorDiaSemana;
 
     @Override
     public String toString() {
