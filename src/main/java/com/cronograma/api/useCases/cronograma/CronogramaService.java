@@ -1,6 +1,7 @@
 package com.cronograma.api.useCases.cronograma;
 
 import com.cronograma.api.entitys.*;
+import com.cronograma.api.entitys.enums.BooleanEnum;
 import com.cronograma.api.entitys.enums.DiaSemanaEnum;
 import com.cronograma.api.entitys.enums.StatusEnum;
 import com.cronograma.api.useCases.cronograma.domains.*;
@@ -204,7 +205,6 @@ public class CronogramaService {
                                 disciplinasComDiasSemanaConflitantes,
                                 NIVEL_VERIFICADO ? nivelConflito - 2 : nivelConflito,
                                 disciplinasConflitantesVerificadas);
-                        //ADICIONAR ordemPrioridadePorDiaSemana
                     }
             }//fim while
         }//fim map
@@ -403,25 +403,10 @@ public class CronogramaService {
         Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorPeriodo = new LinkedHashMap<>();
 
         for (Disciplina disciplina : disciplinasEncontradas){
-            if (disciplina.getProfessor() == null){
-                Set<DiaSemanaDisponivel> diasSemanaDisponiveis = new HashSet<>();
 
-                for (DiaSemanaEnum diaSemanaEnum : DiaSemanaEnum.values()){
-                    if (!diaSemanaEnum.equals(DiaSemanaEnum.DOMINGO)){
-                        DiaSemanaDisponivel diaSemanaDisponivel = new DiaSemanaDisponivel();
-                        diaSemanaDisponivel.setDiaSemanaEnum(diaSemanaEnum);
-                        diaSemanaDisponivel.setStatusEnum(StatusEnum.ATIVO);
-
-                        diasSemanaDisponiveis.add(diaSemanaDisponivel);
-                    }
-                }
-                Professor contratando = new Professor();
-                contratando.setNomeCompleto("Contratando");
-                contratando.setStatusEnum(StatusEnum.ATIVO);
-                contratando.setDiasSemanaDisponivel(diasSemanaDisponiveis);
-
-                disciplina.setProfessor(contratando);
-            }
+            criarNovaInstanciaProfessor(disciplina);
+            verificarDisciplinaNaoPossuiProfessor(disciplina);
+            verificarDisciplinaExtensao(disciplina);
 
            final double QUANTIDADE_DIAS_AULA_NECESSARIOS_POR_DISCIPLINA =
                     Math.floor(disciplina.getCargaHoraria() / disciplina.getCargaHorariaDiaria());
@@ -430,7 +415,77 @@ public class CronogramaService {
                     .put(disciplina,QUANTIDADE_DIAS_AULA_NECESSARIOS_POR_DISCIPLINA);
         }
 
-        return disciplinasComDiasAulaNecessariosPorPeriodo;
+
+        return disciplinasComDiasAulaNecessariosPorPeriodo.entrySet().stream()
+                .sorted(Comparator.comparing(
+                        (Map.Entry<Disciplina, Double> entry) -> entry.getKey().getProfessor().getDiasSemanaDisponivel().size())
+                                .thenComparing(entry -> entry.getKey().getProfessor() == null)
+                ).collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
+    }
+
+    private void criarNovaInstanciaProfessor(Disciplina disciplina) {
+        if(disciplina.getProfessor() != null){
+            Set<DiaSemanaDisponivel> diasSemanaDisponiveis = new HashSet<>();
+
+            for (DiaSemanaDisponivel diaSemanaDisponivel : disciplina.getProfessor().getDiasSemanaDisponivel()){
+                DiaSemanaDisponivel diaSemanaDisponivelNovaInstancia = new DiaSemanaDisponivel();
+
+                diaSemanaDisponivelNovaInstancia.setId(diaSemanaDisponivel.getId());
+                diaSemanaDisponivelNovaInstancia.setDiaSemanaEnum(diaSemanaDisponivel.getDiaSemanaEnum());
+                diaSemanaDisponivelNovaInstancia.setProfessor(diaSemanaDisponivel.getProfessor());
+                diaSemanaDisponivelNovaInstancia.setStatusEnum(diaSemanaDisponivel.getStatusEnum());
+
+                diasSemanaDisponiveis.add(diaSemanaDisponivelNovaInstancia);
+            }
+
+            Professor professorNovaInstancia =  new Professor();
+
+            professorNovaInstancia.setId(disciplina.getProfessor().getId());
+            professorNovaInstancia.setNomeCompleto(disciplina.getProfessor().getNomeCompleto());
+            professorNovaInstancia.setCpf(disciplina.getProfessor().getCpf());
+            professorNovaInstancia.setTelefone(disciplina.getProfessor().getTelefone());
+            professorNovaInstancia.setDiasSemanaDisponivel(diasSemanaDisponiveis);
+            professorNovaInstancia.setStatusEnum(disciplina.getProfessor().getStatusEnum());
+            professorNovaInstancia.setUsuario(disciplina.getProfessor().getUsuario());
+            professorNovaInstancia.setDisciplinas(disciplina.getProfessor().getDisciplinas());
+
+            disciplina.setProfessor(professorNovaInstancia);
+        }
+    }
+    private void verificarDisciplinaNaoPossuiProfessor(Disciplina disciplina){
+        if (disciplina.getProfessor() == null){
+            Set<DiaSemanaDisponivel> diasSemanaDisponiveis = new HashSet<>();
+
+            for (DiaSemanaEnum diaSemanaEnum : DiaSemanaEnum.values()){
+                if (!diaSemanaEnum.equals(DiaSemanaEnum.DOMINGO)){
+                    DiaSemanaDisponivel diaSemanaDisponivel = new DiaSemanaDisponivel();
+                    diaSemanaDisponivel.setDiaSemanaEnum(diaSemanaEnum);
+                    diaSemanaDisponivel.setStatusEnum(StatusEnum.ATIVO);
+
+                    diasSemanaDisponiveis.add(diaSemanaDisponivel);
+                }
+            }
+            Professor contratando = new Professor();
+            contratando.setNomeCompleto("Contratando");
+            contratando.setStatusEnum(StatusEnum.ATIVO);
+            contratando.setDiasSemanaDisponivel(diasSemanaDisponiveis);
+
+            disciplina.setProfessor(contratando);
+        }
+    }
+
+    private void verificarDisciplinaExtensao(Disciplina disciplina){
+        if (disciplina.getExtensaoBooleanEnum().equals(BooleanEnum.SIM)){
+            disciplina.getProfessor().getDiasSemanaDisponivel()
+                    .removeIf(diaSemanaDisponivel ->
+                            !diaSemanaDisponivel.getDiaSemanaEnum().equals(DiaSemanaEnum.SABADO));
+
+        }
     }
 
     private void validarDiasDaSemanaNecessarios(Long cursoId){
