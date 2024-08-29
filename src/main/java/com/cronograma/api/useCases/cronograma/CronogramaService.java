@@ -56,9 +56,9 @@ public class CronogramaService {
 
         //validacao da quantidade de dias disponiveis por periodo X disciplinas + data exececao
 
-        validarDiasDaSemanaNecessarios(cronograma.cursoId()); // fora do loop
+        validarDiasDaSemanaNecessarios(cronograma.cursoId()); // fora do loop //TALVEZ SEJA INUTIL
 
-        Map<DiaSemanaEnum,Double> quantidadeAulasPorDiaDaSemana = //filtrar od dias de excecao
+        Map<DiaSemanaEnum,Double> quantidadeAulasPorDiaDaSemana = //filtrar data exececao
                 buscarQuantidadeAulasDisponveisPorDiaDaSemana(periodoAtivo.getDataInicial(), periodoAtivo.getDataFinal());
 
         //FILTRAR AS DATAS DE EXCECAO quantidadeAulasPorDiaDaSemana
@@ -400,7 +400,7 @@ public class CronogramaService {
         Set<Disciplina> disciplinasEncontradas =
                 disciplinaRepository.buscarDisciplinasPorFaseIdOrdenandoPorQtdDiaDisponivelProfessor(cursoId,faseId).get();//faseId
 
-        Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorPeriodo = new LinkedHashMap<>();
+        Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorPeriodo = new HashMap<>();
 
         for (Disciplina disciplina : disciplinasEncontradas){
 
@@ -415,12 +415,11 @@ public class CronogramaService {
                     .put(disciplina,QUANTIDADE_DIAS_AULA_NECESSARIOS_POR_DISCIPLINA);
         }
 
-
         return disciplinasComDiasAulaNecessariosPorPeriodo.entrySet().stream()
-                .sorted(Comparator.comparing(
-                        (Map.Entry<Disciplina, Double> entry) -> entry.getKey().getProfessor().getDiasSemanaDisponivel().size())
-                                .thenComparing(entry -> entry.getKey().getProfessor() == null)
-                ).collect(Collectors.toMap(
+                .sorted(Comparator.comparing((Map.Entry<Disciplina, Double> entry) -> entry.getKey().getProfessor().getDiasSemanaDisponivel().size())
+                    .thenComparing(entry -> entry.getKey().getExtensaoBooleanEnum().equals(BooleanEnum.NAO))
+                    .thenComparing(Comparator.comparing((Map.Entry<Disciplina, Double> entry) -> entry.getKey().getCargaHoraria()).reversed()))
+                .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         Map.Entry::getValue,
                         (e1, e2) -> e1,

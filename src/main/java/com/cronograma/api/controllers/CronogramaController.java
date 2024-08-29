@@ -1,7 +1,6 @@
 package com.cronograma.api.controllers;
 
 import com.cronograma.api.useCases.cronograma.CronogramaService;
-import com.cronograma.api.useCases.cronograma.domains.CronogramaDisciplinaDom;
 import com.cronograma.api.useCases.cronograma.domains.CronogramaRequestDom;
 import com.cronograma.api.useCases.cronograma.domains.TesteResponseCronogramaDom;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/cronograma")
