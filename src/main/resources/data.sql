@@ -196,10 +196,11 @@ VALUES
 INSERT INTO data_bloqueada
   (motivo, data, usuario_id)
 VALUES
-  ('Natal','2024-12-25', 2),
-  ('Feriado','2024-09-20', 2),
-  ('Feriado1','2024-10-08', 2),
-  ('Feriado2','2024-08-19', 2);
+  ('Feriado1','2024-12-9', 2),
+  ('Feriado2','2024-12-4', 2),
+  ('Feriado3','2024-11-20', 2),
+  ('Feriado4','2024-11-15', 2),
+  ('Feriado5','2024-10-15', 2);
 
 --COORDENADOR
 INSERT INTO coordenador

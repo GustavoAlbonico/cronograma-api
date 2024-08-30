@@ -18,4 +18,5 @@ public class CronogramaDisciplinaMelhorAproveitamentoDom {
     private double quantidadeDiasAulaRestantesPorDiaSemana;
     private double quantidadeDiasAulaRestantesNecessariosPorDisciplina;
     private double disciplinaPorcentagemOcupacaoDiasAulaPorDiaSemana;
+    private double quantidadeDiasAula;
 }
