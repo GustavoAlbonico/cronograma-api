@@ -24,14 +24,4 @@ public interface DisciplinaRepository extends JpaRepository<Disciplina, Long> {
             nativeQuery = true)
     Optional<Set<DiaSemanaEnum>> buscarDiasDaSemanaQuePossuemProfessorPorDisciplinas(@Param("cursoId") Long cursoId, @Param("faseId") Long faseId);
 
-    @Query(value =
-        "SELECT * " +
-        "FROM disciplina " +
-        "WHERE disciplina.curso_id = :cursoId " +
-        "AND disciplina.fase_id = :faseId " +
-        "GROUP BY disciplina.id;"
-    ,nativeQuery = true)
-    Optional<Set<Disciplina>> buscarDisciplinasPorFaseIdOrdenandoPorQtdDiaDisponivelProfessor(@Param("cursoId") Long cursoId,@Param("faseId") Long faseId);
-
-
 }

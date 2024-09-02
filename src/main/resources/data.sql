@@ -193,14 +193,14 @@ VALUES
 --ADS
 
 -- DATA BLOQUEADA
-INSERT INTO data_bloqueada
-  (motivo, data, usuario_id)
-VALUES
-  ('Feriado1','2024-12-9', 2),
-  ('Feriado2','2024-12-4', 2),
-  ('Feriado3','2024-11-20', 2),
-  ('Feriado4','2024-11-15', 2),
-  ('Feriado5','2024-10-15', 2);
+--INSERT INTO data_bloqueada
+--  (motivo, data, usuario_id)
+--VALUES
+--  ('Feriado1','2024-12-9', 2),
+--  ('Feriado2','2024-12-4', 2),
+--  ('Feriado3','2024-11-20', 2),
+--  ('Feriado4','2024-11-15', 2),
+--  ('Feriado5','2024-10-15', 2);
 
 --COORDENADOR
 INSERT INTO coordenador
@@ -268,7 +268,7 @@ VALUES
   ('Produção Audiovisual', 40, 4, '#003300', 'NAO', 1, 6, 1),
   ('Desenvolvimento e Produção de Coleção - INICIO', 40, 4, '#FF6666', 'NAO', 1, 6, 6),
   ('Styling - Final', 40, 4, '#003319', 'NAO', 1, 6, 10),
-  ('Desenvolvimento e Apresentação de Coleção', 80, 4, '#660033', 'SIM', 1, 6, 12),
+  ('Desenvolvimento e Apresentação de Coleção', 80, 4, '#660033', 'NAO', 1, 6, 12),
   ('Desenvolvimento e Produção de Coleção - INICIO', 40, 4, '#00FF80', 'NAO', 1, 6, 3),
   ('Metodologia do Trabalho Científico - FINAL', 40, 4, '#00FF80', 'NAO', 1, 6, 14),
   ('Desenvolvimento e Produção de Coleção ', 40, 4, '#00FF80', 'NAO', 1, 6, 5),

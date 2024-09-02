@@ -9,8 +9,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @SQLDelete(sql = "UPDATE usuario SET status_enum = 'INATIVO' WHERE id=?")
