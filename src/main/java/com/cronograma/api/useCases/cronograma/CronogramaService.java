@@ -115,9 +115,9 @@ public class CronogramaService {
 
             Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorFase = new LinkedHashMap<>(disciplinasComDiasAulaNecessariosPorCurso.get(fase.getId()));
 
-//            final boolean naoExisteDisciplinaExtensao = disciplinasComDiasAulaNecessariosPorFase.keySet().stream()
-//                    .filter(disciplina -> disciplina.getFase().getId().equals(fase.getId()))
-//                    .noneMatch(disciplina -> disciplina.getExtensaoBooleanEnum().equals(BooleanEnum.SIM));
+            final boolean naoExisteDisciplinaExtensao = disciplinasComDiasAulaNecessariosPorFase.keySet().stream()
+                    .filter(disciplina -> disciplina.getFase().getId().equals(fase.getId()))
+                    .noneMatch(disciplina -> disciplina.getExtensaoBooleanEnum().equals(BooleanEnum.SIM));
 
             Map<DiaSemanaEnum, Double> quantidadeAulasPorDiaDaSemanaAuxiliar = new HashMap<>(quantidadeAulasPorDiaDaSemana);
 
@@ -149,9 +149,9 @@ public class CronogramaService {
                                 quantidadeDiasAulaNecessariosPorDisciplina > quantidadeAulasPorDiaSemanaOriginal.get(diaSemanaEnum) &&
                                         quantidadeDiasAulaRestantesNecessariosPorDisciplina <= quantidadeDiasAulaPorDiaSemana;
 
-//                        if(!verificarDiaSemanaEnumLiberado(naoExisteDisciplinaExtensao,diaSemanaEnum,entry.getKey(),cronogramaDisciplinasPorFase)){
-//                            continue;
-//                        }
+                        if(!verificarDiaSemanaEnumLiberado(naoExisteDisciplinaExtensao,diaSemanaEnum,entry.getKey(),cronogramaDisciplinasPorFase)){
+                            continue;
+                        }
 
                         final boolean existeConflitoFases = validarExisteConflitoFases( //tem conflito criar uma realidade paralela ?
                                 cronogramaDisciplinasPorFase,
@@ -226,6 +226,10 @@ public class CronogramaService {
                             System.out.println("Fase:" + entry.getKey().getFase().getId() + " " + entry.getKey().getNome() + " " + entry.getKey().getCargaHoraria());
                             System.out.println(entry.getKey().getProfessor().getNomeCompleto());
                             entry.getKey().getProfessor().getDiasSemanaDisponivel().forEach(aa -> System.out.println(aa.getDiaSemanaEnum()));
+                            System.out.println("\n");
+
+                            disciplinasConflitantesVerificadas.stream()
+                                    .filter(a -> a.nivelConflito() == 1).toList().forEach(System.out::println);
                             throw new RuntimeException("conflito");
                         }
                         //AQUI VAI SER REINICIADO AS FASE CASO GERAR CONFLITO POR CAUSA DE OUTRA FASE
@@ -349,6 +353,11 @@ public class CronogramaService {
                                                             int nivelConflito,
                                                             List<CronogramaDisciplinaConflitanteDom> disciplinasConflitantesVerificadas)
     {
+
+        if(nivelConflito == 0){
+            return null;
+        }
+
         for (CronogramaDisciplinaDom cronogramaDisciplina : cronogramaDisciplinasPorFase) {
           for (DiaSemanaDisponivel diaSemanaDisponivel : disciplina.getProfessor().getDiasSemanaDisponivel()){
               if(cronogramaDisciplina.getDiaSemanaEnum().equals(diaSemanaDisponivel.getDiaSemanaEnum())){
@@ -378,10 +387,6 @@ public class CronogramaService {
                   }
               }
           }
-        }
-
-        if(nivelConflito == 0){
-            return null;
         }
 
         if (!disciplinasComDiasSemanaConflitantes.isEmpty()){
@@ -514,8 +519,8 @@ public class CronogramaService {
                 .anyMatch(disciplinaFase -> disciplinaFase.getExtensaoBooleanEnum().equals(BooleanEnum.SIM));
 
             if(existeDisciplinaExtensao){
-                removerDiaDaSemanaDesnecessarioProfessor(disciplina);
-//                reoordenarDiaDaSemanaProfessor(disciplina);
+//                removerDiaDaSemanaDesnecessarioProfessor(disciplina);
+                reoordenarDiaDaSemanaProfessor(disciplina);
             }
 
            final double QUANTIDADE_DIAS_AULA_NECESSARIOS_POR_DISCIPLINA =
