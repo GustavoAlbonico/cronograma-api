@@ -11,7 +11,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/cronograma
     username: postgres
-    password: postgress
+    password: postgres
     driverClassName: org.postgresql.Driver
   security:
     token:

@@ -105,6 +105,11 @@ public class CronogramaService {
                                                                  int nivelConflito,
                                                                  List<CronogramaDisciplinaConflitanteDom> disciplinasConflitantesVerificadas)
     {
+
+        while (nivelConflito != -20){
+
+        boolean existeConflito = false;
+
         List<CronogramaDisciplinaDom> cronogramaDisciplinasPorFase = new ArrayList<>();
 
         nivelConflito++;
@@ -158,7 +163,8 @@ public class CronogramaService {
                                 quantidadeAulasPorDiaSemanaOriginal,
                                 entry.getKey(),
                                 diaSemanaEnum,
-                                entry.getValue());
+                                entry.getValue(),
+                                disciplinaPrecisaVariosDiasSemana);
 
                         if (
                             !existeConflitoFases &&
@@ -198,7 +204,7 @@ public class CronogramaService {
                                 cronogramaDisciplinaMelhorAproveitamento);
                     }
 
-                    final boolean existeConflito =
+                     existeConflito =
                             disciplinasComDiasAulaNecessariosPorFase.get(entry.getKey()) > 0 &&
                             !disciplinaMelhorAproveitamentoPrecisaVariosDiasDiasSemana;
 
@@ -236,30 +242,47 @@ public class CronogramaService {
 
                         //TALVEZ AQUI SE NIVEL CONFLITO FOR 0 CRIAR LOGICA PARA DIAS SUGESTIVOS
 
-                        return gerarCronogramaPorFase(
-                                disciplinasComDiasAulaNecessariosPorCurso,
-                                fases,
-                                quantidadeAulasPorDiaDaSemana,
-                                disciplinasComDiasSemanaConflitantes,
-                                nivelVerificado ? nivelConflito - 2 : nivelConflito,
-                                disciplinasConflitantesVerificadas);
+
+                        nivelConflito = nivelVerificado ? nivelConflito - 2 : nivelConflito;
+                        break;
+
+//                        return gerarCronogramaPorFase(
+//                                disciplinasComDiasAulaNecessariosPorCurso,
+//                                fases,
+//                                quantidadeAulasPorDiaDaSemana,
+//                                disciplinasComDiasSemanaConflitantes,
+//                                nivelVerificado ? nivelConflito - 2 : nivelConflito,
+//                                disciplinasConflitantesVerificadas);
                     }
                 }//fim while
+                if (existeConflito){
+                    break;
+                }
             }//fim map
+            if (existeConflito){
+                break;
+            }
+        }
 
-
+        if(existeConflito){
+            continue;
         }
 
 //        atualizarOrdemDePrioridadePorDiaSemana(cronogramaDisciplinasPorFase);//talvez criar verificacao para desempenho
 
         return cronogramaDisciplinasPorFase;
+
+        }
+
+        return null;
     }
 
     private boolean validarExisteConflitoFases(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorFase,
                                                final Map<DiaSemanaEnum,Double> quantidadeAulasPorDiaSemanaOriginal,
                                                Disciplina disciplina,
                                                final DiaSemanaEnum diaSemanaEnum,
-                                               double quantidadeDiasAula)
+                                               double quantidadeDiasAula,
+                                               final boolean disciplinaPrecisaVariosDiasSemana)
     {
 
         final double quantidadeAulasOcupadasNoDiaSemana = cronogramaDisciplinasPorFase.stream()
@@ -273,7 +296,7 @@ public class CronogramaService {
        final double quantidadeAulasRestantesNoDiaSemana =
                quantidadeAulasPorDiaSemanaOriginal.get(diaSemanaEnum) - quantidadeAulasOcupadasNoDiaSemana;
 
-       return quantidadeAulasRestantesNoDiaSemana < quantidadeDiasAula;
+       return quantidadeDiasAula > quantidadeAulasRestantesNoDiaSemana && !disciplinaPrecisaVariosDiasSemana;
     }
 
     private void atualizarOrdemDePrioridadePorDiaSemana(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorFase){

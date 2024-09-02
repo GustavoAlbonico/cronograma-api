@@ -290,8 +290,8 @@ VALUES
   ('Sistema Gerenciador de Banco de Dados ', 76, 4, '#00FF80', 'NAO', 2, 2, 16),
   ('Extensão em Análise e Desenvolvimento de Sistemas II', 45, 4, '#00FF80', 'SIM', 2, 2, 16),
 
-  ('Arquitetura de Software', 40, 4, '#99004C', 'NAO', 2, 3, 20),
-  ('Tecnologias e Sistemas de Informação Gerencial', 36, 4, '#003300', 'NAO',2, 3, 16),
+  ('Arquitetura de Software', 36, 4, '#99004C', 'NAO', 2, 3, 20),
+  ('Tecnologias e Sistemas de Informação Gerencial', 40, 4, '#003300', 'NAO',2, 3, 16),
   ('Desenvolvimento Back End', 76, 4, '#FF6666', 'NAO', 2, 3, 22),
   ('Cloud & ITOps', 76, 4, '#003319', 'NAO', 2, 3, 15),
   ('Qualidade e testes de software', 76, 4, '#660033', 'NAO', 2, 3, 21),
