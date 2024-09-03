@@ -197,7 +197,7 @@ VALUES
 --  (motivo, data, usuario_id)
 --VALUES
 --  ('Feriado1','2024-12-9', 2),
---  ('Feriado2','2024-12-4', 2),
+----  ('Feriado2','2024-12-4', 2),
 --  ('Feriado3','2024-11-20', 2),
 --  ('Feriado4','2024-11-15', 2),
 --  ('Feriado5','2024-10-15', 2);

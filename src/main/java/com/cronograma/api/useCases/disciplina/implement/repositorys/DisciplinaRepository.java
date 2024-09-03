@@ -11,7 +11,6 @@ import java.util.Set;
 
 public interface DisciplinaRepository extends JpaRepository<Disciplina, Long> {
     Optional<Set<Disciplina>> findByCursoId(Long id);
-    Optional<Set<Disciplina>> findByFaseId(Long id);
 
     @Query(value =
             "SELECT diaSemanaDis.dia_semana_enum " +

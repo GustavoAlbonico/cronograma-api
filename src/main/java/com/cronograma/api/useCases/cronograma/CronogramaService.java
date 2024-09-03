@@ -65,18 +65,17 @@ public class CronogramaService {
         Stack<CronogramaDisciplinaConflitanteDom> disciplinasComDiasSemanaConflitantes = new Stack<>();
         List<CronogramaDisciplinaConflitanteDom> disciplinasConflitantesVerificadas =  new ArrayList<>();
 
-            List<CronogramaDisciplinaDom> cronogramaFaseOficial =
-                    gerarCronogramaPorFase(
-                            disciplinasComDiasAulaNecessariosPorCurso,
-                            fases,
-                            quantidadeAulasPorDiaDaSemana,
-                            disciplinasComDiasSemanaConflitantes,
-                            0,
-                            disciplinasConflitantesVerificadas);
+        List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso =
+                gerarCronogramaPorCurso(
+                        disciplinasComDiasAulaNecessariosPorCurso,
+                        fases,
+                        quantidadeAulasPorDiaDaSemana,
+                        disciplinasComDiasSemanaConflitantes,
+                        disciplinasConflitantesVerificadas);
 
 
-    List<TesteResponseCronogramaDom>  response =
-            cronogramaFaseOficial
+        List<TesteResponseCronogramaDom>  response =
+                cronogramaDisciplinasPorCurso
             .stream()
             .map(cronogramaDisciplinaDom -> {
             TesteResponseCronogramaDom testeResponseCronogramaDom =
@@ -98,128 +97,129 @@ public class CronogramaService {
         return response;
     }
 
-    private List<CronogramaDisciplinaDom> gerarCronogramaPorFase(Map<Long,Map<Disciplina, Double>> disciplinasComDiasAulaNecessariosPorCurso,
+    private List<CronogramaDisciplinaDom> gerarCronogramaPorCurso(Map<Long,Map<Disciplina, Double>> disciplinasComDiasAulaNecessariosPorCurso,
                                                                  List<Fase> fases,
                                                                  Map<DiaSemanaEnum,Double> quantidadeAulasPorDiaDaSemana,
                                                                  Stack<CronogramaDisciplinaConflitanteDom> disciplinasComDiasSemanaConflitantes,
-                                                                 int nivelConflito,
                                                                  List<CronogramaDisciplinaConflitanteDom> disciplinasConflitantesVerificadas)
     {
+        int quantidadeNivelAlterada = 0;//REMVOER
+        int nivelConflito = 0;
+        boolean existePossibilidades = true;
+        while (existePossibilidades){
 
-        while (nivelConflito != -20){
+            quantidadeNivelAlterada++;//REMOVER
+            boolean existeConflito = false;
 
-        boolean existeConflito = false;
+            List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso = new ArrayList<>();//alterar o nome
 
-        List<CronogramaDisciplinaDom> cronogramaDisciplinasPorFase = new ArrayList<>();
+            for (Fase fase : fases) {
 
-        nivelConflito++;
+                Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorFase = new LinkedHashMap<>(disciplinasComDiasAulaNecessariosPorCurso.get(fase.getId()));
 
-        System.out.println(nivelConflito);
-
-        for (Fase fase : fases) {
-
-            Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorFase = new LinkedHashMap<>(disciplinasComDiasAulaNecessariosPorCurso.get(fase.getId()));
-
-            final boolean naoExisteDisciplinaExtensao = disciplinasComDiasAulaNecessariosPorFase.keySet().stream()
+                final boolean naoExisteDisciplinaExtensao = disciplinasComDiasAulaNecessariosPorFase.keySet().stream()
                     .filter(disciplina -> disciplina.getFase().getId().equals(fase.getId()))
                     .noneMatch(disciplina -> disciplina.getExtensaoBooleanEnum().equals(BooleanEnum.SIM));
 
-            Map<DiaSemanaEnum, Double> quantidadeAulasPorDiaDaSemanaAuxiliar = new HashMap<>(quantidadeAulasPorDiaDaSemana);
+                Map<DiaSemanaEnum, Double> quantidadeAulasPorDiaDaSemanaAuxiliar = new HashMap<>(quantidadeAulasPorDiaDaSemana);
 
-            final Map<DiaSemanaEnum, Double> quantidadeAulasPorDiaSemanaOriginal = Map.copyOf(quantidadeAulasPorDiaDaSemana);
+                final Map<DiaSemanaEnum, Double> quantidadeAulasPorDiaSemanaOriginal = Map.copyOf(quantidadeAulasPorDiaDaSemana);
 
-            adicionarDiasDaSemanaConflitantesVerificados(disciplinasComDiasAulaNecessariosPorFase, disciplinasConflitantesVerificadas);
-            removerDiasDaSemanaConflitantes(disciplinasComDiasAulaNecessariosPorFase, disciplinasComDiasSemanaConflitantes);
+                adicionarDiasDaSemanaConflitantesVerificados(disciplinasComDiasAulaNecessariosPorFase, disciplinasConflitantesVerificadas);
+                removerDiasDaSemanaConflitantes(disciplinasComDiasAulaNecessariosPorFase, disciplinasComDiasSemanaConflitantes);
 
-            for (Map.Entry<Disciplina, Double> entry : disciplinasComDiasAulaNecessariosPorFase.entrySet()) {
-                while (entry.getValue() > 0) {
-                    CronogramaDisciplinaMelhorAproveitamentoDom cronogramaDisciplinaMelhorAproveitamento = null;
-                    boolean disciplinaMelhorAproveitamentoPrecisaVariosDiasDiasSemana = false;
-                    for (DiaSemanaDisponivel diaSemanaDisponivel : entry.getKey().getProfessor().getDiasSemanaDisponivel()) {
-                        final DiaSemanaEnum diaSemanaEnum = diaSemanaDisponivel.getDiaSemanaEnum();
+                for (Map.Entry<Disciplina, Double> entry : disciplinasComDiasAulaNecessariosPorFase.entrySet()) {
+                    while (entry.getValue() > 0) {
+                        CronogramaDisciplinaMelhorAproveitamentoDom cronogramaDisciplinaMelhorAproveitamento = null;
+                        boolean disciplinaMelhorAproveitamentoPrecisaVariosDiasDiasSemana = false;
+                        for (DiaSemanaDisponivel diaSemanaDisponivel : entry.getKey().getProfessor().getDiasSemanaDisponivel()) {
+                            final DiaSemanaEnum diaSemanaEnum = diaSemanaDisponivel.getDiaSemanaEnum();
 
-                        final double quantidadeDiasAulaNecessariosPorDisciplina = entry.getValue();
+                            final double quantidadeDiasAulaNecessariosPorDisciplina = entry.getValue();
 
-                        final double quantidadeDiasAulaPorDiaSemana = quantidadeAulasPorDiaDaSemanaAuxiliar.get(diaSemanaEnum);
+                            final double quantidadeDiasAulaPorDiaSemana = quantidadeAulasPorDiaDaSemanaAuxiliar.get(diaSemanaEnum);
 
-                        final double quantidadeDiasAulaRestantesNecessariosPorDisciplina = quantidadeDiasAulaNecessariosPorDisciplina - quantidadeDiasAulaPorDiaSemana;
+                            final double quantidadeDiasAulaRestantesNecessariosPorDisciplina = quantidadeDiasAulaNecessariosPorDisciplina - quantidadeDiasAulaPorDiaSemana;
 
-                        final double disciplinaPorcentagemOcupacaoDiasAulaPorDiaSemana =
+                            final double disciplinaPorcentagemOcupacaoDiasAulaPorDiaSemana =
                                 (quantidadeDiasAulaNecessariosPorDisciplina / quantidadeDiasAulaPorDiaSemana) * 100;
 
-                        final double quantidadeDiasAulaRestantesPorDiaSemana =
+                            final double quantidadeDiasAulaRestantesPorDiaSemana =
                                 quantidadeDiasAulaPorDiaSemana - quantidadeDiasAulaNecessariosPorDisciplina;
 
-                        final boolean disciplinaPrecisaVariosDiasSemana =
+                            final boolean disciplinaPrecisaVariosDiasSemana =
                                 quantidadeDiasAulaNecessariosPorDisciplina > quantidadeAulasPorDiaSemanaOriginal.get(diaSemanaEnum) &&
                                         quantidadeDiasAulaRestantesNecessariosPorDisciplina <= quantidadeDiasAulaPorDiaSemana;
 
-                        if(!verificarDiaSemanaEnumLiberado(naoExisteDisciplinaExtensao,diaSemanaEnum,entry.getKey(),cronogramaDisciplinasPorFase)){
-                            continue;
-                        }
-
-                        final boolean existeConflitoFases = validarExisteConflitoFases( //tem conflito criar uma realidade paralela ?
-                                cronogramaDisciplinasPorFase,
-                                quantidadeAulasPorDiaSemanaOriginal,
-                                entry.getKey(),
-                                diaSemanaEnum,
-                                entry.getValue(),
-                                disciplinaPrecisaVariosDiasSemana);
-
-                        if (
-                            !existeConflitoFases &&
-                            quantidadeDiasAulaNecessariosPorDisciplina > 0 &&
-                            (quantidadeDiasAulaNecessariosPorDisciplina <= quantidadeDiasAulaPorDiaSemana || disciplinaPrecisaVariosDiasSemana)
-                        ) {
-
-                            final boolean existeMelhorAproveitamentoDias =
-                                    validarExisteMelhorAproveitamentoDias(
-                                            disciplinaPorcentagemOcupacaoDiasAulaPorDiaSemana,
-                                            quantidadeDiasAulaRestantesPorDiaSemana,
-                                            cronogramaDisciplinaMelhorAproveitamento,
-                                            cronogramaDisciplinasPorFase,
-                                            diaSemanaEnum);
-
-                            if (existeMelhorAproveitamentoDias) {
-                                cronogramaDisciplinaMelhorAproveitamento =
-                                        new CronogramaDisciplinaMelhorAproveitamentoDom(
-                                                entry.getKey(),
-                                                diaSemanaEnum,
-                                                quantidadeDiasAulaRestantesPorDiaSemana,
-                                                quantidadeDiasAulaRestantesNecessariosPorDisciplina,
-                                                disciplinaPorcentagemOcupacaoDiasAulaPorDiaSemana,
-                                                quantidadeDiasAulaRestantesNecessariosPorDisciplina < 0 ? entry.getValue() : entry.getValue() - quantidadeDiasAulaRestantesNecessariosPorDisciplina);
-
-                                disciplinaMelhorAproveitamentoPrecisaVariosDiasDiasSemana = disciplinaPrecisaVariosDiasSemana;
+                            if(!verificarDiaSemanaEnumLiberado(naoExisteDisciplinaExtensao,diaSemanaEnum,entry.getKey(),cronogramaDisciplinasPorCurso)){
+                                continue;
                             }
+
+                            final boolean existeConflitoFases = validarExisteConflitoFases(
+                                    cronogramaDisciplinasPorCurso,
+                                    quantidadeAulasPorDiaSemanaOriginal,
+                                    entry.getKey(),
+                                    diaSemanaEnum,
+                                    entry.getValue(),
+                                    disciplinaPrecisaVariosDiasSemana);
+
+                            if (
+                                !existeConflitoFases &&
+                                quantidadeDiasAulaNecessariosPorDisciplina > 0 &&
+                                (quantidadeDiasAulaNecessariosPorDisciplina <= quantidadeDiasAulaPorDiaSemana || disciplinaPrecisaVariosDiasSemana)
+                            ) {
+
+                                final boolean existeMelhorAproveitamentoDias =
+                                        validarExisteMelhorAproveitamentoDias(
+                                                disciplinaPorcentagemOcupacaoDiasAulaPorDiaSemana,
+                                                quantidadeDiasAulaRestantesPorDiaSemana,
+                                                cronogramaDisciplinaMelhorAproveitamento,
+                                                cronogramaDisciplinasPorCurso,
+                                                diaSemanaEnum,
+                                                fase);
+
+                                if (existeMelhorAproveitamentoDias) {
+                                    cronogramaDisciplinaMelhorAproveitamento =
+                                            new CronogramaDisciplinaMelhorAproveitamentoDom(
+                                                    entry.getKey(),
+                                                    diaSemanaEnum,
+                                                    quantidadeDiasAulaRestantesPorDiaSemana,
+                                                    quantidadeDiasAulaRestantesNecessariosPorDisciplina,
+                                                    disciplinaPorcentagemOcupacaoDiasAulaPorDiaSemana,
+                                                    quantidadeDiasAulaRestantesNecessariosPorDisciplina < 0 ? entry.getValue() : entry.getValue() - quantidadeDiasAulaRestantesNecessariosPorDisciplina);
+
+                                    disciplinaMelhorAproveitamentoPrecisaVariosDiasDiasSemana = disciplinaPrecisaVariosDiasSemana;
+                                }
+                            }
+                        }//fim for diasemana
+
+                        if (cronogramaDisciplinaMelhorAproveitamento != null) {
+
+                            adicionarDisciplina(cronogramaDisciplinasPorCurso, cronogramaDisciplinaMelhorAproveitamento);
+
+                            atualizarQuantidadeDiasAula(quantidadeAulasPorDiaDaSemanaAuxiliar,
+                                    disciplinasComDiasAulaNecessariosPorFase,
+                                    cronogramaDisciplinaMelhorAproveitamento);
                         }
-                    }//fim for diasemana
 
-                    if (cronogramaDisciplinaMelhorAproveitamento != null) {
+                         existeConflito =
+                                disciplinasComDiasAulaNecessariosPorFase.get(entry.getKey()) > 0 &&
+                                !disciplinaMelhorAproveitamentoPrecisaVariosDiasDiasSemana;
 
-                        adicionarDisciplina(cronogramaDisciplinasPorFase, cronogramaDisciplinaMelhorAproveitamento);
+                        if (existeConflito) {
 
-                        atualizarQuantidadeDiasAula(quantidadeAulasPorDiaDaSemanaAuxiliar,
-                                disciplinasComDiasAulaNecessariosPorFase,
-                                cronogramaDisciplinaMelhorAproveitamento);
-                    }
+                            final Boolean nivelVerificado = buscarDisciplinaComDiaSemanaConflitante(
+                                    quantidadeAulasPorDiaSemanaOriginal,
+                                    cronogramaDisciplinasPorCurso,
+                                    entry.getKey(),
+                                    disciplinasComDiasSemanaConflitantes,
+                                    nivelConflito,
+                                    disciplinasConflitantesVerificadas);
 
-                     existeConflito =
-                            disciplinasComDiasAulaNecessariosPorFase.get(entry.getKey()) > 0 &&
-                            !disciplinaMelhorAproveitamentoPrecisaVariosDiasDiasSemana;
+                            nivelConflito = nivelVerificado ? nivelConflito - 1 : nivelConflito + 1;
 
-                    if (existeConflito) {
-
-                        final Boolean nivelVerificado = buscarDisciplinaComDiaSemanaConflitante(
-                                cronogramaDisciplinasPorFase,
-                                entry.getKey(),
-                                disciplinasComDiasSemanaConflitantes,
-                                nivelConflito,
-                                disciplinasConflitantesVerificadas);
-
-
-                        if (nivelVerificado == null) {//se o conflito for de fases
-                            cronogramaDisciplinasPorFase.forEach(aa -> System.out.println("Fase: " + aa.getFaseId() + " " +
+                            if (nivelConflito < 0){
+                                cronogramaDisciplinasPorCurso.forEach(aa -> System.out.println("Fase: " + aa.getFaseId() + " " +
                                     aa.getDisciplina().getNome() + " " +
                                     aa.getDisciplina().getCargaHoraria() + "\n" +
                                     "OP" + aa.getOrdemPrioridadePorDiaSemana() + " " +
@@ -227,57 +227,47 @@ public class CronogramaService {
                                     aa.getDiaSemanaEnum() + " " +
                                     aa.getDisciplina().getProfessor().getNomeCompleto() + "\n" +
                                     aa.getDisciplina().getProfessor().getDiasSemanaDisponivel().stream().map(DiaSemanaDisponivel::getDiaSemanaEnum).toList() + "\n"
-                            ));
+                                ));
 
-                            System.out.println("Fase:" + entry.getKey().getFase().getId() + " " + entry.getKey().getNome() + " " + entry.getKey().getCargaHoraria());
-                            System.out.println(entry.getKey().getProfessor().getNomeCompleto());
-                            entry.getKey().getProfessor().getDiasSemanaDisponivel().forEach(aa -> System.out.println(aa.getDiaSemanaEnum()));
-                            System.out.println("\n");
+                                System.out.println("quantidade de nivel de conflitos " + quantidadeNivelAlterada);
+                                System.out.println("Fase:" + entry.getKey().getFase().getId() + " " + entry.getKey().getNome() + " " + entry.getKey().getCargaHoraria());
+                                System.out.println(entry.getKey().getProfessor().getNomeCompleto());
+                                entry.getKey().getProfessor().getDiasSemanaDisponivel().forEach(aa -> System.out.println(aa.getDiaSemanaEnum()));
+                                System.out.println("\n");
 
-                            disciplinasConflitantesVerificadas.stream()
-                                    .filter(a -> a.nivelConflito() == 1).toList().forEach(System.out::println);
-                            throw new RuntimeException("conflito");
+                                existePossibilidades =  false;
+                            }
+                            break;
                         }
-                        //AQUI VAI SER REINICIADO AS FASE CASO GERAR CONFLITO POR CAUSA DE OUTRA FASE
-
-                        //TALVEZ AQUI SE NIVEL CONFLITO FOR 0 CRIAR LOGICA PARA DIAS SUGESTIVOS
-
-
-                        nivelConflito = nivelVerificado ? nivelConflito - 2 : nivelConflito;
+                    }//fim while
+                    if (existeConflito){
                         break;
-
-//                        return gerarCronogramaPorFase(
-//                                disciplinasComDiasAulaNecessariosPorCurso,
-//                                fases,
-//                                quantidadeAulasPorDiaDaSemana,
-//                                disciplinasComDiasSemanaConflitantes,
-//                                nivelVerificado ? nivelConflito - 2 : nivelConflito,
-//                                disciplinasConflitantesVerificadas);
                     }
-                }//fim while
+
+                }//fim map
                 if (existeConflito){
                     break;
                 }
-            }//fim map
-            if (existeConflito){
-                break;
+
+            }//fases
+
+            if(existeConflito){
+                continue;
             }
+            System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+//          atualizarOrdemDePrioridadePorDiaSemana(cronogramaDisciplinasPorFase);//talvez criar verificacao para desempenho
+
+            System.out.println("quantidade de nivel de conflitos " + quantidadeNivelAlterada);
+            return cronogramaDisciplinasPorCurso;
         }
 
-        if(existeConflito){
-            continue;
-        }
-
-//        atualizarOrdemDePrioridadePorDiaSemana(cronogramaDisciplinasPorFase);//talvez criar verificacao para desempenho
-
-        return cronogramaDisciplinasPorFase;
-
-        }
-
-        return null;
+        System.out.println("quantidade de nivel de conflitos " + quantidadeNivelAlterada);
+        disciplinasConflitantesVerificadas.stream()
+                .filter(a -> a.nivelConflito() == 1).toList().forEach(System.out::println);
+        throw new RuntimeException("conflito");
     }
 
-    private boolean validarExisteConflitoFases(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorFase,
+    private boolean validarExisteConflitoFases(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso,
                                                final Map<DiaSemanaEnum,Double> quantidadeAulasPorDiaSemanaOriginal,
                                                Disciplina disciplina,
                                                final DiaSemanaEnum diaSemanaEnum,
@@ -285,7 +275,7 @@ public class CronogramaService {
                                                final boolean disciplinaPrecisaVariosDiasSemana)
     {
 
-        final double quantidadeAulasOcupadasNoDiaSemana = cronogramaDisciplinasPorFase.stream()
+        final double quantidadeAulasOcupadasNoDiaSemana = cronogramaDisciplinasPorCurso.stream()
                 .filter(cronogramaDisciplinaDom ->
                         cronogramaDisciplinaDom.getDisciplina().getProfessor().getId().equals(disciplina.getProfessor().getId()) &&
                         cronogramaDisciplinaDom.getDiaSemanaEnum().equals(diaSemanaEnum))
@@ -327,11 +317,11 @@ public class CronogramaService {
         }
     }
 
-    private void adicionarDisciplina(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorFase,CronogramaDisciplinaMelhorAproveitamentoDom cronogramaDisciplinaMelhorAproveitamento){
+    private void adicionarDisciplina(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso,CronogramaDisciplinaMelhorAproveitamentoDom cronogramaDisciplinaMelhorAproveitamento){
 
         int ordemPrioridadePorDiaSemana = 1;
 
-        for (CronogramaDisciplinaDom cronogramaDisciplinaDom : cronogramaDisciplinasPorFase){
+        for (CronogramaDisciplinaDom cronogramaDisciplinaDom : cronogramaDisciplinasPorCurso){
             if(
               cronogramaDisciplinaDom.getDiaSemanaEnum().equals(cronogramaDisciplinaMelhorAproveitamento.getDiaSemanaEnum()) &&
               cronogramaDisciplinaDom.getFaseId().equals(cronogramaDisciplinaMelhorAproveitamento.getDisciplina().getFase().getId()) &&
@@ -341,7 +331,7 @@ public class CronogramaService {
             }
         }
 
-        cronogramaDisciplinasPorFase.add(new CronogramaDisciplinaDom(
+        cronogramaDisciplinasPorCurso.add(new CronogramaDisciplinaDom(
                 cronogramaDisciplinaMelhorAproveitamento.getDisciplina(),
                 cronogramaDisciplinaMelhorAproveitamento.getDiaSemanaEnum(),
                 cronogramaDisciplinaMelhorAproveitamento.getQuantidadeDiasAula(),
@@ -370,21 +360,40 @@ public class CronogramaService {
                 .put(cronogramaDisciplinaMelhorAproveitamento.getDisciplina(),quantidadeDiasAulaRestantesNecessariosPorDisciplina);
     }
 
-    private Boolean buscarDisciplinaComDiaSemanaConflitante(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorFase,
+    private Boolean buscarDisciplinaComDiaSemanaConflitante(final Map<DiaSemanaEnum, Double> quantidadeAulasPorDiaSemanaOriginal,
+                                                            List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso,
                                                             Disciplina disciplina,
                                                             Stack<CronogramaDisciplinaConflitanteDom> disciplinasComDiasSemanaConflitantes,
                                                             int nivelConflito,
                                                             List<CronogramaDisciplinaConflitanteDom> disciplinasConflitantesVerificadas)
     {
 
-        if(nivelConflito == 0){
-            return null;
-        }
-
-        for (CronogramaDisciplinaDom cronogramaDisciplina : cronogramaDisciplinasPorFase) {
+        for (CronogramaDisciplinaDom cronogramaDisciplina : cronogramaDisciplinasPorCurso) {
           for (DiaSemanaDisponivel diaSemanaDisponivel : disciplina.getProfessor().getDiasSemanaDisponivel()){
-              if(cronogramaDisciplina.getDiaSemanaEnum().equals(diaSemanaDisponivel.getDiaSemanaEnum())){
-                  if(cronogramaDisciplina.getDisciplina().getProfessor().getDiasSemanaDisponivel().size() > 1) {
+              if(
+                 cronogramaDisciplina.getDiaSemanaEnum().equals(diaSemanaDisponivel.getDiaSemanaEnum()) &&
+                 !cronogramaDisciplina.getDisciplina().equals(disciplina)
+              ){
+
+                  final double quantidadeDiasAulaNecessariosDisciplina = cronogramaDisciplinasPorCurso.stream()
+                          .filter(cronogramaDis -> cronogramaDis.getDisciplina().equals(cronogramaDisciplina.getDisciplina()))
+                          .map(cronogramaDis -> cronogramaDis.getDisciplina().getCargaHoraria() / cronogramaDis.getDisciplina().getCargaHorariaDiaria())
+                          .mapToDouble(Double::doubleValue)
+                          .average().getAsDouble();
+
+                  final double mediaQuantidadeDiaAulaDisponivel = cronogramaDisciplinasPorCurso.stream()
+                          .filter(cronogramaDis -> cronogramaDis.getDisciplina().equals(cronogramaDisciplina.getDisciplina()))
+                          .findFirst()
+                          .map(cronogramaDisciplinaDom -> cronogramaDisciplinaDom.getDisciplina().getProfessor().getDiasSemanaDisponivel().stream()
+                                  .mapToDouble(diaSemana -> quantidadeAulasPorDiaSemanaOriginal.get(diaSemana.getDiaSemanaEnum()))
+                                  .average().getAsDouble()
+                          ).get();
+
+
+                  final double quantidadeMinimaDiaDaSemanaNecessario =
+                          Math.ceil(quantidadeDiasAulaNecessariosDisciplina / mediaQuantidadeDiaAulaDisponivel);
+
+                  if(cronogramaDisciplina.getDisciplina().getProfessor().getDiasSemanaDisponivel().size() > quantidadeMinimaDiaDaSemanaNecessario) {
 
                       final boolean disciplinaConflitanteEstaVerificada = disciplinasConflitantesVerificadas.stream()
                               .anyMatch(disciplinaConflitanteVerificada ->
@@ -397,10 +406,15 @@ public class CronogramaService {
                           continue;
                       }
 
+                      final DiaSemanaDisponivel diaSemanaDisponivelConflitante =  cronogramaDisciplina.getDisciplina().getProfessor().getDiasSemanaDisponivel().stream()
+                              .filter(diaSemanaDisponivelProfessorConflitante ->
+                                      diaSemanaDisponivelProfessorConflitante.getDiaSemanaEnum().equals(diaSemanaDisponivel.getDiaSemanaEnum()))
+                              .findFirst().get();
+
                       CronogramaDisciplinaConflitanteDom cronogramaDisciplinaConflitanteDom = new CronogramaDisciplinaConflitanteDom(
                               disciplina,
                               cronogramaDisciplina.getDisciplina(),
-                              diaSemanaDisponivel,
+                              diaSemanaDisponivelConflitante,
                               nivelConflito);
 
                       disciplinasComDiasSemanaConflitantes.push(cronogramaDisciplinaConflitanteDom);
@@ -446,6 +460,8 @@ public class CronogramaService {
                     if(!diaSemanaDisponivelExistente){
                         disciplinas.getKey().getProfessor().getDiasSemanaDisponivel()
                                 .add(disciplinaConflitanteVerificada.diaSemanaDisponivelConflitante());
+
+                        reoordenarDiaDaSemanaProfessor(disciplinas.getKey());
                     }
                 }
             }
@@ -455,8 +471,9 @@ public class CronogramaService {
     private boolean validarExisteMelhorAproveitamentoDias(final double disciplinaPorcentagemOcupacaoDiasAulaPorDiaSemana,
                                                           final double quantidadeDiasAulaRestantesPorDiaSemana,
                                                           CronogramaDisciplinaMelhorAproveitamentoDom cronogramaDisciplinaMelhorAproveitamento,
-                                                          List<CronogramaDisciplinaDom> cronogramaDisciplinasPorFase,
-                                                          final DiaSemanaEnum diaSemanaEnumAtual)
+                                                          List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso,
+                                                          final DiaSemanaEnum diaSemanaEnumAtual,
+                                                          Fase fase)
     {
         boolean existeMelhorAproveitamentoDias = true;
 
@@ -464,10 +481,14 @@ public class CronogramaService {
             existeMelhorAproveitamentoDias = false;
 
             final boolean existeDisciplinaNoDiaSemanaEnumAtual =
-                    cronogramaDisciplinasPorFase.stream().anyMatch(cronogramaDisciplina -> cronogramaDisciplina.getDiaSemanaEnum().equals(diaSemanaEnumAtual));
+                    cronogramaDisciplinasPorCurso.stream().anyMatch(cronogramaDisciplina ->
+                            cronogramaDisciplina.getFaseId().equals(fase.getId()) &&
+                            cronogramaDisciplina.getDiaSemanaEnum().equals(diaSemanaEnumAtual));//verificar
 
             final boolean existeDisciplinaNoDiaSemanaEnumSalvo =
-                    cronogramaDisciplinasPorFase.stream().anyMatch(cronogramaDisciplina -> cronogramaDisciplina.getDiaSemanaEnum().equals(cronogramaDisciplinaMelhorAproveitamento.getDiaSemanaEnum()));
+                    cronogramaDisciplinasPorCurso.stream().anyMatch(cronogramaDisciplina ->
+                            cronogramaDisciplina.getFaseId().equals(cronogramaDisciplinaMelhorAproveitamento.getDisciplina().getFase().getId()) &&
+                            cronogramaDisciplina.getDiaSemanaEnum().equals(cronogramaDisciplinaMelhorAproveitamento.getDiaSemanaEnum()));//verificar
 
             if(
                disciplinaPorcentagemOcupacaoDiasAulaPorDiaSemana > 75.00 &&
@@ -537,14 +558,7 @@ public class CronogramaService {
             criarNovaInstanciaProfessor(disciplina);
             professorContratandoId = verificarDisciplinaNaoPossuiProfessor(professorContratandoId,disciplina);
 
-            final boolean existeDisciplinaExtensao = disciplinasEncontradas.stream()
-                .filter(disciplinaFase -> disciplinaFase.getFase().getId().equals(disciplina.getFase().getId()))
-                .anyMatch(disciplinaFase -> disciplinaFase.getExtensaoBooleanEnum().equals(BooleanEnum.SIM));
-
-            if(existeDisciplinaExtensao){
-//                removerDiaDaSemanaDesnecessarioProfessor(disciplina);
-                reoordenarDiaDaSemanaProfessor(disciplina);
-            }
+            reoordenarDiaDaSemanaProfessor(disciplina);
 
            final double QUANTIDADE_DIAS_AULA_NECESSARIOS_POR_DISCIPLINA =
                     Math.floor(disciplina.getCargaHoraria() / disciplina.getCargaHorariaDiaria());
@@ -557,8 +571,8 @@ public class CronogramaService {
 
             Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorFase = disciplinasComDiasAulaNecessariosPorPeriodo.entrySet().stream()
                     .filter(entry -> entry.getKey().getFase().getId().equals(fase.getId()))
-                    .sorted(Comparator.comparing((Map.Entry<Disciplina, Double> entry) -> entry.getKey().getProfessor().getDiasSemanaDisponivel().size())
-                            .thenComparing(entry -> entry.getKey().getExtensaoBooleanEnum().equals(BooleanEnum.NAO))
+                    .sorted(Comparator.comparing((Map.Entry<Disciplina, Double> entry) -> entry.getKey().getExtensaoBooleanEnum().equals(BooleanEnum.NAO))
+                            .thenComparing(entry -> entry.getKey().getProfessor().getDiasSemanaDisponivel().size())
                             .thenComparing(Comparator.comparing((Map.Entry<Disciplina, Double> entry) -> entry.getKey().getCargaHoraria()).reversed()))
                     .collect(Collectors.toMap(
                             Map.Entry::getKey,
@@ -617,11 +631,13 @@ public class CronogramaService {
         Set<DiaSemanaDisponivel> diaSemanaDisponivelOrdenado;
         if (disciplina.getExtensaoBooleanEnum().equals(BooleanEnum.SIM)){
             diaSemanaDisponivelOrdenado = disciplina.getProfessor().getDiasSemanaDisponivel().stream()
+                    .sorted(Comparator.comparing(diaSemanaDisponivel -> diaSemanaDisponivel.getDiaSemanaEnum().ordinal()))
                     .sorted(Comparator.comparing(diaSemanaDisponivel -> !diaSemanaDisponivel.getDiaSemanaEnum().equals(DiaSemanaEnum.SABADO)))
                     .collect(Collectors.toCollection(LinkedHashSet::new));
 
         } else {
             diaSemanaDisponivelOrdenado = disciplina.getProfessor().getDiasSemanaDisponivel().stream()
+                    .sorted(Comparator.comparing(diaSemanaDisponivel -> diaSemanaDisponivel.getDiaSemanaEnum().ordinal()))
                     .sorted(Comparator.comparing(diaSemanaDisponivel -> diaSemanaDisponivel.getDiaSemanaEnum().equals(DiaSemanaEnum.SABADO)))
                     .collect(Collectors.toCollection(LinkedHashSet::new));
 
@@ -659,14 +675,14 @@ public class CronogramaService {
         return professorContratandoId;
     }
 
-    private boolean verificarDiaSemanaEnumLiberado(final boolean naoExisteDisciplinaExtensao,final DiaSemanaEnum diaSemanaEnum, Disciplina disciplina, List<CronogramaDisciplinaDom> cronogramaDisciplinasPorFase){
+    private boolean verificarDiaSemanaEnumLiberado(final boolean naoExisteDisciplinaExtensao,final DiaSemanaEnum diaSemanaEnum, Disciplina disciplina, List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso){
 
         if(naoExisteDisciplinaExtensao){
             return true;
         }
 
         if (disciplina.getExtensaoBooleanEnum().equals(BooleanEnum.SIM) && !diaSemanaEnum.equals(DiaSemanaEnum.SABADO)){
-            final boolean diaSemanaEnumLiberadoDiferenteSabado = cronogramaDisciplinasPorFase.stream()
+            final boolean diaSemanaEnumLiberadoDiferenteSabado = cronogramaDisciplinasPorCurso.stream()
                     .anyMatch(cronogramaDisciplina ->
                             cronogramaDisciplina.getFaseId().equals(disciplina.getFase().getId()) &&
                             cronogramaDisciplina.getDisciplina().equals(disciplina) &&
@@ -674,7 +690,7 @@ public class CronogramaService {
 
             return diaSemanaEnumLiberadoDiferenteSabado;
         } else if (disciplina.getExtensaoBooleanEnum().equals(BooleanEnum.NAO) && diaSemanaEnum.equals(DiaSemanaEnum.SABADO)) {
-            final boolean diaSemanaEnumLiberadoSerSabado = cronogramaDisciplinasPorFase.stream()
+            final boolean diaSemanaEnumLiberadoSerSabado = cronogramaDisciplinasPorCurso.stream()
                     .anyMatch(cronogramaDisciplina ->
                             cronogramaDisciplina.getFaseId().equals(disciplina.getFase().getId()) &&
                             cronogramaDisciplina.getDisciplina().equals(disciplina) &&
