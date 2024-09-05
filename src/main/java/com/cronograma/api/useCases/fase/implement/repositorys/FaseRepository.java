@@ -16,7 +16,7 @@ public interface FaseRepository extends JpaRepository<Fase, Long> {
             "JOIN disciplina ON fase.id = disciplina.fase_id " +
             "WHERE disciplina.curso_id = :cursoId " +
             "GROUP BY fase.id " +
-            "ORDER BY fase.numero ASC;",
+            "ORDER BY fase.numero DESC;",
         nativeQuery = true)
     Optional<List<Fase>> buscarFasesPorCursoId(@Param("cursoId") Long cursoId);
 

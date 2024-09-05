@@ -124,19 +124,25 @@ VALUES
 
   ('SEGUNDA_FEIRA', 7), --Fabiano Reis
   ('SEXTA_FEIRA', 7),
+  ('QUARTA_FEIRA', 7),--dataex
 
   ('TERCA_FEIRA', 8), --Maria Matias
+  ('QUARTA_FEIRA', 8), --dataex
 
   ('QUARTA_FEIRA', 9), --Polyane Reis
 
   ('TERCA_FEIRA', 10),
   ('QUINTA_FEIRA', 10), --Ellen Fabrini
+  ('SABADO', 10), --dataex
 
   ('SEXTA_FEIRA', 11), --Eduardo Ribeiro
+  ('QUINTA_FEIRA', 11), --dataex
 
   ('QUARTA_FEIRA', 12), --Katiane Araújo
+  ('SABADO', 12), --dataex
 
   ('SEXTA_FEIRA', 13), --Josilene Della
+  ('SABADO', 13), --dataex
 
     --VARIOS CURSOS
   ('SEGUNDA_FEIRA', 14),
@@ -148,6 +154,7 @@ VALUES
 
   ('SEGUNDA_FEIRA', 15), --Fernando Gabriel
   ('QUARTA_FEIRA', 15),
+  ('QUINTA_FEIRA', 15),--dataex
 
   ('TERCA_FEIRA', 16),
   ('SEGUNDA_FEIRA', 16), --Marcelo Mazon
@@ -156,6 +163,7 @@ VALUES
 
   ('QUARTA_FEIRA', 17),--Christine Vieira
   ('SEXTA_FEIRA', 17),
+  ('QUINTA_FEIRA', 17), --dataex
 
   ('SEGUNDA_FEIRA', 18),--Jossuan Diniz
   ('QUINTA_FEIRA', 18),
@@ -178,6 +186,7 @@ VALUES
 
   ('QUARTA_FEIRA', 23),-- Jorge Henrique da Silva Naspolini
   ('SEXTA_FEIRA', 23),
+  ('QUINTA_FEIRA', 23),--dataex
 
   ('QUINTA_FEIRA', 24),--Roni Edson dos Santos
 
@@ -193,14 +202,13 @@ VALUES
 --ADS
 
 -- DATA BLOQUEADA
---INSERT INTO data_bloqueada
---  (motivo, data, usuario_id)
---VALUES
---  ('Feriado1','2024-12-9', 2),
-----  ('Feriado2','2024-12-4', 2),
---  ('Feriado3','2024-11-20', 2),
---  ('Feriado4','2024-11-15', 2),
---  ('Feriado5','2024-10-15', 2);
+INSERT INTO data_bloqueada
+  (motivo, data, usuario_id)
+VALUES
+  ('Feriado2','2024-12-4', 2),
+  ('Feriado3','2024-11-20', 2),
+  ('Feriado4','2024-11-15', 2),
+  ('Feriado5','2024-10-15', 2);
 
 --COORDENADOR
 INSERT INTO coordenador
