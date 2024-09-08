@@ -256,7 +256,7 @@ INSERT INTO disciplina
   (nome, carga_horaria, carga_horaria_diaria, cor_hexadecimal, extensao_boolean_enum, curso_id, fase_id, professor_id)
 VALUES
 --MODA
-  ('Extensão em Design de Moda I', 36, 4, '#1E90FF', 'SIM', 1, 2, 1),
+  ('Extensão em Design de Moda I', 50, 4, '#1E90FF', 'SIM', 1, 2, 1),
   ('Desenho de Moda I', 60, 4, '#006400', 'NAO', 1, 2, 2),
   ('História da Arte e da Moda', 60, 4, '#DAA520', 'NAO', 1, 2, 3),
   ('Marketing de Moda e Comportamento do Consumido', 70, 4, '#8A2BE2', 'NAO', 1, 2, 4),

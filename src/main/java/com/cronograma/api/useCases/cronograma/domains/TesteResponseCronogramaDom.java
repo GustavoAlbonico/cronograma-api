@@ -8,6 +8,5 @@ public record TesteResponseCronogramaDom( double faseId,
                                          int ordemPrioridadePorDiaSemana,
                                          double quantidadeDiasAula,
                                          DiaSemanaEnum diaSemanaEnum,
-                                         String nomeProfessor,
-                                         List<DiaSemanaEnum> listaDiasSemanaDisponiveis) {
+                                         String nomeProfessor) {
 }
