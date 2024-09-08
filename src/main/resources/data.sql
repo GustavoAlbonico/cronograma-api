@@ -124,19 +124,25 @@ VALUES
 
   ('SEGUNDA_FEIRA', 7), --Fabiano Reis
   ('SEXTA_FEIRA', 7),
+  ('QUARTA_FEIRA', 7),--dataex
 
   ('TERCA_FEIRA', 8), --Maria Matias
+  ('QUARTA_FEIRA', 8), --dataex
 
   ('QUARTA_FEIRA', 9), --Polyane Reis
 
   ('TERCA_FEIRA', 10),
   ('QUINTA_FEIRA', 10), --Ellen Fabrini
+  ('SABADO', 10), --dataex
 
   ('SEXTA_FEIRA', 11), --Eduardo Ribeiro
+  ('QUINTA_FEIRA', 11), --dataex
 
   ('QUARTA_FEIRA', 12), --Katiane Araújo
+  ('SABADO', 12), --dataex
 
   ('SEXTA_FEIRA', 13), --Josilene Della
+  ('SABADO', 13), --dataex
 
     --VARIOS CURSOS
   ('SEGUNDA_FEIRA', 14),
@@ -148,6 +154,7 @@ VALUES
 
   ('SEGUNDA_FEIRA', 15), --Fernando Gabriel
   ('QUARTA_FEIRA', 15),
+  ('QUINTA_FEIRA', 15),--dataex
 
   ('TERCA_FEIRA', 16),
   ('SEGUNDA_FEIRA', 16), --Marcelo Mazon
@@ -156,6 +163,7 @@ VALUES
 
   ('QUARTA_FEIRA', 17),--Christine Vieira
   ('SEXTA_FEIRA', 17),
+  ('QUINTA_FEIRA', 17), --dataex
 
   ('SEGUNDA_FEIRA', 18),--Jossuan Diniz
   ('QUINTA_FEIRA', 18),
@@ -178,6 +186,7 @@ VALUES
 
   ('QUARTA_FEIRA', 23),-- Jorge Henrique da Silva Naspolini
   ('SEXTA_FEIRA', 23),
+  ('QUINTA_FEIRA', 23),--dataex
 
   ('QUINTA_FEIRA', 24),--Roni Edson dos Santos
 
@@ -193,14 +202,13 @@ VALUES
 --ADS
 
 -- DATA BLOQUEADA
---INSERT INTO data_bloqueada
---  (motivo, data, usuario_id)
---VALUES
---  ('Feriado1','2024-12-9', 2),
-----  ('Feriado2','2024-12-4', 2),
---  ('Feriado3','2024-11-20', 2),
---  ('Feriado4','2024-11-15', 2),
---  ('Feriado5','2024-10-15', 2);
+INSERT INTO data_bloqueada
+  (motivo, data, usuario_id)
+VALUES
+  ('Feriado2','2024-12-4', 2),
+  ('Feriado3','2024-11-20', 2),
+  ('Feriado4','2024-11-15', 2),
+  ('Feriado5','2024-10-15', 2);
 
 --COORDENADOR
 INSERT INTO coordenador
@@ -248,7 +256,7 @@ INSERT INTO disciplina
   (nome, carga_horaria, carga_horaria_diaria, cor_hexadecimal, extensao_boolean_enum, curso_id, fase_id, professor_id)
 VALUES
 --MODA
-  ('Extensão em Design de Moda I', 50, 4, '#1E90FF', 'SIM', 1, 2, 1),
+  ('Extensão em Design de Moda I', 36, 4, '#1E90FF', 'SIM', 1, 2, 1),
   ('Desenho de Moda I', 60, 4, '#006400', 'NAO', 1, 2, 2),
   ('História da Arte e da Moda', 60, 4, '#DAA520', 'NAO', 1, 2, 3),
   ('Marketing de Moda e Comportamento do Consumido', 70, 4, '#8A2BE2', 'NAO', 1, 2, 4),
@@ -266,13 +274,13 @@ VALUES
 
   ('Desenvolvimento de Portfólio', 40, 4, '#99004C', 'NAO', 1, 6, 1),
   ('Produção Audiovisual', 40, 4, '#003300', 'NAO', 1, 6, 1),
-  ('Desenvolvimento e Produção de Coleção - INICIO', 40, 4, '#FF6666', 'NAO', 1, 6, 6),
+  ('Desenvolvimento e Produção de Coleção - INICIO1', 40, 4, '#FF6666', 'NAO', 1, 6, 6),
   ('Styling - Final', 40, 4, '#003319', 'NAO', 1, 6, 10),
   ('Desenvolvimento e Apresentação de Coleção', 80, 4, '#660033', 'NAO', 1, 6, 12),
-  ('Desenvolvimento e Produção de Coleção - INICIO', 40, 4, '#00FF80', 'NAO', 1, 6, 3),
+  ('Desenvolvimento e Produção de Coleção - INICIO2', 40, 4, '#00FF80', 'NAO', 1, 6, 3),
   ('Metodologia do Trabalho Científico - FINAL', 40, 4, '#00FF80', 'NAO', 1, 6, 14),
-  ('Desenvolvimento e Produção de Coleção ', 40, 4, '#00FF80', 'NAO', 1, 6, 5),
-  ('Desenvolvimento e Produção de Coleção ', 40, 4, '#00FF80', 'NAO', 1, 6, 13),
+  ('Desenvolvimento e Produção de Coleção1 ', 40, 4, '#00FF80', 'NAO', 1, 6, 5),
+  ('Desenvolvimento e Produção de Coleção2 ', 40, 4, '#00FF80', 'NAO', 1, 6, 13),
 
 --ADS
   ('Fundamentos da Pesquisa', 40, 4, '#99004C', 'NAO', 2, 1, 14),
