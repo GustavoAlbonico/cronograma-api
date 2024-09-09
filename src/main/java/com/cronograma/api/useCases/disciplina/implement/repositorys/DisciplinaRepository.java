@@ -11,16 +11,4 @@ import java.util.Set;
 
 public interface DisciplinaRepository extends JpaRepository<Disciplina, Long> {
     Optional<Set<Disciplina>> findByCursoId(Long id);
-
-    @Query(value =
-            "SELECT diaSemanaDis.dia_semana_enum " +
-                    "FROM disciplina dis " +
-                    "JOIN professor prof ON dis.professor_id = prof.id " +
-                    "JOIN dia_semana_disponivel diaSemanaDis on diaSemanaDis.professor_id = prof.id " +
-                    "WHERE dis.curso_id = :cursoId " +
-                    "AND dis.fase_id = :faseId " +
-                    "GROUP BY diaSemanaDis.dia_semana_enum",
-            nativeQuery = true)
-    Optional<Set<DiaSemanaEnum>> buscarDiasDaSemanaQuePossuemProfessorPorDisciplinas(@Param("cursoId") Long cursoId, @Param("faseId") Long faseId);
-
 }
