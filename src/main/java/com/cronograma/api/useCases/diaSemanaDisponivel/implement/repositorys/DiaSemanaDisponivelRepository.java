@@ -7,6 +7,4 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DiaSemanaDisponivelRepository extends JpaRepository<DiaSemanaDisponivel, Long> {
-
-    Optional<List<DiaSemanaDisponivel>> findByProfessorId(Long professorId);
 }
