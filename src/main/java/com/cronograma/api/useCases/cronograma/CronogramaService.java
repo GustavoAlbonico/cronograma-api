@@ -144,7 +144,10 @@ public class CronogramaService {
 
             for (Fase fase : fases) {
 
-                Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorFase = new LinkedHashMap<>(disciplinasComDiasAulaNecessariosPorCurso.get(fase.getId()));
+//              Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorFase = new LinkedHashMap<>(disciplinasComDiasAulaNecessariosPorCurso.get(fase.getId()));
+
+                Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorFase =
+                        new LinkedHashMap<>(reordenarDisciplinasPorQuantidadeDisciplinaProfessorLecionandoDiaSemana(disciplinasComDiasAulaNecessariosPorCurso.get(fase.getId())));//TESTE
 
                 final boolean naoExisteDisciplinaExtensao = disciplinasComDiasAulaNecessariosPorFase.keySet().stream()
                     .filter(disciplina -> disciplina.getFase().getId().equals(fase.getId()))
@@ -321,10 +324,32 @@ public class CronogramaService {
                 continue;
             }
 
-            return adicionarOrdemDePrioridadePorDiaSemana(cronogramaDisciplinasPorCurso);
+            return adicionarOrdemDePrioridadePorDiaSemana(cronogramaDisciplinasPorCurso);//arrumar
+//            {
+//                "faseId": 4.0,
+//                    "disciplinaNome": "Pesquisa de Mercado - FINAL",
+//                    "disicplinaCargaHoraria": 40.0,
+//                    "ordemPrioridadePorDiaSemana": 1,
+//                    "quantidadeDiasAula": 10.0,
+//                    "diaSemanaEnum": "SEXTA_FEIRA",
+//                    "nomeProfessor": "Eduardo Ribeiro"
+//            },
+//            {
+//                "faseId": 4.0,
+//                    "disciplinaNome": "Desenho Técnico de Moda - INICIO",
+//                    "disicplinaCargaHoraria": 40.0,
+//                    "ordemPrioridadePorDiaSemana": 1,
+//                    "quantidadeDiasAula": 9.0,
+//                    "diaSemanaEnum": "SEXTA_FEIRA",
+//                    "nomeProfessor": "Endy Carlos"
+//            },
         }
 
         throw new RuntimeException("conflito");
+    }
+
+    private Map<Disciplina, Double> reordenarDisciplinasPorQuantidadeDisciplinaProfessorLecionandoDiaSemana(Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorFase){
+
     }
 
     private List<CronogramaDisciplinaDom> adicionarOrdemDePrioridadePorDiaSemana(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso){
