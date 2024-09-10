@@ -5,7 +5,7 @@ import java.util.List;
 public record TesteResponseCronogramaDom( double faseId,
                                         String disciplinaNome,
                                          double disicplinaCargaHoraria,
-                                         int ordemPrioridadePorDiaSemana,
+                                         Integer ordemPrioridadePorDiaSemana,
                                          double quantidadeDiasAula,
                                          DiaSemanaEnum diaSemanaEnum,
                                          String nomeProfessor) {

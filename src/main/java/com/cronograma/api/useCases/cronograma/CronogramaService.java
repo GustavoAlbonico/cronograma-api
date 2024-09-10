@@ -6,11 +6,9 @@ import com.cronograma.api.entitys.enums.DiaSemanaEnum;
 import com.cronograma.api.entitys.enums.StatusEnum;
 import com.cronograma.api.useCases.cronograma.domains.*;
 import com.cronograma.api.useCases.dataBloqueada.implement.repositorys.DataBloqueadaRepository;
-import com.cronograma.api.useCases.diaSemanaDisponivel.implement.repositorys.DiaSemanaDisponivelRepository;
 import com.cronograma.api.useCases.disciplina.implement.repositorys.DisciplinaRepository;
 import com.cronograma.api.useCases.fase.implement.repositorys.FaseRepository;
 import com.cronograma.api.useCases.periodo.implement.repositorys.PeriodoRepository;
-import com.cronograma.api.useCases.professor.implement.repositorys.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +17,6 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Service
 public class CronogramaService {
@@ -324,21 +321,17 @@ public class CronogramaService {
                 continue;
             }
 
-//          atualizarOrdemDePrioridadePorDiaSemana(cronogramaDisciplinasPorCurso);//talvez criar verificacao para desempenho
-          cronogramaDisciplinasPorCurso = atualizarOrdemDePrioridadePorDiaSemana2(cronogramaDisciplinasPorCurso);//talvez criar verificacao para desempenho
-
-            return cronogramaDisciplinasPorCurso;
+            return adicionarOrdemDePrioridadePorDiaSemana(cronogramaDisciplinasPorCurso);
         }
 
         throw new RuntimeException("conflito");
     }
 
-    private List<CronogramaDisciplinaDom> atualizarOrdemDePrioridadePorDiaSemana2(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso){
+    private List<CronogramaDisciplinaDom> adicionarOrdemDePrioridadePorDiaSemana(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso){
 
-        List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCursoOrdemDePrioridadePorDiaSemanaAtualizadoPrimeiraParte =
-             cronogramaDisciplinasPorCurso.stream()
+            return cronogramaDisciplinasPorCurso.stream()
                 .collect(Collectors.groupingBy(
-                        cronograma -> Map.entry(cronograma.getFaseId(), cronograma.getDiaSemanaEnum()),
+                        cronograma -> Map.entry(cronograma.getDisciplina().getProfessor().getId(), cronograma.getDiaSemanaEnum()),
                         LinkedHashMap::new,
                         Collectors.toList()
                 ))
@@ -346,95 +339,52 @@ public class CronogramaService {
                 .stream()
                 .flatMap(cronogramas -> {
                     AtomicInteger ordemPrioridadePorDiaSemana = new AtomicInteger(1);
-                    return cronogramas.stream()
-                            .sorted(Comparator.comparing(CronogramaDisciplinaDom::getQuantidadeDiasAula).reversed())
-                            .peek(cronograma -> cronograma.setOrdemPrioridadePorDiaSemana(ordemPrioridadePorDiaSemana.getAndIncrement()));
-                })
-                .toList();
 
-                return cronogramaDisciplinasPorCursoOrdemDePrioridadePorDiaSemanaAtualizadoPrimeiraParte.stream()
+                    if (cronogramas.size() > 1 && cronogramas.stream().noneMatch(cronograma -> cronograma.getQuantidadeDiasAula() <= 5)){
+                        return cronogramas.stream()
+                                .sorted(Comparator.comparing(CronogramaDisciplinaDom::getQuantidadeDiasAula).reversed())
+                                .peek(cronograma -> cronograma.setOrdemPrioridadePorDiaSemana(ordemPrioridadePorDiaSemana.getAndIncrement()));
+                    } else {
+                        return cronogramas.stream();
+                    }
+                })
                 .collect(Collectors.groupingBy(
-                        cronograma -> Map.entry(cronograma.getDisciplina().getProfessor().getId(), cronograma.getDiaSemanaEnum()),
+                        cronograma -> Map.entry(cronograma.getFaseId(), cronograma.getDiaSemanaEnum()),
                         LinkedHashMap::new,
                         Collectors.toList()
                 ))
-                .entrySet()
+                .values()
                 .stream()
-                .flatMap(cronogramas -> {
+                .flatMap(disciplinas -> {
 
-                    for (int x = 1 ; x < cronogramas.getValue().size() ; x++) {
-                        int posicao = x;
-                        final double quantidadeVezesDisciplinaFoiDividadaAnterior =
-                                cronogramaDisciplinasPorCursoOrdemDePrioridadePorDiaSemanaAtualizadoPrimeiraParte.stream()
-                                        .filter(cronograma ->
-                                                cronograma.getDisciplina().getProfessor().getId().equals(cronogramas.getKey().getKey()) &&
-                                                        cronograma.getDisciplina().getId().equals(cronogramas.getValue().get(posicao - 1).getDisciplina().getId()))
-                                        .count();
+                    AtomicInteger ordemPrioridadePorDiaSemana = new AtomicInteger(1);
+                    List<Integer> ordensPrioridadesUtilizadas =  new ArrayList<>();
 
-                        final double quantidadeVezesDisciplinaFoiDividadaAtual =
-                                cronogramaDisciplinasPorCursoOrdemDePrioridadePorDiaSemanaAtualizadoPrimeiraParte.stream()
-                                        .filter(cronograma ->
-                                                cronograma.getDisciplina().getProfessor().getId().equals(cronogramas.getKey().getKey()) &&
-                                                        cronograma.getDisciplina().getId().equals(cronogramas.getValue().get(posicao).getDisciplina().getId()))
-                                        .count();
+                    return disciplinas.stream()
+                            .sorted(Comparator.comparing(CronogramaDisciplinaDom::getQuantidadeDiasAula).reversed())
+                            .peek(cronograma -> {
 
-                        final double quantidadeDiasAulaAnterior = cronogramas.getValue().get(posicao - 1).getQuantidadeDiasAula();
-                        final double quantidadeDiasAulaAtual = cronogramas.getValue().get(posicao).getQuantidadeDiasAula();
+                                while(ordensPrioridadesUtilizadas.contains(ordemPrioridadePorDiaSemana.get())){
+                                    ordemPrioridadePorDiaSemana.incrementAndGet();
+                                }
 
-                        final int ordemPrioridadePorDiaSemanaAnterior = cronogramas.getValue().get(posicao - 1).getOrdemPrioridadePorDiaSemana();
-                        final int ordemPrioridadePorDiaSemanaAtual = cronogramas.getValue().get(posicao).getOrdemPrioridadePorDiaSemana();
+                                if(cronograma.getOrdemPrioridadePorDiaSemana() == null){
+                                    cronograma.setOrdemPrioridadePorDiaSemana(ordemPrioridadePorDiaSemana.get());
+                                }
+                                if(cronograma.getFaseId().equals(3L) && cronograma.getDiaSemanaEnum().equals(DiaSemanaEnum.SEGUNDA_FEIRA)){
+                                    System.out.println(cronograma.getOrdemPrioridadePorDiaSemana());
+                                }
 
-                        if (
-                             quantidadeVezesDisciplinaFoiDividadaAtual > quantidadeVezesDisciplinaFoiDividadaAnterior &&
-                            ordemPrioridadePorDiaSemanaAtual < ordemPrioridadePorDiaSemanaAnterior
-                        ) {
-                            cronogramas.getValue().get(posicao - 1).setOrdemPrioridadePorDiaSemana(ordemPrioridadePorDiaSemanaAtual);
-                            cronogramas.getValue().get(posicao).setOrdemPrioridadePorDiaSemana(ordemPrioridadePorDiaSemanaAnterior);
-                            System.out.println("4");
-                        } else if(
-                                quantidadeVezesDisciplinaFoiDividadaAtual > quantidadeVezesDisciplinaFoiDividadaAnterior &&
-                                ordemPrioridadePorDiaSemanaAtual == ordemPrioridadePorDiaSemanaAnterior
-                        ) {
-                            cronogramas.getValue().get(posicao).setOrdemPrioridadePorDiaSemana(ordemPrioridadePorDiaSemanaAnterior + 1);
-                            System.out.println("3");
-                        }else if(
-                                quantidadeVezesDisciplinaFoiDividadaAtual == quantidadeVezesDisciplinaFoiDividadaAnterior &&
-                                quantidadeDiasAulaAtual > quantidadeDiasAulaAnterior &&
-                                ordemPrioridadePorDiaSemanaAtual > ordemPrioridadePorDiaSemanaAnterior
-                        ){
-                            cronogramas.getValue().get(posicao - 1).setOrdemPrioridadePorDiaSemana(ordemPrioridadePorDiaSemanaAtual);
-                            cronogramas.getValue().get(posicao).setOrdemPrioridadePorDiaSemana(ordemPrioridadePorDiaSemanaAnterior);
-                            System.out.println("2");
-                        } else if (
-                                quantidadeVezesDisciplinaFoiDividadaAtual == quantidadeVezesDisciplinaFoiDividadaAnterior &&
-                                quantidadeDiasAulaAtual == quantidadeDiasAulaAnterior &&
-                                ordemPrioridadePorDiaSemanaAtual == ordemPrioridadePorDiaSemanaAnterior
-                        ) {
-                            System.out.println("1");
+                                ordensPrioridadesUtilizadas.add(cronograma.getOrdemPrioridadePorDiaSemana());
+                            });
 
-                            cronogramas.getValue().get(posicao).setOrdemPrioridadePorDiaSemana(ordemPrioridadePorDiaSemanaAnterior + 1);
-
-//                            IntStream.range(0,cronogramaDisciplinasPorCursoOrdemDePrioridadePorDiaSemanaAtualizadoPrimeiraParte.size())
-//                                    .filter(index ->
-//                                            cronogramaDisciplinasPorCursoOrdemDePrioridadePorDiaSemanaAtualizadoPrimeiraParte.get(index).getFaseId()
-//                                                    .equals(cronogramas.getValue().get(posicao).getFaseId()) &&
-//                                                    cronogramaDisciplinasPorCursoOrdemDePrioridadePorDiaSemanaAtualizadoPrimeiraParte.get(index).getDiaSemanaEnum()
-//                                                            .equals(cronogramas.getValue().get(posicao).getDiaSemanaEnum()))
-//                                    .skip(1L)
-//                                    .peek(index -> System.out.println(index));
-
-                        }
-                    }
-
-                    return cronogramas.getValue().stream();
                 })
                 .sorted(
                         Comparator.comparing(CronogramaDisciplinaDom::getFaseId)
-                        .thenComparing(CronogramaDisciplinaDom::getDiaSemanaEnum)
-                        .thenComparing(CronogramaDisciplinaDom::getOrdemPrioridadePorDiaSemana)
+                                .thenComparing(CronogramaDisciplinaDom::getDiaSemanaEnum)
+                                .thenComparing(CronogramaDisciplinaDom::getOrdemPrioridadePorDiaSemana)
                 )
                 .toList();
-
     }
     private boolean verificarDisciplinaCargaHorariaPequenaPrecisaVariosDias(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso,
                                                          double quantidadeDiasAulaNecessariosPorDisciplina,
@@ -494,36 +444,6 @@ public class CronogramaService {
                 .sum();
 
      return quantidadeAulasPorDiaSemanaOriginal.get(diaSemanaEnum) - quantidadeAulasOcupadasNoDiaSemana;
-    }
-
-    private void atualizarOrdemDePrioridadePorDiaSemana(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso){
-
-        Map<Long, Map<DiaSemanaEnum, List<CronogramaDisciplinaDom>>> cronogramaDisciplinasPorFaseEPorDiaSemana = cronogramaDisciplinasPorCurso.stream()
-                        .collect(Collectors.groupingBy(CronogramaDisciplinaDom::getFaseId, Collectors.groupingBy(CronogramaDisciplinaDom::getDiaSemanaEnum)));
-
-        for (Map<DiaSemanaEnum, List<CronogramaDisciplinaDom>> cronogramaDisciplinasPorFaseSeparadoPorDiaSemanaEnum : cronogramaDisciplinasPorFaseEPorDiaSemana.values()) {
-            for (DiaSemanaEnum diaSemanaEnum : cronogramaDisciplinasPorFaseSeparadoPorDiaSemanaEnum.keySet()) {
-                for (int x = 1; x < cronogramaDisciplinasPorFaseSeparadoPorDiaSemanaEnum.get(diaSemanaEnum).size(); x++) {
-
-                    final double quantidadeDiasAulaAnterior =
-                            cronogramaDisciplinasPorFaseSeparadoPorDiaSemanaEnum.get(diaSemanaEnum).get(x - 1).getQuantidadeDiasAula();
-                    final double quantidadeDiasAulaAtual =
-                            cronogramaDisciplinasPorFaseSeparadoPorDiaSemanaEnum.get(diaSemanaEnum).get(x).getQuantidadeDiasAula();
-
-                    if (quantidadeDiasAulaAnterior < 5) {//ajustar ordem de prioridade quando for 10/ 2/ 8 dias
-                        if (quantidadeDiasAulaAtual > quantidadeDiasAulaAnterior) {
-                            final int ordemPrioridadePorDiaSemanaAnterior =
-                                    cronogramaDisciplinasPorFaseSeparadoPorDiaSemanaEnum.get(diaSemanaEnum).get(x - 1).getOrdemPrioridadePorDiaSemana();
-                            final int ordemPrioridadePorDiaSemanaAtual =
-                                    cronogramaDisciplinasPorFaseSeparadoPorDiaSemanaEnum.get(diaSemanaEnum).get(x).getOrdemPrioridadePorDiaSemana();
-
-                            cronogramaDisciplinasPorFaseSeparadoPorDiaSemanaEnum.get(diaSemanaEnum).get(x).setOrdemPrioridadePorDiaSemana(ordemPrioridadePorDiaSemanaAnterior);
-                            cronogramaDisciplinasPorFaseSeparadoPorDiaSemanaEnum.get(diaSemanaEnum).get(x - 1).setOrdemPrioridadePorDiaSemana(ordemPrioridadePorDiaSemanaAtual);
-                        }
-                    }
-                }
-            }
-        }
     }
 
     private void adicionarDisciplinaCronograma(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso,CronogramaDisciplinaMelhorAproveitamentoDom cronogramaDisciplinaMelhorAproveitamento){
