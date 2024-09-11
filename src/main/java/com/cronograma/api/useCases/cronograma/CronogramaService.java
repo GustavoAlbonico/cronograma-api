@@ -348,6 +348,25 @@ public class CronogramaService {
 //                    "diaSemanaEnum": "SEXTA_FEIRA",
 //                    "nomeProfessor": "Endy Carlos"
 //            },
+
+//            {
+//                "faseId": 6.0,
+//                    "disciplinaNome": "Desenvolvimento e Produção de Coleção1 ",
+//                    "disicplinaCargaHoraria": 40.0,
+//                    "ordemPrioridadePorDiaSemana": 1,
+//                    "quantidadeDiasAula": 10.0,
+//                    "diaSemanaEnum": "SEXTA_FEIRA",
+//                    "nomeProfessor": "Josiane Minato"
+//            },
+//            {
+//                "faseId": 6.0,
+//                    "disciplinaNome": "Desenvolvimento e Produção de Coleção - INICIO2",
+//                    "disicplinaCargaHoraria": 40.0,
+//                    "ordemPrioridadePorDiaSemana": 2,
+//                    "quantidadeDiasAula": 9.0,
+//                    "diaSemanaEnum": "SEXTA_FEIRA",
+//                    "nomeProfessor": "Endy Carlos"
+//            },
         }
 
         throw new RuntimeException("conflito");
@@ -357,24 +376,58 @@ public class CronogramaService {
                                                                                                             List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso,
                                                                                                             Map<DiaSemanaEnum, Double> quantidadeAulasPorDiaDaSemana
     ){
-        double media
-
-        disciplinasComDiasAulaNecessariosPorFase.entrySet().forEach(disciplinaDoubleEntry -> {
-
-            if (disciplinaDoubleEntry.getKey().getCargaHoraria() / disciplinaDoubleEntry.getKey().getCargaHorariaDiaria() ) {
-
-                final boolean existePrioridade = cronogramaDisciplinasPorCurso.stream()
-                        .filter(cronogramaDisciplina ->
-                                cronogramaDisciplina.getDisciplina().getProfessor().getId().equals(disciplinaDoubleEntry.getKey().getProfessor().getId())
-                        )
-                        .collect(Collectors.groupingBy(CronogramaDisciplinaDom::getDiaSemanaEnum))
-                        .entrySet()
-                        .stream()
-                        .anyMatch(cronogramas ->
-                                        cronogramas.getValue().size() > 1 &&
-                                        cronogramas.getValue().stream().anyMatch(cronograma -> cronograma.getQuantidadeDiasAula() <= 5));
+            if (cronogramaDisciplinasPorCurso.isEmpty()){
+                return disciplinasComDiasAulaNecessariosPorFase;
             }
-        });
+
+            return disciplinasComDiasAulaNecessariosPorFase.entrySet().stream()
+                        .collect(Collectors.toMap(
+                                disciplinaDoubleEntry -> disciplinaDoubleEntry,
+                                disciplinaDoubleEntry -> {
+                                    final double mediaQuantidadeAulaDisponivelDiaSemana = disciplinaDoubleEntry.getKey().getProfessor().getDiasSemanaDisponivel().stream()
+                                            .filter(diaSemanaDisponivel -> quantidadeAulasPorDiaDaSemana.containsKey(diaSemanaDisponivel.getDiaSemanaEnum()))
+                                            .mapToDouble(diaSemanaDisponivel -> quantidadeAulasPorDiaDaSemana.get(diaSemanaDisponivel.getDiaSemanaEnum()))
+                                            .average().getAsDouble();
+
+                                    final double disciplinaPorcentagemOcupacaoDiasAulaPorDiaSemana =
+                                            (disciplinasComDiasAulaNecessariosPorFase.get(disciplinaDoubleEntry.getKey()) / mediaQuantidadeAulaDisponivelDiaSemana) * 100;
+
+                                    if (disciplinaPorcentagemOcupacaoDiasAulaPorDiaSemana < 75) {
+
+                                        //ver se a validação esta correta
+                                        boolean aa =  cronogramaDisciplinasPorCurso.stream()
+                                                .filter(cronogramaDisciplina -> cronogramaDisciplina.getDisciplina().getProfessor().getId()
+                                                        .equals(disciplinaDoubleEntry.getKey().getProfessor().getId()))
+                                                .collect(Collectors.groupingBy(CronogramaDisciplinaDom::getDiaSemanaEnum))
+                                                .entrySet()
+                                                .stream()
+                                                .anyMatch(cronogramas ->
+                                                        cronogramas.getValue().size() > 1 &&
+                                                                cronogramas.getValue().stream().anyMatch(cronograma -> cronograma.getQuantidadeDiasAula() <= 5));
+                                        System.out.println(aa);
+                                        System.out.println(disciplinaDoubleEntry.getKey().getNome());
+                                        System.out.println("\n");
+                                        return aa;
+                                    }
+
+                                    return false;
+                                }
+                        ))
+                       .entrySet()
+                       .stream()
+                       .sorted(Comparator
+                               .comparing((Map.Entry<Map.Entry<Disciplina, Double>, Boolean> entry) -> entry.getKey().getKey().getExtensaoBooleanEnum().equals(BooleanEnum.NAO))
+                               .thenComparing(Map.Entry.<Map.Entry<Disciplina, Double>, Boolean>comparingByValue().reversed())
+                               .thenComparing(entry -> entry.getKey().getKey().getProfessor().getDiasSemanaDisponivel().size())
+                               .thenComparing(Comparator.comparing((Map.Entry<Map.Entry<Disciplina, Double>, Boolean> entry) -> entry.getKey().getKey().getCargaHoraria()).reversed())
+                       )
+                       .collect(Collectors.toMap(
+                               entry -> entry.getKey().getKey(),
+                               entry -> entry.getKey().getValue(),
+                               (e1,e2) -> e1,
+                               LinkedHashMap::new
+                       ));
+
     }
 
     private List<CronogramaDisciplinaDom> adicionarOrdemDePrioridadePorDiaSemana(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso){
@@ -410,26 +463,26 @@ public class CronogramaService {
                     AtomicInteger ordemPrioridadePorDiaSemana = new AtomicInteger(1);
                     List<Integer> ordensPrioridadesUtilizadas =  new ArrayList<>();
 
-                    return disciplinas.stream()
-                            .sorted(Comparator.comparing(CronogramaDisciplinaDom::getQuantidadeDiasAula).reversed())
-                            .peek(cronograma -> {
-
-                                while(ordensPrioridadesUtilizadas.contains(ordemPrioridadePorDiaSemana.get())){
-                                    ordemPrioridadePorDiaSemana.incrementAndGet();
-                                }
-
-                                if(cronograma.getOrdemPrioridadePorDiaSemana() == null){
-                                    cronograma.setOrdemPrioridadePorDiaSemana(ordemPrioridadePorDiaSemana.get());
-                                }
-
-                                ordensPrioridadesUtilizadas.add(cronograma.getOrdemPrioridadePorDiaSemana());
-                            });
+                    return disciplinas.stream();
+//                            .sorted(Comparator.comparing(CronogramaDisciplinaDom::getQuantidadeDiasAula).reversed())
+//                            .peek(cronograma -> {
+//
+//                                while(ordensPrioridadesUtilizadas.contains(ordemPrioridadePorDiaSemana.get())){
+//                                    ordemPrioridadePorDiaSemana.incrementAndGet();
+//                                }
+//
+//                                if(cronograma.getOrdemPrioridadePorDiaSemana() == null){
+//                                    cronograma.setOrdemPrioridadePorDiaSemana(ordemPrioridadePorDiaSemana.get());
+//                                }
+//
+//                                ordensPrioridadesUtilizadas.add(cronograma.getOrdemPrioridadePorDiaSemana());
+//                            });
 
                 })
                 .sorted(
                         Comparator.comparing(CronogramaDisciplinaDom::getFaseId)
                                 .thenComparing(CronogramaDisciplinaDom::getDiaSemanaEnum)
-                                .thenComparing(CronogramaDisciplinaDom::getOrdemPrioridadePorDiaSemana)
+//                                .thenComparing(CronogramaDisciplinaDom::getOrdemPrioridadePorDiaSemana)
                 )
                 .toList();
     }
