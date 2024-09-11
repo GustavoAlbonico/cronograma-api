@@ -147,7 +147,12 @@ public class CronogramaService {
 //              Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorFase = new LinkedHashMap<>(disciplinasComDiasAulaNecessariosPorCurso.get(fase.getId()));
 
                 Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorFase =
-                        new LinkedHashMap<>(reordenarDisciplinasPorQuantidadeDisciplinaProfessorLecionandoDiaSemana(disciplinasComDiasAulaNecessariosPorCurso.get(fase.getId())));//TESTE
+                        new LinkedHashMap<>(
+                                reordenarDisciplinasPorQuantidadeDisciplinaProfessorLecionandoDiaSemana(
+                                        disciplinasComDiasAulaNecessariosPorCurso.get(fase.getId()),
+                                        cronogramaDisciplinasPorCurso,
+                                        quantidadeAulasPorDiaDaSemana)
+                        );//TESTE
 
                 final boolean naoExisteDisciplinaExtensao = disciplinasComDiasAulaNecessariosPorFase.keySet().stream()
                     .filter(disciplina -> disciplina.getFase().getId().equals(fase.getId()))
@@ -348,8 +353,28 @@ public class CronogramaService {
         throw new RuntimeException("conflito");
     }
 
-    private Map<Disciplina, Double> reordenarDisciplinasPorQuantidadeDisciplinaProfessorLecionandoDiaSemana(Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorFase){
+    private Map<Disciplina, Double> reordenarDisciplinasPorQuantidadeDisciplinaProfessorLecionandoDiaSemana(Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorFase,
+                                                                                                            List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso,
+                                                                                                            Map<DiaSemanaEnum, Double> quantidadeAulasPorDiaDaSemana
+    ){
+        double media
 
+        disciplinasComDiasAulaNecessariosPorFase.entrySet().forEach(disciplinaDoubleEntry -> {
+
+            if (disciplinaDoubleEntry.getKey().getCargaHoraria() / disciplinaDoubleEntry.getKey().getCargaHorariaDiaria() ) {
+
+                final boolean existePrioridade = cronogramaDisciplinasPorCurso.stream()
+                        .filter(cronogramaDisciplina ->
+                                cronogramaDisciplina.getDisciplina().getProfessor().getId().equals(disciplinaDoubleEntry.getKey().getProfessor().getId())
+                        )
+                        .collect(Collectors.groupingBy(CronogramaDisciplinaDom::getDiaSemanaEnum))
+                        .entrySet()
+                        .stream()
+                        .anyMatch(cronogramas ->
+                                        cronogramas.getValue().size() > 1 &&
+                                        cronogramas.getValue().stream().anyMatch(cronograma -> cronograma.getQuantidadeDiasAula() <= 5));
+            }
+        });
     }
 
     private List<CronogramaDisciplinaDom> adicionarOrdemDePrioridadePorDiaSemana(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso){
@@ -395,9 +420,6 @@ public class CronogramaService {
 
                                 if(cronograma.getOrdemPrioridadePorDiaSemana() == null){
                                     cronograma.setOrdemPrioridadePorDiaSemana(ordemPrioridadePorDiaSemana.get());
-                                }
-                                if(cronograma.getFaseId().equals(3L) && cronograma.getDiaSemanaEnum().equals(DiaSemanaEnum.SEGUNDA_FEIRA)){
-                                    System.out.println(cronograma.getOrdemPrioridadePorDiaSemana());
                                 }
 
                                 ordensPrioridadesUtilizadas.add(cronograma.getOrdemPrioridadePorDiaSemana());
