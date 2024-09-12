@@ -394,20 +394,15 @@ public class CronogramaService {
 
                                     if (disciplinaPorcentagemOcupacaoDiasAulaPorDiaSemana < 75) {
 
-                                        //ver se a validação esta correta
-                                        boolean aa =  cronogramaDisciplinasPorCurso.stream()
+                                        return cronogramaDisciplinasPorCurso.stream()
                                                 .filter(cronogramaDisciplina -> cronogramaDisciplina.getDisciplina().getProfessor().getId()
                                                         .equals(disciplinaDoubleEntry.getKey().getProfessor().getId()))
-                                                .collect(Collectors.groupingBy(CronogramaDisciplinaDom::getDiaSemanaEnum))
+                                                .collect(Collectors.groupingBy(CronogramaDisciplinaDom::getDisciplina))
                                                 .entrySet()
                                                 .stream()
                                                 .anyMatch(cronogramas ->
                                                         cronogramas.getValue().size() > 1 &&
                                                                 cronogramas.getValue().stream().anyMatch(cronograma -> cronograma.getQuantidadeDiasAula() <= 5));
-                                        System.out.println(aa);
-                                        System.out.println(disciplinaDoubleEntry.getKey().getNome());
-                                        System.out.println("\n");
-                                        return aa;
                                     }
 
                                     return false;
