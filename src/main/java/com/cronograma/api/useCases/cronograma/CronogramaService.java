@@ -4,6 +4,7 @@ import com.cronograma.api.entitys.*;
 import com.cronograma.api.entitys.enums.BooleanEnum;
 import com.cronograma.api.entitys.enums.DiaSemanaEnum;
 import com.cronograma.api.entitys.enums.StatusEnum;
+import com.cronograma.api.exceptions.CronogramaConflitoException;
 import com.cronograma.api.useCases.cronograma.domains.*;
 import com.cronograma.api.useCases.dataBloqueada.implement.repositorys.DataBloqueadaRepository;
 import com.cronograma.api.useCases.disciplina.implement.repositorys.DisciplinaRepository;
@@ -329,7 +330,7 @@ public class CronogramaService {
             return adicionarOrdemDePrioridadePorDiaSemana(cronogramaDisciplinasPorCurso);
         }
 
-        throw new RuntimeException("conflito");
+        throw new CronogramaConflitoException("Conflito encontrado!");
     }
 
     private Map<Disciplina, Double> reordenarDisciplinasPorQuantidadeDisciplinaProfessorLecionandoDiaSemana(Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorFase,
