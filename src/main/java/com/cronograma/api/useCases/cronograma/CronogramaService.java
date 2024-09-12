@@ -144,15 +144,13 @@ public class CronogramaService {
 
             for (Fase fase : fases) {
 
-//              Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorFase = new LinkedHashMap<>(disciplinasComDiasAulaNecessariosPorCurso.get(fase.getId()));
-
                 Map<Disciplina, Double> disciplinasComDiasAulaNecessariosPorFase =
                         new LinkedHashMap<>(
                                 reordenarDisciplinasPorQuantidadeDisciplinaProfessorLecionandoDiaSemana(
                                         disciplinasComDiasAulaNecessariosPorCurso.get(fase.getId()),
                                         cronogramaDisciplinasPorCurso,
                                         quantidadeAulasPorDiaDaSemana)
-                        );//TESTE
+                        );
 
                 final boolean naoExisteDisciplinaExtensao = disciplinasComDiasAulaNecessariosPorFase.keySet().stream()
                     .filter(disciplina -> disciplina.getFase().getId().equals(fase.getId()))
@@ -328,45 +326,7 @@ public class CronogramaService {
             if(existeConflito){
                 continue;
             }
-
-            return adicionarOrdemDePrioridadePorDiaSemana(cronogramaDisciplinasPorCurso);//arrumar
-//            {
-//                "faseId": 4.0,
-//                    "disciplinaNome": "Pesquisa de Mercado - FINAL",
-//                    "disicplinaCargaHoraria": 40.0,
-//                    "ordemPrioridadePorDiaSemana": 1,
-//                    "quantidadeDiasAula": 10.0,
-//                    "diaSemanaEnum": "SEXTA_FEIRA",
-//                    "nomeProfessor": "Eduardo Ribeiro"
-//            },
-//            {
-//                "faseId": 4.0,
-//                    "disciplinaNome": "Desenho Técnico de Moda - INICIO",
-//                    "disicplinaCargaHoraria": 40.0,
-//                    "ordemPrioridadePorDiaSemana": 1,
-//                    "quantidadeDiasAula": 9.0,
-//                    "diaSemanaEnum": "SEXTA_FEIRA",
-//                    "nomeProfessor": "Endy Carlos"
-//            },
-
-//            {
-//                "faseId": 6.0,
-//                    "disciplinaNome": "Desenvolvimento e Produção de Coleção1 ",
-//                    "disicplinaCargaHoraria": 40.0,
-//                    "ordemPrioridadePorDiaSemana": 1,
-//                    "quantidadeDiasAula": 10.0,
-//                    "diaSemanaEnum": "SEXTA_FEIRA",
-//                    "nomeProfessor": "Josiane Minato"
-//            },
-//            {
-//                "faseId": 6.0,
-//                    "disciplinaNome": "Desenvolvimento e Produção de Coleção - INICIO2",
-//                    "disicplinaCargaHoraria": 40.0,
-//                    "ordemPrioridadePorDiaSemana": 2,
-//                    "quantidadeDiasAula": 9.0,
-//                    "diaSemanaEnum": "SEXTA_FEIRA",
-//                    "nomeProfessor": "Endy Carlos"
-//            },
+            return adicionarOrdemDePrioridadePorDiaSemana(cronogramaDisciplinasPorCurso);
         }
 
         throw new RuntimeException("conflito");
@@ -404,7 +364,6 @@ public class CronogramaService {
                                                         cronogramas.getValue().size() > 1 &&
                                                                 cronogramas.getValue().stream().anyMatch(cronograma -> cronograma.getQuantidadeDiasAula() <= 5));
                                     }
-
                                     return false;
                                 }
                         ))
@@ -456,28 +415,29 @@ public class CronogramaService {
                 .flatMap(disciplinas -> {
 
                     AtomicInteger ordemPrioridadePorDiaSemana = new AtomicInteger(1);
-                    List<Integer> ordensPrioridadesUtilizadas =  new ArrayList<>();
 
-                    return disciplinas.stream();
-//                            .sorted(Comparator.comparing(CronogramaDisciplinaDom::getQuantidadeDiasAula).reversed())
-//                            .peek(cronograma -> {
-//
-//                                while(ordensPrioridadesUtilizadas.contains(ordemPrioridadePorDiaSemana.get())){
-//                                    ordemPrioridadePorDiaSemana.incrementAndGet();
-//                                }
-//
-//                                if(cronograma.getOrdemPrioridadePorDiaSemana() == null){
-//                                    cronograma.setOrdemPrioridadePorDiaSemana(ordemPrioridadePorDiaSemana.get());
-//                                }
-//
-//                                ordensPrioridadesUtilizadas.add(cronograma.getOrdemPrioridadePorDiaSemana());
-//                            });
+                    List<Integer> ordensPrioridadesUtilizadas =
+                            new ArrayList<>(disciplinas.stream().map(CronogramaDisciplinaDom::getOrdemPrioridadePorDiaSemana).toList());
+
+                    return disciplinas.stream()
+                            .sorted(Comparator.comparing(CronogramaDisciplinaDom::getQuantidadeDiasAula).reversed())
+                            .peek(cronograma -> {
+
+                                while(ordensPrioridadesUtilizadas.contains(ordemPrioridadePorDiaSemana.get())){
+                                    ordemPrioridadePorDiaSemana.incrementAndGet();
+                                }
+
+                                if(cronograma.getOrdemPrioridadePorDiaSemana() == null){
+                                    cronograma.setOrdemPrioridadePorDiaSemana(ordemPrioridadePorDiaSemana.get());
+                                    ordensPrioridadesUtilizadas.add(ordemPrioridadePorDiaSemana.get());
+                                }
+                            });
 
                 })
                 .sorted(
                         Comparator.comparing(CronogramaDisciplinaDom::getFaseId)
                                 .thenComparing(CronogramaDisciplinaDom::getDiaSemanaEnum)
-//                                .thenComparing(CronogramaDisciplinaDom::getOrdemPrioridadePorDiaSemana)
+                                .thenComparing(CronogramaDisciplinaDom::getOrdemPrioridadePorDiaSemana)
                 )
                 .toList();
     }
@@ -525,9 +485,9 @@ public class CronogramaService {
 
 
     private double buscarQuantidadeAulasRestantesNoDiaSemanaPorProfessor(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso,
-                                               final Map<DiaSemanaEnum,Double> quantidadeAulasPorDiaSemanaOriginal,
-                                               Disciplina disciplina,
-                                               final DiaSemanaEnum diaSemanaEnum)
+                                                                         final Map<DiaSemanaEnum,Double> quantidadeAulasPorDiaSemanaOriginal,
+                                                                         Disciplina disciplina,
+                                                                         final DiaSemanaEnum diaSemanaEnum)
     {
 
         final double quantidadeAulasOcupadasNoDiaSemana = cronogramaDisciplinasPorCurso.stream()
@@ -721,7 +681,7 @@ public class CronogramaService {
         return existeMelhorAproveitamentoDias;
     }
 
-    private Periodo buscarPeriodoAtivoAtual() {
+    private Periodo buscarPeriodoAtivoAtual() {//remover e adicionar em service periodo
         Set<Periodo> periodoEncontrado =  periodoRepository.findByStatusEnum(StatusEnum.ATIVO).get();
 
         if(periodoEncontrado.size() > 1){
