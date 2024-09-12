@@ -25,8 +25,6 @@ public enum DiaSemanaEnum {
                 return SEXTA_FEIRA;
             case SATURDAY:
                 return SABADO;
-            case SUNDAY:
-                return DOMINGO;
             default:
                 throw new IllegalArgumentException("Dia da semana inválido: " + dayOfWeek);
         }

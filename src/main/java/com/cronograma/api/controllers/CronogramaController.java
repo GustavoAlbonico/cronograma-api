@@ -2,6 +2,7 @@ package com.cronograma.api.controllers;
 
 import com.cronograma.api.useCases.cronograma.CronogramaService;
 import com.cronograma.api.useCases.cronograma.domains.CronogramaRequestDom;
+import com.cronograma.api.useCases.cronograma.domains.TesteResponseCronogramaDom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,7 @@ public class CronogramaController {
     @PostMapping("/gerar")
     public ResponseEntity<?> gerarCronograma(@RequestBody CronogramaRequestDom cronograma) {
 
-        List<String> response = cronogramaService.gerarCronograma(cronograma);
+        List<TesteResponseCronogramaDom> response = cronogramaService.gerarCronograma(cronograma);
         return ResponseEntity.status(200).body(response);
     }
 }
