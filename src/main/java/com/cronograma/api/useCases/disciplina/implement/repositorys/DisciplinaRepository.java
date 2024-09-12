@@ -8,7 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 import java.util.Set;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface DisciplinaRepository extends JpaRepository<Disciplina, Long> {
     Optional<Set<Disciplina>> findByCursoId(Long id);
 }
