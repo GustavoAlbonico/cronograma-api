@@ -12,5 +12,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DisciplinaRepository extends JpaRepository<Disciplina, Long> {
-    Optional<Set<Disciplina>> findByCursoId(Long id);
 }

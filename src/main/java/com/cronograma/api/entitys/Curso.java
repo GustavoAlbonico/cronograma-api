@@ -44,4 +44,7 @@ public class Curso {
 
     @OneToMany(mappedBy = "curso")
     private Set<Disciplina> disciplinas = new HashSet<>();
+
+    @OneToOne(mappedBy = "curso")
+    private Evento evento;
 }
