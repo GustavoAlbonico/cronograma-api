@@ -1,20 +1,17 @@
 package com.cronograma.api.useCases.cronograma;
 
 import com.cronograma.api.entitys.*;
-import com.cronograma.api.entitys.enums.BooleanEnum;
-import com.cronograma.api.entitys.enums.DiaSemanaEnum;
-import com.cronograma.api.entitys.enums.StatusEnum;
+import com.cronograma.api.entitys.enums.*;
 import com.cronograma.api.exceptions.CronogramaException;
 import com.cronograma.api.useCases.cronograma.domains.*;
 import com.cronograma.api.useCases.cronograma.implement.repositorys.CronogramaDataBloqueadaRepository;
 import com.cronograma.api.useCases.cronograma.implement.repositorys.CronogramaDisciplinaRepository;
 import com.cronograma.api.useCases.cronograma.implement.repositorys.CronogramaFaseRepository;
-import com.cronograma.api.useCases.dataBloqueada.implement.repositorys.DataBloqueadaRepository;
-import com.cronograma.api.useCases.disciplina.implement.repositorys.DisciplinaRepository;
-import com.cronograma.api.useCases.fase.implement.repositorys.FaseRepository;
 import com.cronograma.api.useCases.periodo.PeriodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -35,59 +32,38 @@ public class CronogramaService {
     private CronogramaDataBloqueadaRepository cronogramaDataBloqueadaRepository;
 
     private final PeriodoService periodoService;
+
     public CronogramaService(PeriodoService periodoService) {
         this.periodoService = periodoService;
     }
-
-    public List<TesteResponseCronogramaDom> gerarCronograma(CronogramaRequestDom cronograma){
+    @Transactional(propagation = Propagation.NESTED)
+    public void gerarCronogramaPorCursos(CronogramaRequestDom cronograma){
 
         Periodo periodoAtivo = periodoService.buscarPeriodoAtivoAtual();
 
         List<DataBloqueada> datasBloqueadas = cronogramaDataBloqueadaRepository.findAll();
 
-        Map<DiaSemanaEnum,Double> quantidadeAulasPorDiaDaSemana =
-                buscarQuantidadeAulasDisponveisPorDiaDaSemana(periodoAtivo,datasBloqueadas);
+        Map<DiaSemanaEnum, Double> quantidadeAulasPorDiaDaSemana =
+                buscarQuantidadeAulasDisponveisPorDiaDaSemana(periodoAtivo, datasBloqueadas);
 
-        List<Fase> fases = cronogramaFaseRepository.buscarFasesPorCursoId(cronograma.cursoId())
+        List<Fase> fases = cronogramaFaseRepository.buscarFasesPorCursoId(cronograma.getCursoId())
                 .orElseThrow(() -> new CronogramaException("Nenhuma fase encontrada!"));
 
-        Set<Disciplina> disciplinasEncontradas = cronogramaDisciplinaRepository.findByCursoId(cronograma.cursoId())
+        Set<Disciplina> disciplinasEncontradas = cronogramaDisciplinaRepository.findByCursoId(cronograma.getCursoId())
                 .orElseThrow(() -> new CronogramaException("Nenhuma disciplina encontrada!"));
 
-        validarQuantidadeDiasAulaLetivosDisponiveisPorPeriodo(disciplinasEncontradas,fases,quantidadeAulasPorDiaDaSemana);
+        validarQuantidadeDiasAulaLetivosDisponiveisPorPeriodo(disciplinasEncontradas, fases, quantidadeAulasPorDiaDaSemana);
         validarProfessorPossuiDiaSemanaDisponivelCadastrado(disciplinasEncontradas);
         validarDisciplinaExtensaoPossuiProfessorDiaSemanaDisponivelSabadoCadastrado(disciplinasEncontradas);
 
-        Map<Long,Map<Disciplina, Double>> disciplinasComDiasAulaNecessariosPorCurso =
-                buscarDisciplinasComDiasAulaNecessariosPorCurso(disciplinasEncontradas,fases);
+        Map<Long, Map<Disciplina, Double>> disciplinasComDiasAulaNecessariosPorCurso =
+                buscarDisciplinasComDiasAulaNecessariosPorCurso(disciplinasEncontradas, fases);
 
         List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso =
                 gerarCronogramaPorCurso(
                         disciplinasComDiasAulaNecessariosPorCurso,
                         fases,
                         quantidadeAulasPorDiaDaSemana);
-
-
-        List<TesteResponseCronogramaDom>  response =
-                cronogramaDisciplinasPorCurso
-            .stream()
-            .map(cronogramaDisciplinaDom -> {
-            TesteResponseCronogramaDom testeResponseCronogramaDom =
-                    new TesteResponseCronogramaDom(
-                            cronogramaDisciplinaDom.getFaseId(),
-                            cronogramaDisciplinaDom.getDisciplina().getNome(),
-                            cronogramaDisciplinaDom.getDisciplina().getCargaHoraria(),
-                            cronogramaDisciplinaDom.getOrdemPrioridadePorDiaSemana(),
-                            cronogramaDisciplinaDom.getQuantidadeDiasAula(),
-                            cronogramaDisciplinaDom.getDiaSemanaEnum(),
-                            cronogramaDisciplinaDom.getDisciplina().getProfessor().getNomeCompleto()
-                    );
-            return testeResponseCronogramaDom;
-        })
-//        .sorted(Comparator.comparing(TesteResponseCronogramaDom::faseId).thenComparing(TesteResponseCronogramaDom::diaSemanaEnum).thenComparing(TesteResponseCronogramaDom::quantidadeDiasAula))
-        .toList();
-
-        return response;
     }
 
     private void validarQuantidadeDiasAulaLetivosDisponiveisPorPeriodo(Set<Disciplina> disciplinasEncontradas,List<Fase> fases,Map<DiaSemanaEnum,Double> quantidadeAulasPorDiaDaSemana){

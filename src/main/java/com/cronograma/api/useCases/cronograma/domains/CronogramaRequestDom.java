@@ -1,7 +1,16 @@
 package com.cronograma.api.useCases.cronograma.domains;
-import java.time.LocalDate;
 
-public record CronogramaRequestDom(
-        Long periodoId,
-        Long cursoId) {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class CronogramaRequestDom{
+    private Long periodoId;
+    private Long cursoId;
+    private Long usuarioId;
 }
