@@ -1,7 +1,7 @@
 package com.cronograma.api.entitys.enums;
 
 public enum EventoStatusEnum {
-    PROCESSANDO,
+    EXECUTANDO,
     ERRO,
     SUCESSO,
 }

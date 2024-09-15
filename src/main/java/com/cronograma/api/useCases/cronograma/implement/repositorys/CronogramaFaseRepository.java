@@ -4,10 +4,11 @@ import com.cronograma.api.entitys.Fase;
 import com.cronograma.api.useCases.fase.implement.repositorys.FaseRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-
+@Repository
 public interface CronogramaFaseRepository extends FaseRepository {
     @Query(value =
             "SELECT fase.* " +

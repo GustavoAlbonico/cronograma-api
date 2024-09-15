@@ -22,7 +22,7 @@ public class DiaCronograma {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    DiaSemanaEnum diaSemanaEnum;
+    private DiaSemanaEnum diaSemanaEnum;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne
