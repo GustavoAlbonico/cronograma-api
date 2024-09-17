@@ -45,32 +45,44 @@ public class EventoService {
 
     @Transactional
     public void gerarCronograma(EventoCronogramaRequestDom cronograma){
-        validarExisteEventoExecucao(cronograma);
-        removerEventoAntigo(cronograma);
-
-        EventoRequestDom eventoPendente =  new EventoRequestDom(
-                null,
-                "Gerando cronograma",
-                "gerar cronograma",
-                EventoStatusEnum.EXECUTANDO,
-                cronograma.getCursoId(),
-                cronograma.getPeriodoId(),
-                cronograma.getUsuarioId()
-        );
-
-        Evento evento = criarEvento(eventoPendente);
+        Long cronogramaId = null;
         try {
-            cronogramaService.gerarCronogramaPorCursos(cronograma);
-            evento.setEventoStatusEnum(EventoStatusEnum.SUCESSO);
-            evento.setMensagem("Cronograma gerado com sucesso!");
-        } catch (CronogramaException cronogramaException) {
-            evento.setEventoStatusEnum(EventoStatusEnum.ERRO);
-            evento.setMensagem(cronogramaException.getMessage());
-        } catch (Exception exception) {
-            evento.setEventoStatusEnum(EventoStatusEnum.ERRO);
-            evento.setMensagem("Erro não mapeado!");
+            validarExisteEventoExecucao(cronograma);
+            removerEventoAntigo(cronograma);
+
+            EventoRequestDom eventoPendente = new EventoRequestDom(
+                    null,
+                    "Gerando cronograma",
+                    "gerar cronograma",
+                    EventoStatusEnum.EXECUTANDO,
+                    cronograma.getCursoId(),
+                    cronograma.getPeriodoId(),
+                    cronograma.getUsuarioId()
+            );
+            Evento evento = criarEvento(eventoPendente);
+            try {
+                cronogramaId = cronogramaService.gerarCronogramaPorCursos(cronograma);
+                evento.setEventoStatusEnum(EventoStatusEnum.SUCESSO);
+                evento.setMensagem("Cronograma gerado com sucesso!");
+            } catch (CronogramaException cronogramaException) {
+                evento.setEventoStatusEnum(EventoStatusEnum.ERRO);
+                evento.setMensagem(cronogramaException.getMessage());
+            } catch (Exception exception) {
+                evento.setEventoStatusEnum(EventoStatusEnum.ERRO);
+                evento.setMensagem("Erro não mapeado!");
+            }
+            atualizarEvento(evento);
+        } catch (EventoException eventoException){
+            if(cronogramaId != null){
+                cronogramaService.deletarCronograma(cronogramaId);
+            }
+            throw eventoException;
+        } catch (Exception exception){
+            if(cronogramaId != null){
+                cronogramaService.deletarCronograma(cronogramaId);
+            }
+            throw exception;
         }
-        atualizarEvento(evento);
     }
 
     public Evento criarEvento(EventoRequestDom eventoRequestDom){

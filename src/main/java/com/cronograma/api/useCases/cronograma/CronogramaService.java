@@ -56,7 +56,12 @@ public class CronogramaService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void gerarCronogramaPorCursos(CronogramaRequestDom cronograma){
+    public void deletarCronograma(Long id){
+        cronogramaRepository.deleteById(id);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Long gerarCronogramaPorCursos(CronogramaRequestDom cronograma){
 
         validarExisteCronograma(cronograma);
 
@@ -90,9 +95,15 @@ public class CronogramaService {
 
         final Cronograma cronogramaEntidade = new Cronograma();
         cronogramaMapper.cronogramaRequestDomParaCronograma(cronograma,cronogramaEntidade,cronogramaCursoRepository,cronogramaPeriodoRepository);
-        Long cronogramaId = cronogramaRepository.save(cronogramaEntidade).getId();
+        Cronograma cronogramaSalvo = cronogramaRepository.save(cronogramaEntidade);
 
-        diaCronogramaService.criarDiaCronograma(cronogramaDisciplinasPorCurso,cronogramaId);
+        diaCronogramaService.criarDiaCronograma(
+                cronogramaDisciplinasPorCurso,
+                cronogramaSalvo,
+                periodoAtivo,
+                datasBloqueadas);
+
+        return cronogramaSalvo.getId();
     }
     private void validarExisteCronograma(CronogramaRequestDom cronograma){
         Optional<Cronograma> cronogramaEncontrado = cronogramaRepository.findByCursoIdAndPeriodoId(cronograma.getCursoId(),cronograma.getPeriodoId());

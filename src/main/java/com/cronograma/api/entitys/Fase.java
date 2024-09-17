@@ -36,6 +36,9 @@ public class Fase {
     @OneToMany(mappedBy = "fase")
     private Set<Disciplina> disciplinas = new HashSet<>();
 
+    @OneToMany(mappedBy = "fase")
+    private Set<DiaCronograma> diasCronograma = new HashSet<>();
+
     @Override
     public String toString() {
         return "Fase{" +

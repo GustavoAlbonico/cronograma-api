@@ -17,7 +17,7 @@ public class EventoController {
     @Autowired
     private EventoService eventoService;
 
-    @PostMapping("/gerarCronograma")
+    @PostMapping("/gerarcronograma")
     public ResponseEntity<?> gerarCronograma(@RequestBody EventoCronogramaRequestDom cronograma){
         eventoService.gerarCronograma(cronograma);
         return ResponseEntity.status(201).body(null);
