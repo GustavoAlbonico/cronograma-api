@@ -5,20 +5,27 @@ import com.cronograma.api.exceptions.CronogramaException;
 import com.cronograma.api.infra.exceptions.RestErrorMessage;
 import com.cronograma.api.useCases.cronograma.CronogramaService;
 import com.cronograma.api.useCases.cronograma.domains.CronogramaRequestDom;
+import com.cronograma.api.useCases.cronograma.domains.CronogramaResponseDom;
 import com.cronograma.api.useCases.cronograma.domains.TesteResponseCronogramaDom;
 import com.cronograma.api.useCases.evento.domains.EventoRequestDom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/cronograma")
 public class CronogramaController {
 
+    @Autowired
+    private CronogramaService cronogramaService;
+
+    @GetMapping("/carregar/curso/{cursoId}/fase/{faseId}")
+        public ResponseEntity<?> carregarCronograma(@PathVariable Long cursoId, @PathVariable Long faseId){
+        CronogramaResponseDom response = cronogramaService.carregarCronograma(cursoId,faseId);
+        return ResponseEntity.ok(response);
+    }
 }

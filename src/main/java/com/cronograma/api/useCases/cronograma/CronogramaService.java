@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -53,6 +54,11 @@ public class CronogramaService {
     public CronogramaService(PeriodoService periodoService, DiaCronogramaService diaCronogramaService) {
         this.periodoService = periodoService;
         this.diaCronogramaService = diaCronogramaService;
+    }
+
+    public CronogramaResponseDom carregarCronograma(Long cursoId,Long faseId){
+        diaCronogramaService
+
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
