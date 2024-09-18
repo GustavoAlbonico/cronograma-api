@@ -1,18 +1,15 @@
 package com.cronograma.api.entitys;
 
+import com.cronograma.api.entitys.enums.DataStatusEnum;
 import com.cronograma.api.entitys.enums.DiaSemanaEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class DiaCronograma {
@@ -27,6 +24,10 @@ public class DiaCronograma {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private DiaSemanaEnum diaSemanaEnum;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private DataStatusEnum dataStatusEnum;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne

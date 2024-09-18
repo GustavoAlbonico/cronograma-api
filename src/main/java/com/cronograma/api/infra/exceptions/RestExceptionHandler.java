@@ -2,6 +2,7 @@ package com.cronograma.api.infra.exceptions;
 
 import com.cronograma.api.exceptions.CampoObrigatorioException;
 import com.cronograma.api.exceptions.CronogramaException;
+import com.cronograma.api.exceptions.DiaCronogramaException;
 import com.cronograma.api.exceptions.EventoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EventoException.class)
     private ResponseEntity<RestErrorMessage> eventoException(EventoException exception){
+        RestErrorMessage errorResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST,exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(DiaCronogramaException.class)
+    private ResponseEntity<RestErrorMessage> diaCronogramaException(DiaCronogramaException exception){
         RestErrorMessage errorResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST,exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }

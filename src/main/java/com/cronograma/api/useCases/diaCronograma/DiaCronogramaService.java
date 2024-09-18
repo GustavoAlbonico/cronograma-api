@@ -1,10 +1,12 @@
 package com.cronograma.api.useCases.diaCronograma;
 
 import com.cronograma.api.entitys.*;
+import com.cronograma.api.entitys.enums.DataStatusEnum;
 import com.cronograma.api.entitys.enums.DiaSemanaEnum;
 import com.cronograma.api.exceptions.DiaCronogramaException;
 import com.cronograma.api.useCases.cronograma.CronogramaService;
 import com.cronograma.api.useCases.cronograma.domains.CronogramaDisciplinaDom;
+import com.cronograma.api.useCases.diaCronograma.implement.repositorys.DiaCronogramaRepository;
 import com.cronograma.api.useCases.fase.implement.repositorys.FaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +21,17 @@ import java.util.stream.Collectors;
 public class DiaCronogramaService {
 
     @Autowired
+    private DiaCronogramaRepository diaCronogramaRepository;
+
+    @Autowired
     private FaseRepository faseRepository;
 
 
-    public void criarDiaCronograma(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso, Cronograma cronogramaSalvo, Periodo periodo, List<DataBloqueada> datasBloqueadas){
+    public void criarDiaCronograma(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso,
+                                   Cronograma cronogramaSalvo,
+                                   Periodo periodo,
+                                   List<DataBloqueada> datasBloqueadas
+    ){
 
         Map<Long,Map<DiaSemanaEnum,List<CronogramaDisciplinaDom>>> cronogramaDisciplinasPorFaseIdDiaSemana = cronogramaDisciplinasPorCurso.stream()
                 .collect(Collectors.groupingBy(
@@ -52,62 +61,53 @@ public class DiaCronogramaService {
 
             LocalDate dataInicialAuxiliar = periodo.getDataInicial();
             while (dataInicialAuxiliar.isBefore(periodo.getDataFinal().plusDays(1L))) {
-                LocalDate dataInicialAuxiliarLocal = dataInicialAuxiliar;
-
                 DayOfWeek dayOfWeek = dataInicialAuxiliar.getDayOfWeek();
+
                 if (!dayOfWeek.equals(DayOfWeek.SUNDAY)) {
-                    DiaSemanaEnum diaDaSemana = DiaSemanaEnum.dayOfWeekParaDiaSemanaEnum(dayOfWeek);
+                    boolean dataDisponivel = true;
+                    final DiaSemanaEnum diaDaSemana = DiaSemanaEnum.dayOfWeekParaDiaSemanaEnum(dayOfWeek);
 
+                    DiaCronograma diaCronograma = new DiaCronograma();
+                    diaCronograma.setData(dataInicialAuxiliar);
+                    diaCronograma.setDiaSemanaEnum(diaDaSemana);
+                    diaCronograma.setFase(entry.getKey());
+                    diaCronograma.setCronograma(cronogramaSalvo);
+
+                    LocalDate dataInicialAuxiliarLocal = dataInicialAuxiliar;
                     if(datasBloqueadas.stream().anyMatch(dataBloqueada -> dataBloqueada.getData().isEqual(dataInicialAuxiliarLocal))){
-                        DiaCronograma diaCronograma =  new DiaCronograma(
-                                null,
-                                dataInicialAuxiliar,
-                                diaDaSemana,
-                                entry.getKey(),
-                                cronogramaSalvo,
-                                null);
-
-                        diasCronograma.add(diaCronograma);
+                        diaCronograma.setDataStatusEnum(DataStatusEnum.BLOQUEADA);
+                        dataDisponivel = false;
                     } else {
                         for (CronogramaDisciplinaDom cronogramaDisciplina : entry.getValue().get(diaDaSemana)){
                             double quantidadeDiasAula = cronogramaDisciplina.getQuantidadeDiasAula();
+
                             if (quantidadeDiasAula > 0){
+                                List<LocalDate> datasOcupadasProfessorAtual = diasCronograma.stream()
+                                        .filter(diaCronogramaAuxiliar ->
+                                                    diaCronogramaAuxiliar.getDisciplina() != null &&
+                                                    diaCronogramaAuxiliar.getDisciplina().getProfessor().getId()
+                                                        .equals(cronogramaDisciplina.getDisciplina().getProfessor().getId()))
+                                        .map(DiaCronograma::getData)
+                                        .toList();
 
-                                DiaCronograma diaCronograma =  new DiaCronograma(
-                                        null,
-                                        dataInicialAuxiliar,
-                                        diaDaSemana,
-                                        entry.getKey(),
-                                        cronogramaSalvo,
-                                        cronogramaDisciplina.getDisciplina());
-
-                                diasCronograma.add(diaCronograma);
-                                cronogramaDisciplina.setQuantidadeDiasAula(quantidadeDiasAula - 1);
-                                break;
+                                if(!datasOcupadasProfessorAtual.contains(dataInicialAuxiliar)){
+                                    diaCronograma.setDataStatusEnum(DataStatusEnum.OCUPADA);
+                                    diaCronograma.setDisciplina(cronogramaDisciplina.getDisciplina());
+                                    cronogramaDisciplina.setQuantidadeDiasAula(quantidadeDiasAula - 1);
+                                    dataDisponivel = false;
+                                    break;
+                                }
                             }
                         }
                     }
+                    if (dataDisponivel){
+                        diaCronograma.setDataStatusEnum(DataStatusEnum.DISPONIVEL);
+                    }
+                    diasCronograma.add(diaCronograma);
                 }
                 dataInicialAuxiliar = dataInicialAuxiliar.plusDays(1);
             }
         }
-
-
-        Map<Fase,Map<DiaSemanaEnum,List<DiaCronograma>>> diaCronogramaPorFaseDiaSemana =
-                diasCronograma.stream()
-                        .collect(Collectors.groupingBy(
-                                DiaCronograma::getFase,
-                                LinkedHashMap::new,
-                                Collectors.groupingBy(
-                                        DiaCronograma::getDiaSemanaEnum,
-                                        LinkedHashMap::new,
-                                        Collectors.toList())
-                                )
-                        );
-
-
-
-        //verificar os dias vazios para adicionar tambem
-
+        diaCronogramaRepository.saveAll(diasCronograma);
     }
 }
