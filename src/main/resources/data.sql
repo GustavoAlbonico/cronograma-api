@@ -230,10 +230,10 @@ VALUES
 
 --CURSO
 INSERT INTO curso
-  (nome, coordenador_id)
+  (nome, sigla, coordenador_id)
 VALUES
-  ('Moda', 1),
-  ('ADS', 2);
+  ('Moda','MODA', 1),
+  ('Analise e Desenvolvimento de Sistemas','ADS', 2);
 
 --CURSO_FASE
 INSERT INTO curso_fase

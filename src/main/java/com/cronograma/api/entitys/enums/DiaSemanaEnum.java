@@ -12,21 +12,14 @@ public enum DiaSemanaEnum {
     DOMINGO;
 
     public static DiaSemanaEnum dayOfWeekParaDiaSemanaEnum(DayOfWeek dayOfWeek) {
-        switch (dayOfWeek) {
-            case MONDAY:
-                return SEGUNDA_FEIRA;
-            case TUESDAY:
-                return TERCA_FEIRA;
-            case WEDNESDAY:
-                return QUARTA_FEIRA;
-            case THURSDAY:
-                return QUINTA_FEIRA;
-            case FRIDAY:
-                return SEXTA_FEIRA;
-            case SATURDAY:
-                return SABADO;
-            default:
-                throw new IllegalArgumentException("Dia da semana inválido: " + dayOfWeek);
-        }
+        return switch (dayOfWeek) {
+            case MONDAY -> SEGUNDA_FEIRA;
+            case TUESDAY -> TERCA_FEIRA;
+            case WEDNESDAY -> QUARTA_FEIRA;
+            case THURSDAY -> QUINTA_FEIRA;
+            case FRIDAY -> SEXTA_FEIRA;
+            case SATURDAY -> SABADO;
+            default -> throw new IllegalArgumentException("Dia da semana inválido: " + dayOfWeek);
+        };
     }
 }

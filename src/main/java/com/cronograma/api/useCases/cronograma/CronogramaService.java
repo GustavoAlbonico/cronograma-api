@@ -4,6 +4,7 @@ import com.cronograma.api.entitys.*;
 import com.cronograma.api.entitys.enums.*;
 import com.cronograma.api.exceptions.CronogramaException;
 import com.cronograma.api.useCases.cronograma.domains.*;
+import com.cronograma.api.useCases.cronograma.implement.mappers.CronogramaDiaCronogramaMapper;
 import com.cronograma.api.useCases.cronograma.implement.mappers.CronogramaDisciplinaMapper;
 import com.cronograma.api.useCases.cronograma.implement.mappers.CronogramaMapper;
 import com.cronograma.api.useCases.cronograma.implement.repositorys.*;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -43,10 +43,16 @@ public class CronogramaService {
     private CronogramaRepository cronogramaRepository;
 
     @Autowired
+    private CronogramaDiaCronogramaRepository cronogramaDiaCronogramaRepository;
+
+    @Autowired
     private CronogramaMapper cronogramaMapper;
 
     @Autowired
     private CronogramaDisciplinaMapper cronogramaDisciplinaMapper;
+
+    @Autowired
+    private CronogramaDiaCronogramaMapper cronogramaDiaCronogramaMapper;
 
     private final PeriodoService periodoService;
     private final DiaCronogramaService diaCronogramaService;
@@ -57,8 +63,29 @@ public class CronogramaService {
     }
 
     public CronogramaResponseDom carregarCronograma(Long cursoId,Long faseId){
-        diaCronogramaService
 
+        List<DiaCronograma> diasCronogramaEncontrado = cronogramaDiaCronogramaRepository.buscarTodosPorCursoIdFaseId(cursoId,faseId);
+        List<CronogramaDiaCronogramaResponseDom>  diasCronogramaResponse =
+                cronogramaDiaCronogramaMapper.listaDiaCronogramaParaListaCronogramaDiaCronogramaResponseDom(diasCronogramaEncontrado);
+
+        Map<MesEnum,Map<DiaSemanaEnum,List<CronogramaDiaCronogramaResponseDom>>> diasCronogramaResponseOrdenado = diasCronogramaResponse.stream()
+                .collect(Collectors.groupingBy(
+                        diaCronograma -> MesEnum.monthParaMesEnum(diaCronograma.getData().getMonth()),
+                        LinkedHashMap::new,
+                        Collectors.groupingBy(
+                                CronogramaDiaCronogramaResponseDom::getDiaSemanaEnum,
+                                LinkedHashMap::new,
+                                Collectors.collectingAndThen(
+                                        Collectors.toList(),
+                                        listaDiaCronogramaResponse -> listaDiaCronogramaResponse.stream()
+                                                .sorted(Comparator.comparing(CronogramaDiaCronogramaResponseDom::getData))
+                                                .toList()
+                                        )
+                                )
+                        )
+                );
+
+        return null;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

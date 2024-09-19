@@ -1,5 +1,7 @@
 package com.cronograma.api.entitys.enums;
 
+import java.time.Month;
+
 public enum MesEnum {
     JANEIRO,
     FEVEREIRO,
@@ -12,5 +14,22 @@ public enum MesEnum {
     SETEMBRO,
     OUTUBRO,
     NOVEMBRO,
-    DEZEMBRO,
+    DEZEMBRO;
+
+    public static MesEnum monthParaMesEnum(Month month) {
+        return switch (month) {
+            case JANUARY -> JANEIRO;
+            case FEBRUARY -> FEVEREIRO;
+            case MARCH -> MARCO;
+            case APRIL -> ABRIL;
+            case MAY -> MAIO;
+            case JUNE -> JUNHO;
+            case JULY -> JULHO;
+            case AUGUST -> AGOSTO;
+            case SEPTEMBER -> SETEMBRO;
+            case OCTOBER -> OUTUBRO;
+            case NOVEMBER -> NOVEMBRO;
+            case DECEMBER -> DEZEMBRO;
+        };
+    }
 }

@@ -71,10 +71,6 @@ public class EventoService {
                 evento.setEventoStatusEnum(EventoStatusEnum.ERRO);
                 evento.setMensagem("Erro não mapeado!");
             }
-            Integer aa = null;
-            if (aa > 3){
-                System.out.println("aaaaaa");
-            }
             atualizarEvento(evento);
         } catch (EventoException eventoException){
             if(cronogramaId != null){

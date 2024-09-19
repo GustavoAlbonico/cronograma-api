@@ -4,7 +4,6 @@ import com.cronograma.api.entitys.*;
 import com.cronograma.api.entitys.enums.DataStatusEnum;
 import com.cronograma.api.entitys.enums.DiaSemanaEnum;
 import com.cronograma.api.exceptions.DiaCronogramaException;
-import com.cronograma.api.useCases.cronograma.CronogramaService;
 import com.cronograma.api.useCases.cronograma.domains.CronogramaDisciplinaDom;
 import com.cronograma.api.useCases.diaCronograma.implement.repositorys.DiaCronogramaRepository;
 import com.cronograma.api.useCases.fase.implement.repositorys.FaseRepository;
@@ -25,7 +24,6 @@ public class DiaCronogramaService {
 
     @Autowired
     private FaseRepository faseRepository;
-
 
     public void criarDiaCronograma(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso,
                                    Cronograma cronogramaSalvo,
