@@ -11,7 +11,6 @@ import lombok.Setter;
 @Setter
 public class CronogramaDisciplinaResponseDom {
     private String nome;
-    private String sigla;
     private String corHexadecimal;
     private Double cargaHoraria;
     private String professorNome;

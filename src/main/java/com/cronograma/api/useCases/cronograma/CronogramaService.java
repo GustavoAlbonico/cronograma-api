@@ -62,7 +62,16 @@ public class CronogramaService {
         this.diaCronogramaService = diaCronogramaService;
     }
 
-    public CronogramaResponseDom carregarCronograma(Long cursoId,Long faseId){
+    public CronogramaResponseDom carregarCronograma(Long periodoId,Long cursoId,Long faseId){
+
+        Periodo periodo = cronogramaPeriodoRepository.findById(periodoId).orElseThrow(() -> new CronogramaException("Nenhum periodo encontrado!"));
+        Curso curso = cronogramaCursoRepository.findById(cursoId).orElseThrow(() -> new CronogramaException("Nenhum curso encontrado!"));
+        Fase fase = cronogramaFaseRepository.findById(faseId).orElseThrow(() -> new CronogramaException("Nenhuma fase encontrada!"));
+
+        List<Disciplina> disciplinas = cronogramaDisciplinaRepository.findAllByCursoIdAndFaseId(cursoId,faseId);
+
+        List<CronogramaDisciplinaResponseDom> disciplinasReponse =
+                cronogramaDisciplinaMapper.listaDisciplinaParaListaCronogramaDisciplinaResponseDom(disciplinas);
 
         List<DiaCronograma> diasCronogramaEncontrado = cronogramaDiaCronogramaRepository.buscarTodosPorCursoIdFaseId(cursoId,faseId);
         List<CronogramaDiaCronogramaResponseDom>  diasCronogramaResponse =
@@ -85,7 +94,16 @@ public class CronogramaService {
                         )
                 );
 
-        return null;
+        CronogramaResponseDom cronogramaResponseDom =
+                new CronogramaResponseDom(
+                        curso.getNome(),
+                        fase.getNumero(),
+                        periodo.getDataInicial().getYear(),
+                        disciplinasReponse,
+                        diasCronogramaResponseOrdenado
+                );
+
+        return cronogramaResponseDom;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

@@ -23,9 +23,9 @@ public class CronogramaController {
     @Autowired
     private CronogramaService cronogramaService;
 
-    @GetMapping("/carregar/curso/{cursoId}/fase/{faseId}")
-        public ResponseEntity<?> carregarCronograma(@PathVariable Long cursoId, @PathVariable Long faseId){
-        CronogramaResponseDom response = cronogramaService.carregarCronograma(cursoId,faseId);
+    @GetMapping("/carregar/periodo/{periodoId}/curso/{cursoId}/fase/{faseId}")
+        public ResponseEntity<?> carregarCronograma(@PathVariable Long periodoId,@PathVariable Long cursoId, @PathVariable Long faseId){
+        CronogramaResponseDom response = cronogramaService.carregarCronograma(periodoId,cursoId,faseId);
         return ResponseEntity.ok(response);
     }
 }

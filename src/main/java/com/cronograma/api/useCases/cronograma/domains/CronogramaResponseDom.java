@@ -20,6 +20,7 @@ public class CronogramaResponseDom {
 
     private String cursoNome;
     private Integer faseNumero;
+    private Integer ano;
     private List<CronogramaDisciplinaResponseDom> disciplinas = new ArrayList<>();
-    private Map<MesEnum, Map<DiaSemanaEnum,CronogramaDiaCronogramaResponseDom>> diasCronograma = new LinkedHashMap<>();
+    private Map<MesEnum, Map<DiaSemanaEnum,List<CronogramaDiaCronogramaResponseDom>>> diasCronograma = new LinkedHashMap<>();
 }
