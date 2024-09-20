@@ -138,11 +138,27 @@ public class CronogramaService {
         Map<Long, Map<Disciplina, Double>> disciplinasComDiasAulaNecessariosPorCurso =
                 buscarDisciplinasComDiasAulaNecessariosPorCurso(disciplinas, fases);
 
+
+        Set<Long> professoresId = disciplinas.stream().map(disciplina -> disciplina.getProfessor().getId()).collect(Collectors.toSet());
+        List<DiaCronograma> diasCronogramaReferenteProfessoresCursoAtual = cronogramaDiaCronogramaRepository.buscarTodosPorProfessoresId(professoresId);
+        final Map<Long,Map<DiaSemanaEnum, Double>> professoresLecionandoEmOutroCursoComQuantidadeDiaSemanaOcupados = diasCronogramaReferenteProfessoresCursoAtual.stream()
+                .collect(Collectors.groupingBy(diaCronograma -> diaCronograma.getDisciplina().getProfessor().getId(),
+                        LinkedHashMap::new,
+                        Collectors.groupingBy(DiaCronograma::getDiaSemanaEnum,
+                            LinkedHashMap::new,
+                            Collectors.collectingAndThen(
+                                    Collectors.toList(),
+                                    diasCronograma -> Double.valueOf(diasCronograma.size())
+                            ))
+                        )
+                );
+
         List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso =
                 gerarCronogramaPorCurso(
                         disciplinasComDiasAulaNecessariosPorCurso,
                         fases,
-                        quantidadeAulasPorDiaDaSemana);
+                        quantidadeAulasPorDiaDaSemana,
+                        professoresLecionandoEmOutroCursoComQuantidadeDiaSemanaOcupados);
 
         final Cronograma cronogramaEntidade = new Cronograma();
         cronogramaMapper.cronogramaRequestDomParaCronograma(cronograma,cronogramaEntidade,cronogramaCursoRepository,cronogramaPeriodoRepository);
@@ -210,7 +226,8 @@ public class CronogramaService {
 
     private List<CronogramaDisciplinaDom> gerarCronogramaPorCurso(Map<Long,Map<Disciplina, Double>> disciplinasComDiasAulaNecessariosPorCurso,
                                                                  List<Fase> fases,
-                                                                 Map<DiaSemanaEnum,Double> quantidadeAulasPorDiaDaSemana)
+                                                                 Map<DiaSemanaEnum,Double> quantidadeAulasPorDiaDaSemana,
+                                                                 final Map<Long,Map<DiaSemanaEnum, Double>> professoresLecionandoEmOutroCursoComQuantidadeDiaSemanaOcupados)
     {
 
         Stack<CronogramaDisciplinaConflitanteDom> disciplinasComDiasSemanaConflitantes = new Stack<>();
@@ -299,7 +316,8 @@ public class CronogramaService {
                                         cronogramaDisciplinasPorCurso,
                                         quantidadeAulasPorDiaSemanaOriginal,
                                         entry.getKey(),
-                                        diaSemanaEnum);
+                                        diaSemanaEnum,
+                                        professoresLecionandoEmOutroCursoComQuantidadeDiaSemanaOcupados);
 
                             final boolean existeConflitoFases =
                                     (quantidadeDiasAulaRestantesNecessariosPorDisciplina < 0 ? entry.getValue() : entry.getValue() - quantidadeDiasAulaRestantesNecessariosPorDisciplina)
@@ -567,16 +585,26 @@ public class CronogramaService {
     private double buscarQuantidadeAulasRestantesNoDiaSemanaPorProfessor(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso,
                                                                          final Map<DiaSemanaEnum,Double> quantidadeAulasPorDiaSemanaOriginal,
                                                                          Disciplina disciplina,
-                                                                         final DiaSemanaEnum diaSemanaEnum)
+                                                                         final DiaSemanaEnum diaSemanaEnum,
+                                                                         final Map<Long,Map<DiaSemanaEnum, Double>> professoresLecionandoEmOutroCursoComQuantidadeDiaSemanaOcupados)
     {
+        double quantidadeAulasOcupadasNoDiaSemanaOutroCurso = 0.0;
+        if(
+           professoresLecionandoEmOutroCursoComQuantidadeDiaSemanaOcupados.containsKey(disciplina.getProfessor().getId()) &&
+           professoresLecionandoEmOutroCursoComQuantidadeDiaSemanaOcupados.get(disciplina.getProfessor().getId()).containsKey(diaSemanaEnum)
+        ){
+            quantidadeAulasOcupadasNoDiaSemanaOutroCurso = professoresLecionandoEmOutroCursoComQuantidadeDiaSemanaOcupados.get(disciplina.getProfessor().getId()).get(diaSemanaEnum);
+        }
 
-        final double quantidadeAulasOcupadasNoDiaSemana = cronogramaDisciplinasPorCurso.stream()
+        final double quantidadeAulasOcupadasNoDiaSemanaCursoAtual = cronogramaDisciplinasPorCurso.stream()
                 .filter(cronogramaDisciplinaDom ->
                         cronogramaDisciplinaDom.getDisciplina().getProfessor().getId().equals(disciplina.getProfessor().getId()) &&
                         cronogramaDisciplinaDom.getDiaSemanaEnum().equals(diaSemanaEnum))
                 .map(CronogramaDisciplinaDom::getQuantidadeDiasAula)
                 .mapToDouble(Double::doubleValue)
                 .sum();
+
+        final double quantidadeAulasOcupadasNoDiaSemana = quantidadeAulasOcupadasNoDiaSemanaOutroCurso + quantidadeAulasOcupadasNoDiaSemanaCursoAtual;
 
      return quantidadeAulasPorDiaSemanaOriginal.get(diaSemanaEnum) - quantidadeAulasOcupadasNoDiaSemana;
     }
