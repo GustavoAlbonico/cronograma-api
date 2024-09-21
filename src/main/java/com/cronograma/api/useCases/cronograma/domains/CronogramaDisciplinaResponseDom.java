@@ -5,12 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class CronogramaRequestDom{
-    private Long periodoId;
-    private Long cursoId;
-    private Long usuarioId;
+public class CronogramaDisciplinaResponseDom {
+    private String nome;
+    private String corHexadecimal;
+    private Double cargaHoraria;
+    private String professorNome;
 }

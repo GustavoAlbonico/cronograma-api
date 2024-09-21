@@ -1,5 +1,6 @@
 package com.cronograma.api.entitys;
 
+import com.cronograma.api.entitys.enums.DataStatusEnum;
 import com.cronograma.api.entitys.enums.DiaSemanaEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -22,7 +23,16 @@ public class DiaCronograma {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    DiaSemanaEnum diaSemanaEnum;
+    private DiaSemanaEnum diaSemanaEnum;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private DataStatusEnum dataStatusEnum;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Fase fase;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne
@@ -31,6 +41,6 @@ public class DiaCronograma {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn
     private Disciplina disciplina;
 }

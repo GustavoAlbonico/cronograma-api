@@ -8,6 +8,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -31,5 +32,8 @@ public class Periodo {
     private StatusEnum statusEnum;
 
     @OneToMany(mappedBy = "periodo")
-    private Set<Cronograma> cronogramas;
+    private Set<Cronograma> cronogramas = new HashSet<>();
+
+    @OneToMany(mappedBy = "periodo")
+    private Set<Evento> eventos = new HashSet<>();
 }

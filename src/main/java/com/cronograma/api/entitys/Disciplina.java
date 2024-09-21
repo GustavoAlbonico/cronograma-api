@@ -37,7 +37,7 @@ public class Disciplina {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    BooleanEnum extensaoBooleanEnum;
+    private BooleanEnum extensaoBooleanEnum;
 
     @Column(nullable = false,columnDefinition = "VARCHAR(255) DEFAULT 'ATIVO'")
     @Enumerated(EnumType.STRING)

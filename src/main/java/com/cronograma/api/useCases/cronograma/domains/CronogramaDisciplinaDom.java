@@ -18,12 +18,4 @@ public class CronogramaDisciplinaDom{
     private double quantidadeDiasAula;
     private Integer ordemPrioridadePorDiaSemana;
     private Long faseId;
-
-    @Override
-    public String toString() {
-        return "CronogramaDisciplinaDom{" +
-                "disciplina=" + disciplina +
-                ", diaSemanaEnum=" + diaSemanaEnum +
-                '}';
-    }
 }

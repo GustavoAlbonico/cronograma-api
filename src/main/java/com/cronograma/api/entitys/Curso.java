@@ -26,6 +26,9 @@ public class Curso {
     @Column(nullable = false)
     private String nome;
 
+    @Column(nullable = false, length = 6)
+    private String sigla;
+
     @Column(nullable = false,columnDefinition = "VARCHAR(255) DEFAULT 'ATIVO'")
     @Enumerated(EnumType.STRING)
     private StatusEnum statusEnum;
@@ -44,4 +47,7 @@ public class Curso {
 
     @OneToMany(mappedBy = "curso")
     private Set<Disciplina> disciplinas = new HashSet<>();
+
+    @OneToOne(mappedBy = "curso")
+    private Evento evento;
 }

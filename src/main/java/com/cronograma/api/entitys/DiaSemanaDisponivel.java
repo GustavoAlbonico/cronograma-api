@@ -18,8 +18,6 @@ import java.time.LocalDate;
 @SQLRestriction("status_enum = 'ATIVO'")
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class DiaSemanaDisponivel {
 
     @Id
@@ -28,7 +26,7 @@ public class DiaSemanaDisponivel {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    DiaSemanaEnum diaSemanaEnum;
+    private DiaSemanaEnum diaSemanaEnum;
 
     @Column(nullable = false,columnDefinition = "VARCHAR(255) DEFAULT 'ATIVO'")
     @Enumerated(EnumType.STRING)
@@ -38,13 +36,4 @@ public class DiaSemanaDisponivel {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Professor professor;
-
-    @Override
-    public String toString() {
-        return "DiaSemanaDisponivel{" +
-                "id=" + id +
-                ", diaSemanaEnum=" + diaSemanaEnum +
-                ", statusEnum=" + statusEnum +
-                '}';
-    }
 }

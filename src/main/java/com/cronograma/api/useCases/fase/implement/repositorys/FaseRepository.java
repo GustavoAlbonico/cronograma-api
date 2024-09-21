@@ -12,15 +12,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FaseRepository extends JpaRepository<Fase, Long> {
-    @Query(value =
-            "SELECT fase.* " +
-            "FROM fase " +
-            "JOIN disciplina ON fase.id = disciplina.fase_id " +
-            "WHERE disciplina.curso_id = :cursoId " +
-            "GROUP BY fase.id " +
-            "ORDER BY fase.numero ASC;",
-        nativeQuery = true)
-    Optional<List<Fase>> buscarFasesPorCursoId(@Param("cursoId") Long cursoId);
-
-
 }

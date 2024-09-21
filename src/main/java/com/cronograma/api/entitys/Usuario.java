@@ -4,12 +4,15 @@ import com.cronograma.api.entitys.enums.NivelAcessoEnum;
 import com.cronograma.api.entitys.enums.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -44,6 +47,8 @@ public class Usuario {
     private Coordenador coordenador;
 
     @OneToMany(mappedBy = "usuario")
-    private Set<DataBloqueada> datasBloqueadas;
+    private Set<DataBloqueada> datasBloqueadas = new HashSet<>();
 
+    @OneToMany(mappedBy = "usuario")
+    private Set<Evento> eventos =  new HashSet<>();
 }
