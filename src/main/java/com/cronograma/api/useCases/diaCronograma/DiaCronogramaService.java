@@ -28,7 +28,8 @@ public class DiaCronogramaService {
     public void criarDiaCronograma(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso,
                                    Cronograma cronogramaSalvo,
                                    Periodo periodo,
-                                   List<DataBloqueada> datasBloqueadas
+                                   List<DataBloqueada> datasBloqueadas,
+                                   List<DiaCronograma> diasCronogramaReferenteProfessoresCursoAtual
     ){
 
         Map<Long,Map<DiaSemanaEnum,List<CronogramaDisciplinaDom>>> cronogramaDisciplinasPorFaseIdDiaSemana = cronogramaDisciplinasPorCurso.stream()
@@ -88,7 +89,15 @@ public class DiaCronogramaService {
                                         .map(DiaCronograma::getData)
                                         .toList();
 
-                                if(!datasOcupadasProfessorAtual.contains(dataInicialAuxiliar)){
+                                List<LocalDate> datasOcupadasProfessorAtualEmOutroCurso = diasCronogramaReferenteProfessoresCursoAtual.stream()
+                                        .filter(diaCronogramaAuxiliar ->
+                                                diaCronogramaAuxiliar.getDisciplina() != null &&
+                                                        diaCronogramaAuxiliar.getDisciplina().getProfessor().getId()
+                                                                .equals(cronogramaDisciplina.getDisciplina().getProfessor().getId()))
+                                        .map(DiaCronograma::getData)
+                                        .toList();
+
+                                if(!datasOcupadasProfessorAtual.contains(dataInicialAuxiliar) && !datasOcupadasProfessorAtualEmOutroCurso.contains(dataInicialAuxiliar)){
                                     diaCronograma.setDataStatusEnum(DataStatusEnum.OCUPADA);
                                     diaCronograma.setDisciplina(cronogramaDisciplina.getDisciplina());
                                     cronogramaDisciplina.setQuantidadeDiasAula(quantidadeDiasAula - 1);

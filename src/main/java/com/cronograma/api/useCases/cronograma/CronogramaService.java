@@ -94,20 +94,26 @@ public class CronogramaService {
                         )
                 );
 
+        List<CronogramaMesResponseDom> cronogramaMesesResponseDoms =  new ArrayList<>();
+        for (MesEnum mesEnum : diasCronogramaResponseOrdenado.keySet()){
+            CronogramaMesResponseDom cronogramaMesResponse =  new CronogramaMesResponseDom(mesEnum,diasCronogramaResponseOrdenado.get(mesEnum));
+            cronogramaMesesResponseDoms.add(cronogramaMesResponse);
+        }
+
         CronogramaResponseDom cronogramaResponseDom =
                 new CronogramaResponseDom(
                         curso.getNome(),
                         fase.getNumero(),
                         periodo.getDataInicial().getYear(),
                         disciplinasReponse,
-                        diasCronogramaResponseOrdenado
+                        cronogramaMesesResponseDoms
                 );
 
         return cronogramaResponseDom;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deletarCronograma(Long id){
+    public void excluirCronograma(Long id){
         cronogramaRepository.deleteById(id);
     }
 
@@ -168,7 +174,8 @@ public class CronogramaService {
                 cronogramaDisciplinasPorCurso,
                 cronogramaSalvo,
                 periodoAtivo,
-                datasBloqueadas);
+                datasBloqueadas,
+                diasCronogramaReferenteProfessoresCursoAtual);
 
         return cronogramaSalvo.getId();
     }

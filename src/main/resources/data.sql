@@ -272,23 +272,23 @@ VALUES
   ('Desenho Técnico de Moda - INICIO', 40, 4, '#00FF80', 'NAO', 1, 4, 3),
   ('Pesquisa de Mercado - FINAL', 40, 4, '#00FF80', 'NAO', 1, 4, 11),
 
-  ('Desenvolvimento de Portfólio', 40, 4, '#99004C', 'NAO', 1, 6, 1),
-  ('Produção Audiovisual', 40, 4, '#003300', 'NAO', 1, 6, 1),
-  ('Desenvolvimento e Produção de Coleção - INICIO1', 40, 4, '#FF6666', 'NAO', 1, 6, 6),
-  ('Styling - Final', 40, 4, '#003319', 'NAO', 1, 6, 10),
-  ('Desenvolvimento e Apresentação de Coleção', 80, 4, '#660033', 'NAO', 1, 6, 12),
-  ('Desenvolvimento e Produção de Coleção - INICIO2', 40, 4, '#00FF80', 'NAO', 1, 6, 3),
-  ('Metodologia do Trabalho Científico - FINAL', 40, 4, '#00FF80', 'NAO', 1, 6, 14),
-  ('Desenvolvimento e Produção de Coleção1 ', 40, 4, '#00FF80', 'NAO', 1, 6, 5),
-  ('Desenvolvimento e Produção de Coleção2 ', 40, 4, '#00FF80', 'NAO', 1, 6, 13),
+  ('Desenvolvimento de Portfólio', 40, 4, '#FF5733', 'NAO', 1, 6, 1),
+  ('Produção Audiovisual', 40, 4, '#33FF57', 'NAO', 1, 6, 1),
+  ('Desenvolvimento e Produção de Coleção - INICIO1', 40, 4, '#3357FF', 'NAO', 1, 6, 6),
+  ('Styling - Final', 40, 4, '#FF33A6', 'NAO', 1, 6, 10),
+  ('Desenvolvimento e Apresentação de Coleção', 80, 4, '#A633FF', 'NAO', 1, 6, 12),
+  ('Desenvolvimento e Produção de Coleção - INICIO2', 40, 4, '#33FFA6', 'NAO', 1, 6, 3),
+  ('Metodologia do Trabalho Científico - FINAL', 40, 4, '#FF8C33', 'NAO', 1, 6, 14),
+  ('Desenvolvimento e Produção de Coleção1 ', 40, 4, '#8C33FF', 'NAO', 1, 6, 5),
+  ('Desenvolvimento e Produção de Coleção2 ', 40, 4, '#33FF8C', 'NAO', 1, 6, 13),
 
 --ADS
-  ('Fundamentos da Pesquisa', 40, 4, '#99004C', 'NAO', 2, 1, 14),
-  ('Introdução a Computação', 36, 4, '#003300', 'NAO',2, 1, 15),
-  ('Modelagem de Dados', 76, 4, '#FF6666', 'NAO', 2, 1, 16),
-  ('Introdução a Programação de Computadores', 152, 4, '#003319', 'NAO', 2, 1, 17),
-  ('Engenharia de Requisitos', 76, 4, '#660033', 'NAO', 2, 1, 18),
-  ('Extensão em Análise e Desenvolvimento de Sistemas I', 45, 4, '#00FF80', 'SIM', 2, 1, 14),
+  ('Fundamentos da Pesquisa', 40, 4, '#FF3333', 'NAO', 2, 1, 14),
+  ('Introdução a Computação', 36, 4, '#33FFFF', 'NAO',2, 1, 15),
+  ('Modelagem de Dados', 76, 4, '#FFFF33', 'NAO', 2, 1, 16),
+  ('Introdução a Programação de Computadores', 152, 4, '#FF33FF', 'NAO', 2, 1, 17),
+  ('Engenharia de Requisitos', 76, 4, '#33FF33', 'NAO', 2, 1, 18),
+  ('Extensão em Análise e Desenvolvimento de Sistemas I', 45, 4, '#3399FF', 'SIM', 2, 1, 14),
 
   ('Estrutura de Dados', 40, 4, '#99004C', 'NAO', 2, 2, 16),
   ('UX/UI Design de Sistema', 36, 4, '#003300', 'NAO',2, 2, 19),
@@ -314,14 +314,14 @@ VALUES
   ('Desenvolvimento Full Stack', 76, 4, '#00FF80', 'NAO', 2, 4, 22),
   ('Extensão em Análise e Desenvolvimento de Sistemas IIII', 45, 4, '#00FF80', 'SIM', 2, 4, 25),
 
-  ('Tópicos Especiais em ADS', 76, 4, '#99004C', 'NAO', 2, 5, 26),
-  ('Desenvolvimento para dispositivos móveis', 76, 4, '#003300', 'NAO',2, 5, null),
-  ('Metodologia do Trabalho Científico', 40, 4, '#FF6666', 'NAO', 2, 5, 14),
-  ('Desenvolvimento de aplicação (Sistema)', 76, 4, '#003319', 'NAO', 2, 5, 22),
-  ('Legislação Aplicada a Informação', 36, 4, '#660033', 'NAO', 2, 5, 27),
-  ('Desenvolvimento de Aplicação (Projeto)', 40, 4, '#00FF80', 'NAO', 2, 5, 21),
-  ('Certificações em ADS', 36, 4, '#00FF80', 'NAO', 2, 5, 27),
-  ('InovADS (integradora)', 20, 4, '#00FF80', 'NAO', 2, 5, 28);
+  ('Tópicos Especiais em ADS', 76, 4, '#9933FF', 'NAO', 2, 5, 26),
+  ('Desenvolvimento para dispositivos móveis', 76, 4, '#FF3399', 'NAO',2, 5, null),
+  ('Metodologia do Trabalho Científico', 40, 4, '#99FF33', 'NAO', 2, 5, 14),
+  ('Desenvolvimento de aplicação (Sistema)', 76, 4, '#FF6633', 'NAO', 2, 5, 22),
+  ('Legislação Aplicada a Informação', 36, 4, '#6633FF', 'NAO', 2, 5, 27),
+  ('Desenvolvimento de Aplicação (Projeto)', 40, 4, '#33FF66', 'NAO', 2, 5, 21),
+  ('Certificações em ADS', 36, 4, '#FF3366', 'NAO', 2, 5, 27),
+  ('InovADS (integradora)', 20, 4, '#66FF33', 'NAO', 2, 5, 28);
 
 -- PERIODO
 INSERT INTO  periodo

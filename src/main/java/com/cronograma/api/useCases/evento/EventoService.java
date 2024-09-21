@@ -74,12 +74,12 @@ public class EventoService {
             atualizarEvento(evento);
         } catch (EventoException eventoException){
             if(cronogramaId != null){
-                cronogramaService.deletarCronograma(cronogramaId);
+                cronogramaService.excluirCronograma(cronogramaId);
             }
             throw eventoException;
         } catch (Exception exception){
             if(cronogramaId != null){
-                cronogramaService.deletarCronograma(cronogramaId);
+                cronogramaService.excluirCronograma(cronogramaId);
             }
             throw exception;
         }

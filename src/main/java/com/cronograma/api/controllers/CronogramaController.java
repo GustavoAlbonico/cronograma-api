@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin//remover
 @RestController
 @RequestMapping("/cronograma")
 public class CronogramaController {
@@ -27,5 +27,11 @@ public class CronogramaController {
         public ResponseEntity<?> carregarCronograma(@PathVariable Long periodoId,@PathVariable Long cursoId, @PathVariable Long faseId){
         CronogramaResponseDom response = cronogramaService.carregarCronograma(periodoId,cursoId,faseId);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/excluir/{cronogramaId}")
+    public ResponseEntity<?> excluirCronograma(@PathVariable Long cronogramaId){
+        cronogramaService.excluirCronograma(cronogramaId);
+        return ResponseEntity.ok(null);
     }
 }
