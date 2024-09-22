@@ -5,6 +5,7 @@ import com.cronograma.api.entitys.enums.DataStatusEnum;
 import com.cronograma.api.entitys.enums.DiaSemanaEnum;
 import com.cronograma.api.exceptions.DiaCronogramaException;
 import com.cronograma.api.useCases.cronograma.domains.CronogramaDisciplinaDom;
+import com.cronograma.api.useCases.diaCronograma.implement.mappers.DiaCronogramaMapper;
 import com.cronograma.api.useCases.diaCronograma.implement.repositorys.DiaCronogramaRepository;
 import com.cronograma.api.useCases.fase.implement.repositorys.FaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,6 +26,9 @@ public class DiaCronogramaService {
 
     @Autowired
     private FaseRepository faseRepository;
+
+    @Autowired
+    private DiaCronogramaMapper diaCronogramaMapper;
 
     public void criarDiaCronograma(List<CronogramaDisciplinaDom> cronogramaDisciplinasPorCurso,
                                    Cronograma cronogramaSalvo,
@@ -117,4 +122,162 @@ public class DiaCronogramaService {
         }
         diaCronogramaRepository.saveAll(diasCronograma);
     }
+
+    public void editarDiaCronograma(Long primeiroDiaCronogramaId, Long segundoDiaCronogramaId){
+
+        //validação de usario preciso pegar atraves do jwt
+
+        if(primeiroDiaCronogramaId.equals(segundoDiaCronogramaId)){
+            throw new DiaCronogramaException("Datas selecionadas não podem ser iguais!");
+        }
+
+        DiaCronograma  primeiroDiaCronograma = diaCronogramaRepository.findById(primeiroDiaCronogramaId)
+                .orElseThrow(() -> new DiaCronogramaException("Nenhuma data encontrada!"));
+        DiaCronograma  segundoDiaCronograma = diaCronogramaRepository.findById(segundoDiaCronogramaId)
+                .orElseThrow(() -> new DiaCronogramaException("Nenhuma data encontrada!"));
+
+        if (
+            primeiroDiaCronograma.getDataStatusEnum().equals(DataStatusEnum.BLOQUEADA) ||
+            segundoDiaCronograma.getDataStatusEnum().equals(DataStatusEnum.BLOQUEADA)
+        ) {
+            throw new DiaCronogramaException("Data(s) selecionada(s) inválida(s)!");
+        }
+
+        if(
+           primeiroDiaCronograma.getDataStatusEnum().equals(DataStatusEnum.DISPONIVEL) &&
+           segundoDiaCronograma.getDataStatusEnum().equals(DataStatusEnum.DISPONIVEL)
+        ){
+            throw new DiaCronogramaException("Datas selecionadas invalidas!");
+        }
+
+        if(
+           !primeiroDiaCronograma.getCronograma().getCurso().getId().equals(segundoDiaCronograma.getCronograma().getCurso().getId()) ||
+           !primeiroDiaCronograma.getFase().getId().equals(segundoDiaCronograma.getFase().getId())
+        ){
+            throw new DiaCronogramaException("Uma das datas selecionadas não pertence ao mesmo curso ou fase!");
+        }
+
+        if(primeiroDiaCronograma.getDisciplina() != null && segundoDiaCronograma.getDisciplina() != null){
+            if (primeiroDiaCronograma.getDisciplina().getId().equals(segundoDiaCronograma.getDisciplina().getId())){
+                throw new DiaCronogramaException("As datas selecionadas pertencem a mesma disciplina!");
+            }
+        }
+
+        validarPossuiConflitoData(primeiroDiaCronograma,segundoDiaCronograma);//TESTAR
+        validarPossuiDiaSemanaDisponivel(primeiroDiaCronograma,segundoDiaCronograma);//TESTAR
+
+        validarPossuiConflitoData(segundoDiaCronograma,primeiroDiaCronograma);//TESTAR
+        validarPossuiDiaSemanaDisponivel(segundoDiaCronograma,primeiroDiaCronograma);
+
+        final DiaCronograma primeiroDiaCronogramaEditado = new DiaCronograma();
+        primeiroDiaCronogramaEditado.setDisciplina(primeiroDiaCronograma.getDisciplina());
+        primeiroDiaCronogramaEditado.setDataStatusEnum(primeiroDiaCronograma.getDataStatusEnum());
+        diaCronogramaMapper.diaCronogramaParaDiaCronogramaEditado(segundoDiaCronograma,primeiroDiaCronogramaEditado);
+
+        final DiaCronograma segundoDiaCronogramaEditado = new DiaCronograma();
+        segundoDiaCronogramaEditado.setDisciplina(segundoDiaCronograma.getDisciplina());
+        segundoDiaCronogramaEditado.setDataStatusEnum(segundoDiaCronograma.getDataStatusEnum());
+        diaCronogramaMapper.diaCronogramaParaDiaCronogramaEditado(primeiroDiaCronograma,segundoDiaCronogramaEditado);
+
+        diaCronogramaRepository.save(primeiroDiaCronogramaEditado);
+        diaCronogramaRepository.save(segundoDiaCronogramaEditado);
+    }
+
+    private void validarPossuiConflitoData(DiaCronograma  diaCronogramaEdicao, DiaCronograma  diaCronogramaAtual){
+        if(diaCronogramaEdicao.getDataStatusEnum().equals(DataStatusEnum.OCUPADA) && diaCronogramaEdicao.getDisciplina().getProfessor() != null){
+            Optional<DiaCronograma> diaCronogramaEcontrado = diaCronogramaRepository.buscarPorProfessorIdPorData(
+                    diaCronogramaEdicao.getDisciplina().getProfessor().getId(),
+                    diaCronogramaAtual.getData());
+
+            if(diaCronogramaEcontrado.isPresent()){
+                if(
+                   !diaCronogramaEcontrado.get().getCronograma().getCurso().getId().equals(diaCronogramaEdicao.getCronograma().getCurso().getId()) ||
+                   !diaCronogramaEcontrado.get().getFase().getId().equals(diaCronogramaEdicao.getFase().getId())
+                ){
+                    DateTimeFormatter dataFormatoPtBr = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                    throw new DiaCronogramaException(
+                            diaCronogramaEdicao.getDisciplina().getProfessor().getNomeCompleto()  +
+                                    " já leciona na data (" + dataFormatoPtBr.format(diaCronogramaAtual.getData()) + ") em outra fase ou curso!");
+                }
+            }
+        }
+    }
+
+    private void validarPossuiDiaSemanaDisponivel (DiaCronograma  diaCronogramaEdicao, DiaCronograma  diaCronogramaAtual){
+        if(diaCronogramaEdicao.getDataStatusEnum().equals(DataStatusEnum.OCUPADA) && diaCronogramaEdicao.getDisciplina().getProfessor() != null) {
+            final boolean professorPossuiDiaSemanaDisponivel = diaCronogramaEdicao.getDisciplina().getProfessor().getDiasSemanaDisponivel().stream()
+                    .anyMatch(diaSemanaDisponivel -> diaSemanaDisponivel.getDiaSemanaEnum().equals(diaCronogramaAtual.getDiaSemanaEnum()));
+
+            if (!professorPossuiDiaSemanaDisponivel) {
+                throw new DiaCronogramaException(
+                        diaCronogramaEdicao.getDisciplina().getProfessor().getNomeCompleto() +
+                                " não possui " + diaCronogramaAtual.getDiaSemanaEnum() + " como dia da semana disponivel!");
+            }
+        }
+    }
+
+//    private void validarPossuiConflitoDataEPossuiDiaSemanaDisponivel(DiaCronograma  primeiroDiaCronograma, DiaCronograma  segundoDiaCronograma){
+//
+//        boolean primeiroDiaCronogramaExisteConflitoDatas = false;
+//        boolean professorPrimeiroDiaCronogramaPossuiDiaSemanaDisponivel = true;
+//        if(primeiroDiaCronograma.getDataStatusEnum().equals(DataStatusEnum.OCUPADA) && primeiroDiaCronograma.getDisciplina().getProfessor() != null) {
+//            DiaCronograma diaCronogramaEcontrado = diaCronogramaRepository.buscarPorProfessorIdPorData(
+//                    primeiroDiaCronograma.getDisciplina().getProfessor().getId(),
+//                    segundoDiaCronograma.getData());
+//
+//            if(
+//               !diaCronogramaEcontrado.getCronograma().getCurso().getId().equals(primeiroDiaCronograma.getCronograma().getCurso().getId()) &&
+//               !diaCronogramaEcontrado.getFase().getId().equals(primeiroDiaCronograma.getFase().getId())
+//            ){
+//                primeiroDiaCronogramaExisteConflitoDatas = true;
+//            }
+//
+//            professorPrimeiroDiaCronogramaPossuiDiaSemanaDisponivel =
+//                    primeiroDiaCronograma.getDisciplina().getProfessor().getDiasSemanaDisponivel().stream()
+//                            .anyMatch(diaSemanaDisponivel -> diaSemanaDisponivel.getDiaSemanaEnum().equals(segundoDiaCronograma.getDiaSemanaEnum()));
+//        }
+//
+//
+//        boolean segundoDiaCronogramaExisteConflitoDatas = false;
+//        boolean professorSegundoDiaCronogramaPossuiDiaSemanaDisponivel = true;
+//        if(segundoDiaCronograma.getDataStatusEnum().equals(DataStatusEnum.OCUPADA) && segundoDiaCronograma.getDisciplina().getProfessor() != null){
+//            DiaCronograma diaCronogramaEcontrado = diaCronogramaRepository.buscarPorProfessorIdPorData(
+//                    segundoDiaCronograma.getDisciplina().getProfessor().getId(),
+//                    primeiroDiaCronograma.getData());
+//
+//            if(
+//               !diaCronogramaEcontrado.getCronograma().getCurso().getId().equals(segundoDiaCronograma.getCronograma().getCurso().getId()) &&
+//               !diaCronogramaEcontrado.getFase().getId().equals(segundoDiaCronograma.getFase().getId())
+//            ){
+//                segundoDiaCronogramaExisteConflitoDatas = true;
+//            }
+//
+//            professorSegundoDiaCronogramaPossuiDiaSemanaDisponivel =
+//                    segundoDiaCronograma.getDisciplina().getProfessor().getDiasSemanaDisponivel().stream()
+//                            .anyMatch(diaSemanaDisponivel -> diaSemanaDisponivel.getDiaSemanaEnum().equals(primeiroDiaCronograma.getDiaSemanaEnum()));
+//        }
+//
+//        if(!professorPrimeiroDiaCronogramaPossuiDiaSemanaDisponivel){
+//            throw new DiaCronogramaException(
+//                    primeiroDiaCronograma.getDisciplina().getProfessor().getNomeCompleto() +
+//                    " não possui " + segundoDiaCronograma.getDiaSemanaEnum() + " como dia da semana disponivel!");
+//
+//        } else if(!professorSegundoDiaCronogramaPossuiDiaSemanaDisponivel){
+//            throw new DiaCronogramaException(
+//                    segundoDiaCronograma.getDisciplina().getProfessor().getNomeCompleto() +
+//                    " não possui " + primeiroDiaCronograma.getDiaSemanaEnum() + " como dia da semana disponivel!");
+//        }
+//
+//        DateTimeFormatter dataFormatoPtBr = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//        if(primeiroDiaCronogramaExisteConflitoDatas){
+//            throw new DiaCronogramaException(
+//                    primeiroDiaCronograma.getDisciplina().getProfessor().getNomeCompleto() +
+//                    " já leciona nesta data (" + dataFormatoPtBr.format(segundoDiaCronograma.getData()) + ") em outra fase ou curso!");
+//        } else if(segundoDiaCronogramaExisteConflitoDatas){
+//            throw new DiaCronogramaException(
+//                    segundoDiaCronograma.getDisciplina().getProfessor().getNomeCompleto() +
+//                    " já leciona nesta data (" + dataFormatoPtBr.format(primeiroDiaCronograma.getData()) + ") em outra fase ou curso!");
+//        }
+//    }
 }

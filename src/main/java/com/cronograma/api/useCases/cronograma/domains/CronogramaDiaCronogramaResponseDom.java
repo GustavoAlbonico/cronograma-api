@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -16,6 +19,7 @@ public class CronogramaDiaCronogramaResponseDom {
     private DiaSemanaEnum diaSemanaEnum;
     private DataStatusEnum dataStatusEnum;
     private String professorNome;
+    private List<DiaSemanaEnum> professorDiasSemanaEnum = new ArrayList<>();
     private String disciplinaNome;
     private String corHexadecimal;
 }
