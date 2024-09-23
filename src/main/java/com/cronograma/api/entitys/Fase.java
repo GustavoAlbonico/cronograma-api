@@ -9,12 +9,11 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@SQLDelete(sql = "UPDATE usuario SET status_enum = 'INATIVO' WHERE id=?")
-@SQLRestriction("status_enum = 'ATIVO'")
 @Getter
 @Setter
 public class Fase {
@@ -39,14 +38,8 @@ public class Fase {
     @OneToMany(mappedBy = "fase")
     private Set<DiaCronograma> diasCronograma = new HashSet<>();
 
-    @Override
-    public String toString() {
-        return "Fase{" +
-                "id=" + id +
-                ", numero=" + numero +
-                ", statusEnum=" + statusEnum +
-                ", cursos=" + cursos +
-                ", disciplinas=" + disciplinas +
-                '}';
+    @PrePersist
+    void defaultStatusEnum(){
+        statusEnum = StatusEnum.ATIVO;
     }
 }
