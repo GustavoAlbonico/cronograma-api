@@ -3,15 +3,14 @@ package com.cronograma.api.exceptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CampoObrigatorioException extends RuntimeException{
-
+public class FaseException extends RuntimeException {
     private List<String> messageList =  new ArrayList<>();
-    public CampoObrigatorioException(String mensagem){
+    public FaseException(String mensagem){
         super(mensagem);
     }
 
-    public CampoObrigatorioException(List<String> mensagens){
-       this.messageList = mensagens;
+    public FaseException(List<String> mensagens){
+        this.messageList = mensagens;
     }
     public List<String> getMessages(){
         if (messageList.isEmpty()){
@@ -26,8 +25,4 @@ public class CampoObrigatorioException extends RuntimeException{
         }
         return messageList.toString();
     }
-
-
-
-
 }

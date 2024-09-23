@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FaseRepository extends JpaRepository<Fase, Long> {
+    Optional<Fase> findByNumero(Integer numero);
 }
