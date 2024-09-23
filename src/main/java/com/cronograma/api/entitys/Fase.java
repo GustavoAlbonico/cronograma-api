@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@SQLDelete(sql = "UPDATE usuario SET status_enum = 'INATIVO' WHERE id=?")
 @Getter
 @Setter
 public class Fase {

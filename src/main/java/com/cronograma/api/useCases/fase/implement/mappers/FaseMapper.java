@@ -2,6 +2,7 @@ package com.cronograma.api.useCases.fase.implement.mappers;
 
 import com.cronograma.api.entitys.Fase;
 import com.cronograma.api.useCases.fase.domains.FaseRequestDom;
+import com.cronograma.api.useCases.fase.domains.FaseResponseDom;
 import org.mapstruct.*;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
@@ -15,4 +16,6 @@ public interface FaseMapper {
     @Mapping(target = "id", ignore = true)
     void faseRequestDomParaFaseEncontrada(FaseRequestDom faseRequestDom,
                                            @MappingTarget Fase fase);
+
+    FaseResponseDom faseParaFaseResponseDom(Fase fase);
 }
