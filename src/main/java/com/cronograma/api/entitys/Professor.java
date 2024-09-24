@@ -25,8 +25,8 @@ public class Professor {
     @Column(nullable = false)
     private String nomeCompleto;
 
-    @Column(nullable = false, length = 11)
-    private String cpf;
+    @Column(nullable = false)
+    private String email;
 
     @Column(nullable = false, length = 50)
     private String telefone;

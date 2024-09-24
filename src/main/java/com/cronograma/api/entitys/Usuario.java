@@ -26,8 +26,8 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    @Column(nullable = false, unique = true, length = 11)
+    private String cpf;
 
     @Column(nullable = false)
     private String senha;
@@ -51,4 +51,10 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario")
     private Set<Evento> eventos =  new HashSet<>();
+
+    @PrePersist
+    void defaultStatusEnum(){
+        statusEnum = StatusEnum.ATIVO;
+    }
+
 }
