@@ -9,6 +9,7 @@ import com.cronograma.api.useCases.fase.implement.mappers.FaseMapper;
 import com.cronograma.api.useCases.fase.implement.repositorys.FaseDisciplinaRepository;
 import com.cronograma.api.useCases.fase.implement.repositorys.FaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

@@ -40,6 +40,8 @@ public class UsuarioService {
             usuario.setSenha(passwordEncoder.encode(usuarioRequestDom.senha()));
             usuario.setCpf(usuarioRequestDom.cpf());
             usuario.setNome(usuarioRequestDom.nome());
+            usuario.setNivelAcessoEnum(usuarioRequestDom.nivelAcessoEnum());
+
             usuarioRepository.save(usuario);
 
 

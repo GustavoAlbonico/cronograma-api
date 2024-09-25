@@ -60,4 +60,15 @@ public class Usuario {
         statusEnum = StatusEnum.ATIVO;
     }
 
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", cpf='" + cpf + '\'' +
+                ", senha='" + senha + '\'' +
+                ", nivelAcessoEnum=" + nivelAcessoEnum +
+                ", statusEnum=" + statusEnum +
+                '}';
+    }
 }
