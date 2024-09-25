@@ -26,6 +26,9 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String nome;
+
     @Column(nullable = false, unique = true, length = 11)
     private String cpf;
 

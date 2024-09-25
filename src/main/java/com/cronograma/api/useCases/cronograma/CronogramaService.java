@@ -206,7 +206,7 @@ public class CronogramaService {
             if (disciplina.getProfessor() != null){
                 if (disciplina.getProfessor().getDiasSemanaDisponivel().isEmpty()){
                     throw new CronogramaException(
-                            "O professor " + disciplina.getProfessor().getNomeCompleto() +
+                            "O professor " + disciplina.getProfessor().getUsuario().getNome() +
                             " da disciplina " + disciplina.getNome() +
                             " que pertence a " + disciplina.getFase().getNumero() + "º fase não possui dia semana disponivel cadastrado!");
                 }
@@ -223,7 +223,7 @@ public class CronogramaService {
 
                if (disciplinaExtensaoPossuiProfessorDiaSemanaDisponivelSabadoCadastrado){
                    throw new CronogramaException(
-                           "O professor " + disciplina.getProfessor().getNomeCompleto() +
+                           "O professor " + disciplina.getProfessor().getUsuario().getNome() +
                                    " da disciplina " + disciplina.getNome() +
                                    " que pertence a " + disciplina.getFase().getNumero() + "º fase não possui SABADO cadastrado como dia semana disponivel!");
                }

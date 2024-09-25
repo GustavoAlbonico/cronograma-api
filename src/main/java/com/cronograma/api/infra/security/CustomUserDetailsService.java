@@ -17,7 +17,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UsuarioRepository usuarioRepository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = this.usuarioRepository.findByCpf(username).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+        Usuario usuario = this.usuarioRepository.findByCpf(username).orElseThrow(() -> new UsernameNotFoundException("Cpf não encontrado"));
         return new org.springframework.security.core.userdetails.User(usuario.getCpf(), usuario.getSenha(), new ArrayList<>());
 
     }
