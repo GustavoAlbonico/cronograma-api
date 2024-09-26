@@ -26,6 +26,7 @@ public class FaseController {
     }
 
     @PostMapping("/criar")
+    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('FaseController','criar')")
     public ResponseEntity<?> criarFase(@RequestBody FaseRequestDom fase){
         faseService.criarFase(fase);
         return ResponseEntity.status(201).body(null);

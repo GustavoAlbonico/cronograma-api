@@ -35,13 +35,17 @@ public class Usuario {
     @Column(nullable = false)
     private String senha;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private NivelAcessoEnum nivelAcessoEnum;
-
     @Column(nullable = false,columnDefinition = "VARCHAR(255) DEFAULT 'ATIVO'")
     @Enumerated(EnumType.STRING)
     private StatusEnum statusEnum;
+
+    @ManyToMany
+    @JoinTable(
+            name = "usuario_nivel_acesso",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "nivel_acesso_id")
+    )
+    private Set<NivelAcesso> niveisAcesso = new HashSet<>();
 
     @OneToOne(mappedBy = "usuario")
     private Professor professor;
@@ -67,8 +71,12 @@ public class Usuario {
                 ", nome='" + nome + '\'' +
                 ", cpf='" + cpf + '\'' +
                 ", senha='" + senha + '\'' +
-                ", nivelAcessoEnum=" + nivelAcessoEnum +
                 ", statusEnum=" + statusEnum +
+                ", niveisAcesso=" + niveisAcesso +
+                ", professor=" + professor +
+                ", coordenador=" + coordenador +
+                ", datasBloqueadas=" + datasBloqueadas +
+                ", eventos=" + eventos +
                 '}';
     }
 }

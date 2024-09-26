@@ -1,5 +1,12 @@
-----LIMPADO DADOS E RESETANDO SEQUENCIA
+----LIMPANDO DADOS E RESETANDO SEQUENCIA
+TRUNCATE TABLE funcionalidade RESTART IDENTITY CASCADE;
+TRUNCATE TABLE controller RESTART IDENTITY CASCADE;
+TRUNCATE TABLE controller_funcionalidade RESTART IDENTITY CASCADE;
+TRUNCATE TABLE nivel_acesso RESTART IDENTITY CASCADE;
+TRUNCATE TABLE nivel_acesso_controller RESTART IDENTITY CASCADE;
 TRUNCATE TABLE usuario RESTART IDENTITY CASCADE;
+TRUNCATE TABLE usuario_nivel_acesso RESTART IDENTITY CASCADE;
+
 TRUNCATE TABLE professor RESTART IDENTITY CASCADE;
 TRUNCATE TABLE coordenador RESTART IDENTITY CASCADE;
 TRUNCATE TABLE data_bloqueada RESTART IDENTITY CASCADE;
@@ -9,55 +16,114 @@ TRUNCATE TABLE curso RESTART IDENTITY CASCADE;
 TRUNCATE TABLE curso_fase RESTART IDENTITY CASCADE;
 TRUNCATE TABLE disciplina RESTART IDENTITY CASCADE;
 TRUNCATE TABLE periodo RESTART IDENTITY CASCADE;
+
+
+
+
+
 --
 --
 ----INSERTS
 --
-----USUARIO
---INSERT INTO usuario
---  (email, senha, nivel_acesso_enum)
---VALUES
---    ('teste@gmail.com', '123', 'ADMINISTRADOR'),
---    ('moda@example.com', 'senha456', 'COORDENADOR'),--2
---    --moda
---    ('gabriel.valga@example.com', 'senha123', 'PROFESSOR'),
---    ('marina.casagrande@example.com', 'senha123', 'PROFESSOR'),
---    ('endy.carlos@example.com', 'senha123', 'PROFESSOR'),
---    ('debora.volpato@example.com', 'senha123', 'PROFESSOR'),
---    ('josiane.minato@example.com', 'senha123', 'PROFESSOR'),
---    ('lavinia.maccari@example.com', 'senha123', 'PROFESSOR'),
---    ('fabiano.reis@example.com', 'senha123', 'PROFESSOR'),
---    ('maria.matias@example.com', 'senha123', 'PROFESSOR'),
---    ('polyane.reis@example.com', 'senha123', 'PROFESSOR'),
---    ('ellen.fabrini@example.com', 'senha123', 'PROFESSOR'),
---    ('eduardo.ribeiro@example.com', 'senha123', 'PROFESSOR'),--13
---
---    ('katiane.araujo@example.com', 'senha123', 'PROFESSOR'),
---    ('josilene.della@example.com', 'senha123', 'PROFESSOR'), --15
---
---    --ads
---    ('fernando.gabriel@example.com', 'senha123', 'PROFESSOR'),
---    ('marcelo.mazon@example.com', 'senha123', 'PROFESSOR'),
---    ('christine.vieira@example.com', 'senha123', 'PROFESSOR'),
---    ('dayana.ricken@example.com', 'senha123', 'PROFESSOR'),
---    ('jossuan@example.com', 'senha123', 'PROFESSOR'), --19
---
---
---    ('lucas.bonfantecoordenador@example.com', 'senha456', 'COORDENADOR'), -- 20
---
---    ('daniel.goulart@example.com', 'senha123', 'PROFESSOR'),
---    ('rogerio.cortina@example.com', 'senha123', 'PROFESSOR'),
---    ('muriel.benhardt@example.com', 'senha123', 'PROFESSOR'),
---    ('roberto.medeiros@example.com', 'senha123', 'PROFESSOR'),--24
---
---
---    ('jorge.henrique.silva@example.com', 'senha123', 'PROFESSOR'),
---    ('roni.edson@example.com', 'senha123', 'PROFESSOR'),
---    ('bruno.kurzawe@example.com', 'senha123', 'PROFESSOR'),
---    ('liliane.fernandes@example.com', 'senha123', 'PROFESSOR'),
---    ('cledemilson.santos@example.com', 'senha123', 'PROFESSOR'),
---    ('lucas.bonfanteprofessor@example.com', 'senha123', 'PROFESSOR');--30
---
+--FUNCIONALIDADE
+INSERT INTO funcionalidade
+  (nome, descricao)
+VALUES
+  ('CRIAR', 'Adiciona uma entidade'),
+  ('EDITAR', 'Altera informações'),
+  ('CARREGAR', 'Busca informações'),
+  ('DELETAR', 'Exclui uma informação do banco de dados'),
+  ('IMPORTAR', 'importa um arquivo para dentro do sistema'),
+  ('CARREGAR_POR_ID', 'carregar um informação pelo id');
+
+--CONTROLLER
+INSERT INTO controller
+  (nome)
+VALUES
+  ('FASE_CONTROLLER'),
+  ('USUARIO_CONTROLLER'),
+  ('CURSO_CONTROLLER'),
+  ('DISCIPLINA_CONTROLLER'),
+  ('DATA_BLOQUEADA_CONTROLLER');
+
+--CONTROLLER_FUNCIONALIDADE
+INSERT INTO  controller_funcionalidade
+  (controller_id, funcionalidade_id)
+VALUES
+  (1,1),
+  (1,2),
+  (1,3),
+  (1,4),
+  (2,1),
+  (2,2),
+  (2,3),
+  (2,4),
+  (2,5);
+
+--NIVEL ACESSO
+INSERT INTO nivel_acesso
+  (nome, descricao)
+VALUES
+  ('ADMINISTRADOR', 'acesso geral'),
+  ('COORDENADOR_GERAL', 'acesso geral'),
+  ('COORDENADOR', 'acessso quase geral'),
+  ('PROFESSOR', ' apenas visualiza'),
+  ('USUARIO', 'apenas visualiza');
+
+INSERT INTO nivel_acesso_controller
+  (nivel_acesso_id, controller_id)
+VALUES
+  (1,1),
+  (1,2),
+  (2,1),
+  (2,2);
+
+--USUARIO
+
+INSERT INTO usuario
+  (email, senha, nivel_acesso_enum)
+VALUES
+    ('teste@gmail.com', '123', 'ADMINISTRADOR'),
+    ('moda@example.com', 'senha456', 'COORDENADOR'),--2
+    --moda
+    ('gabriel.valga@example.com', 'senha123', 'PROFESSOR'),
+    ('marina.casagrande@example.com', 'senha123', 'PROFESSOR'),
+    ('endy.carlos@example.com', 'senha123', 'PROFESSOR'),
+    ('debora.volpato@example.com', 'senha123', 'PROFESSOR'),
+    ('josiane.minato@example.com', 'senha123', 'PROFESSOR'),
+    ('lavinia.maccari@example.com', 'senha123', 'PROFESSOR'),
+    ('fabiano.reis@example.com', 'senha123', 'PROFESSOR'),
+    ('maria.matias@example.com', 'senha123', 'PROFESSOR'),
+    ('polyane.reis@example.com', 'senha123', 'PROFESSOR'),
+    ('ellen.fabrini@example.com', 'senha123', 'PROFESSOR'),
+    ('eduardo.ribeiro@example.com', 'senha123', 'PROFESSOR'),--13
+
+    ('katiane.araujo@example.com', 'senha123', 'PROFESSOR'),
+    ('josilene.della@example.com', 'senha123', 'PROFESSOR'), --15
+
+    --ads
+    ('fernando.gabriel@example.com', 'senha123', 'PROFESSOR'),
+    ('marcelo.mazon@example.com', 'senha123', 'PROFESSOR'),
+    ('christine.vieira@example.com', 'senha123', 'PROFESSOR'),
+    ('dayana.ricken@example.com', 'senha123', 'PROFESSOR'),
+    ('jossuan@example.com', 'senha123', 'PROFESSOR'), --19
+
+
+    ('lucas.bonfantecoordenador@example.com', 'senha456', 'COORDENADOR'), -- 20
+
+    ('daniel.goulart@example.com', 'senha123', 'PROFESSOR'),
+    ('rogerio.cortina@example.com', 'senha123', 'PROFESSOR'),
+    ('muriel.benhardt@example.com', 'senha123', 'PROFESSOR'),
+    ('roberto.medeiros@example.com', 'senha123', 'PROFESSOR'),--24
+
+
+    ('jorge.henrique.silva@example.com', 'senha123', 'PROFESSOR'),
+    ('roni.edson@example.com', 'senha123', 'PROFESSOR'),
+    ('bruno.kurzawe@example.com', 'senha123', 'PROFESSOR'),
+    ('liliane.fernandes@example.com', 'senha123', 'PROFESSOR'),
+    ('cledemilson.santos@example.com', 'senha123', 'PROFESSOR'),
+    ('lucas.bonfanteprofessor@example.com', 'senha123', 'PROFESSOR');--30
+
 ----PROFESSOR
 --INSERT INTO professor
 --  (cpf,nome_completo, telefone, usuario_id)

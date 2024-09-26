@@ -1,6 +1,6 @@
 package com.cronograma.api.useCases.usuario.domains;
 
-import com.cronograma.api.entitys.enums.NivelAcessoEnum;
+import java.util.List;
 
-public record UsuarioRequestDom (String cpf, String senha, String nome, NivelAcessoEnum nivelAcessoEnum){
+public record UsuarioRequestDom (String cpf, String senha, String nome, List<Long> niveisAcessoId){
 }

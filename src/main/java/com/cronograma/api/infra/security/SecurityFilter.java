@@ -31,7 +31,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if(login != null){
             Usuario usuario = usuarioRepository.findByCpf(login).orElseThrow(() -> new AuthenticationException("Cpf não encontrado"));
-            var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+            var authorities = usuario.getNiveisAcesso().stream().map(nivelAcesso -> new SimpleGrantedAuthority(nivelAcesso.getNome())).toList();
             var authentication = new UsernamePasswordAuthenticationToken(usuario, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
