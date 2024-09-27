@@ -24,9 +24,6 @@ public class Coordenador {
     private Long id;
 
     @Column(nullable = false)
-    private String nomeCompleto;
-
-    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false, length = 50)

@@ -23,9 +23,6 @@ public class Professor {
     private Long id;
 
     @Column(nullable = false)
-    private String nomeCompleto;
-
-    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false, length = 50)
@@ -50,7 +47,6 @@ public class Professor {
     public String toString() {
         return "Professor{" +
                 "id=" + id +
-                ", nomeCompleto='" + nomeCompleto + '\'' +
                 ", diasSemanaDisponivel=" + diasSemanaDisponivel +
                 '}';
     }

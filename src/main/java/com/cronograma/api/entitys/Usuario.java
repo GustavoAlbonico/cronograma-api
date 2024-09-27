@@ -39,7 +39,7 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private StatusEnum statusEnum;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "usuario_nivel_acesso",
             joinColumns = @JoinColumn(name = "usuario_id"),
@@ -53,10 +53,10 @@ public class Usuario {
     @OneToOne(mappedBy = "usuario")
     private Coordenador coordenador;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario",fetch = FetchType.EAGER)
     private Set<DataBloqueada> datasBloqueadas = new HashSet<>();
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario",fetch = FetchType.EAGER)
     private Set<Evento> eventos =  new HashSet<>();
 
     @PrePersist

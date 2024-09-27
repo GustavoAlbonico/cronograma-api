@@ -118,7 +118,7 @@ public class CronogramaService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Long gerarCronogramaPorCursos(CronogramaRequestDom cronograma){
+    public Long gerarCronograma(CronogramaRequestDom cronograma){
 
         validarExisteCronograma(cronograma);
 
@@ -890,7 +890,6 @@ public class CronogramaService {
             Professor contratando = new Professor();
 
             contratando.setId(professorContratandoId);
-            contratando.setNomeCompleto("Contratando");
             contratando.setStatusEnum(StatusEnum.ATIVO);
             contratando.setDiasSemanaDisponivel(diasSemanaDisponiveis);
 

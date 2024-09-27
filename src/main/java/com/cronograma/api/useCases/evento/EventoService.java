@@ -44,7 +44,7 @@ public class EventoService {
     }
 
     @Transactional
-    public void gerarCronograma(EventoCronogramaRequestDom cronograma){
+    public void criarEventoCronograma(EventoCronogramaRequestDom cronograma){
         Long cronogramaId = null;
         try {
             validarExisteEventoExecucao(cronograma);
@@ -61,7 +61,7 @@ public class EventoService {
             );
             Evento evento = criarEvento(eventoPendente);
             try {
-                cronogramaId = cronogramaService.gerarCronogramaPorCursos(cronograma);
+                cronogramaId = cronogramaService.gerarCronograma(cronograma);
                 evento.setEventoStatusEnum(EventoStatusEnum.SUCESSO);
                 evento.setMensagem("Cronograma gerado com sucesso!");
             } catch (CronogramaException cronogramaException) {

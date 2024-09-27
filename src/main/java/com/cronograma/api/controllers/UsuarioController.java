@@ -1,17 +1,11 @@
 package com.cronograma.api.controllers;
 
-import com.cronograma.api.entitys.Usuario;
-import com.cronograma.api.exceptions.AuthenticationException;
-import com.cronograma.api.infra.security.TokenService;
 import com.cronograma.api.useCases.usuario.UsuarioService;
-import com.cronograma.api.useCases.usuario.domains.UsuarioRequestDom;
+import com.cronograma.api.useCases.usuario.domains.UsuarioCadastroRequestDom;
+import com.cronograma.api.useCases.usuario.domains.UsuarioLoginRequestDom;
 import com.cronograma.api.useCases.usuario.domains.UsuarioResponseDom;
-import com.cronograma.api.useCases.usuario.implement.repositorys.UsuarioRepository;
-import lombok.RequiredArgsConstructor;
-import org.antlr.v4.runtime.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,13 +19,13 @@ public class UsuarioController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UsuarioRequestDom usuarioRequestDom){
-        UsuarioResponseDom response =  usuarioService.login(usuarioRequestDom);
+    public ResponseEntity<?> login(@RequestBody UsuarioLoginRequestDom usuarioLoginRequestDom){
+        UsuarioResponseDom response =  usuarioService.login(usuarioLoginRequestDom);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/cadastro")
-    public ResponseEntity<?> cadastro(@RequestBody UsuarioRequestDom usuarioRequestDom){
+    public ResponseEntity<?> cadastro(@RequestBody UsuarioCadastroRequestDom usuarioRequestDom){
         UsuarioResponseDom response =  usuarioService.cadastro(usuarioRequestDom);
         return ResponseEntity.ok(response);
     }

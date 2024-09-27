@@ -17,48 +17,125 @@ TRUNCATE TABLE curso_fase RESTART IDENTITY CASCADE;
 TRUNCATE TABLE disciplina RESTART IDENTITY CASCADE;
 TRUNCATE TABLE periodo RESTART IDENTITY CASCADE;
 
-
-
-
-
---
---
 ----INSERTS
 --
 --FUNCIONALIDADE
 INSERT INTO funcionalidade
   (nome, descricao)
 VALUES
-  ('CRIAR', 'Adiciona uma entidade'),
-  ('EDITAR', 'Altera informações'),
-  ('CARREGAR', 'Busca informações'),
-  ('DELETAR', 'Exclui uma informação do banco de dados'),
-  ('IMPORTAR', 'importa um arquivo para dentro do sistema'),
-  ('CARREGAR_POR_ID', 'carregar um informação pelo id');
+  ('CRIAR', 'Adiciona uma entidade'),--1
+  ('EDITAR', 'Altera informações'),--2
+  ('CARREGAR', 'Busca todos os dados'),--3
+  ('INATIVAR', 'inativa um dado'),--4
+  ('ATIVAR', 'ativa um dado'),--5
+  ('EXCLUIR', 'Exclui uma informação do banco de dados'),--6
+  ('IMPORTAR', 'importa um arquivo para dentro do sistema'),--7
+  ('CARREGAR_ATIVO', 'Busca todos os dados ativos'),--8
+  ('ASSOCIAR_COORDENADOR', 'associa um coordenador a um professor'),--9
+  ('CARREGAR_POR_ID', 'carregar uma informação pelo id'),--10
+  ('FORMULARIO_DIA_SEMANA_DISPONIVEL', 'envia um formulario com os dias da semana disponiveis'),--11
+  ('EDITAR_EMAIL', 'edita o email'),--12
+  ('REDEFINIR_SENHA', 'redefine a senha'),--13
+  ('VALIDAR_TOKEN_REDEFINIR_SENHA', 'valida o token para redefinição da senha'); --14
 
 --CONTROLLER
 INSERT INTO controller
-  (nome)
+  (nome,descricao)
 VALUES
-  ('FASE_CONTROLLER'),
-  ('USUARIO_CONTROLLER'),
-  ('CURSO_CONTROLLER'),
-  ('DISCIPLINA_CONTROLLER'),
-  ('DATA_BLOQUEADA_CONTROLLER');
+  ('USUARIO_CONTROLLER',null),--1
+  ('PROFESSOR_CONTROLLER',null),--2
+  ('COORDENADOR_CONTROLLER',null),--3
+  ('ALUNO_CONTROLLER',null),--4
+  ('EVENTO_CONTROLLER',null),--5
+  ('PERIODO_CONTROLLER',null),--6
+  ('FASE_CONTROLLER',null),--7
+  ('CURSO_CONTROLLER',null),--8
+  ('DISCIPLINA_CONTROLLER',null),--9
+  ('DATA_BLOQUEADA_CONTROLLER',null),--10
+  ('HISTORICO_CONTROLLER',null),--11
+  ('CRONOGRAMA_CONTROLLER',null),--12
+  ('DIA_CRONOGRAMA_CONTROLLER',null),--13
+
+  ('PROFESSOR_CONTROLLER','personalizado para professores'),--14
+  ('CRONOGRAMA_CONTROLLER','personalizado para professores'),--15
+
+  ('CRONOGRAMA_CONTROLLER','personalizado para alunos');--16
 
 --CONTROLLER_FUNCIONALIDADE
 INSERT INTO  controller_funcionalidade
   (controller_id, funcionalidade_id)
 VALUES
-  (1,1),
-  (1,2),
-  (1,3),
-  (1,4),
-  (2,1),
-  (2,2),
-  (2,3),
-  (2,4),
-  (2,5);
+  (1,1),--CRIAR --USUARIO
+
+  (2,1),--CRIAR
+  (2,2),--EDITAR
+  (2,3),--CARREGAR  -- PROFESSOR
+  (2,4),--INATIVAR
+  (2,5),--ATIVAR
+  (2,8),--CARREGAR_ATIVO
+  (2,9),--ASSOCIAR_COORDENADOR
+
+  (3,1),--CRIAR
+  (3,2),--EDITAR
+  (3,3),--CARREGAR  -- COORDENADOR
+  (3,4),--INATIVAR
+  (3,5),--ATIVAR
+  (3,8),--CARREGAR_ATIVO
+
+  (4,1),--CRIAR
+  (4,2),--EDITAR
+  (4,3),--CARREGAR  --ALUNO
+  (4,6),--EXCLUIR
+  (4,7),--IMPORTAR
+
+  (5,1),--CRIAR --EVENTO
+
+  (6,1),--CRIAR
+  (6,2),--EDITAR
+  (6,3),--CARREGAR  --PERIODO
+  (6,4),--INATIVAR
+  (6,8),--CARREGAR_ATIVO
+
+  (7,1),--CRIAR
+  (7,2),--EDITAR
+  (7,3),--CARREGAR  --FASE
+  (7,4),--INATIVAR
+  (7,5),--ATIVAR
+  (7,8),--CARREGAR_ATIVO
+
+  (8,1),--CRIAR
+  (8,2),--EDITAR
+  (8,3),--CARREGAR  --CURSO
+  (8,4),--INATIVAR
+  (8,5),--ATIVAR
+  (8,8),--CARREGAR_ATIVO
+
+  (9,1),--CRIAR
+  (9,2),--EDITAR
+  (9,3),--CARREGAR  --DISCIPLINA
+  (9,4),--INATIVAR
+  (9,5),--ATIVAR
+  (9,8),--CARREGAR_ATIVO
+
+  (10,1),--CRIAR
+  (10,2),--EDITAR
+  (10,3),--CARREGAR  --DATA_BLOQUEADA
+  (10,6),--EXCLUIR
+
+  (11,3),--CARREGAR  --HISTORICO
+
+  (12,3),--CARREGAR  --CRONOGRAMA_CONTROLLER
+  (12,6),--EXCLUIR
+
+  (13,2),--EDITAR  --DIA_CRONOGRAMA_CONTROLLER
+----------
+
+  (14,11),--FORMULARIO_DIA_SEMANA_DISPONIVEL -- PROFESSOR
+
+  (15,3),--CARREGAR  --CRONOGRAMA_CONTROLLER
+
+------------------
+  (16,3);--CARREGAR  --CRONOGRAMA_CONTROLLER
 
 --NIVEL ACESSO
 INSERT INTO nivel_acesso
@@ -73,96 +150,150 @@ VALUES
 INSERT INTO nivel_acesso_controller
   (nivel_acesso_id, controller_id)
 VALUES
-  (1,1),
-  (1,2),
-  (2,1),
-  (2,2);
+  (1,1), --USUARIO_CONTROLLER
+  (1,2), --PROFESSOR_CONTROLLER
+  (1,3), --COORDENADOR_CONTROLLER
+  (1,4), --ALUNO_CONTROLLER
+  (1,5), --EVENTO_CONTROLLER
+  (1,6), --PERIODO_CONTROLLER --ADMINISTRADOR
+  (1,7), --FASE_CONTROLLER
+  (1,8), --CURSO_CONTROLLER
+  (1,9), --DISCIPLINA_CONTROLLER
+  (1,10), --DATA_BLOQUEADA_CONTROLLER
+  (1,11), --HISTORICO_CONTROLLER
+  (1,12), --CRONOGRAMA_CONTROLLER
+  (1,13), --DIA_CRONOGRAMA_CONTROLLER
 
---USUARIO
+  (2,2), --PROFESSOR_CONTROLLER
+  (2,3), --COORDENADOR_CONTROLLER
+  (2,4), --ALUNO_CONTROLLER
+  (2,5), --EVENTO_CONTROLLER
+  (2,6), --PERIODO_CONTROLLER --COORDENADOR_GERAL
+  (2,7), --FASE_CONTROLLER
+  (2,8), --CURSO_CONTROLLER
+  (2,9), --DISCIPLINA_CONTROLLER
+  (2,10), --DATA_BLOQUEADA_CONTROLLER
+  (2,11), --HISTORICO_CONTROLLER
+  (2,12), --CRONOGRAMA_CONTROLLER
+  (2,13), --DIA_CRONOGRAMA_CONTROLLER
 
+  (3,2), --PROFESSOR_CONTROLLER
+  (3,4), --ALUNO_CONTROLLER
+  (3,5), --EVENTO_CONTROLLER      --COORDENADOR
+  (3,9), --DISCIPLINA_CONTROLLER
+  (3,10), --DATA_BLOQUEADA_CONTROLLER
+  (3,11), --HISTORICO_CONTROLLER
+  (3,12), --CRONOGRAMA_CONTROLLER
+  (3,13), --DIA_CRONOGRAMA_CONTROLLER
+
+  (4,14), --PROFESSOR_CONTROLLER    --PROFESSOR
+  (4,15), --CRONOGRAMA_CONTROLLER
+
+  (5,16); --CRONOGRAMA_CONTROLLER   -- ALUNOS
+
+-- USUÁRIO
 INSERT INTO usuario
-  (email, senha, nivel_acesso_enum)
+  (cpf, senha, nome)
 VALUES
-    ('teste@gmail.com', '123', 'ADMINISTRADOR'),
-    ('moda@example.com', 'senha456', 'COORDENADOR'),--2
-    --moda
-    ('gabriel.valga@example.com', 'senha123', 'PROFESSOR'),
-    ('marina.casagrande@example.com', 'senha123', 'PROFESSOR'),
-    ('endy.carlos@example.com', 'senha123', 'PROFESSOR'),
-    ('debora.volpato@example.com', 'senha123', 'PROFESSOR'),
-    ('josiane.minato@example.com', 'senha123', 'PROFESSOR'),
-    ('lavinia.maccari@example.com', 'senha123', 'PROFESSOR'),
-    ('fabiano.reis@example.com', 'senha123', 'PROFESSOR'),
-    ('maria.matias@example.com', 'senha123', 'PROFESSOR'),
-    ('polyane.reis@example.com', 'senha123', 'PROFESSOR'),
-    ('ellen.fabrini@example.com', 'senha123', 'PROFESSOR'),
-    ('eduardo.ribeiro@example.com', 'senha123', 'PROFESSOR'),--13
+    ('99999999999', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'ADMINISTRADOR'),
+    ('12385484901', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Moda coordenador'), --2
+    ('12345678901', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Gabriel Valga'), --3
+    ('23456789012', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Marina Casagrande'), --4
+    ('34567890123', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Endy Carlos'), --5
+    ('45678901234', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Débora Volpato'), --6
+    ('56789012345', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Josiane Minato'), --7
+    ('67890123456', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Lavinia Maccari'), --8
+    ('78901234567', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Fabiano Reis'), --9
+    ('89012345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Maria Matias'), --10
+    ('90123456789', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Polyane Reis'), --11
+    ('01234567890', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Ellen Fabrini'), --12
+    ('12345566000', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Eduardo Ribeiro'), --13
+    ('01234501010', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Katiane Araújo'), --14
+    ('01010167890', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Josilene Della'), --15
+    ('23456789013', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Dayana Ricken'), --16
+    ('34567890124', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Fernando Gabriel'), --17
+    ('45678901235', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Marcelo Mazon'), --18
+    ('56789012346', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Christine Vieira'), --19
+    ('67890123457', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Jossuan Diniz'), --20
+    ('30067890123', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Daniel Goulart'), --21
+    ('45008901234', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Rogério Cortina'), --22
+    ('56009012345', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Muriel Bernhardt'), --23
+    ('67012012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Roberto Fermino Medeiros'), --24
+    ('67007799056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Jorge Henrique da Silva Naspolini'), --25
+    ('00012012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Roni Edson dos Santos'), --26
+    ('11012012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Bruno Kurzawe'), --27
+    ('67011012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Liliane Fernandes'), --28
+    ('62222012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Cledemilson dos Santos'), --29
+    ('67012014456', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Lucas Bonfante Rebelo'); --30
 
-    ('katiane.araujo@example.com', 'senha123', 'PROFESSOR'),
-    ('josilene.della@example.com', 'senha123', 'PROFESSOR'), --15
+INSERT INTO  usuario_nivel_acesso
+  (nivel_acesso_id, usuario_id)
+VALUES
+  (1,1),
+  (3,2),
+  (4,3),
+  (4,4),
+  (4,5),
+  (4,6),
+  (4,7),
+  (4,8),
+  (4,9),
+  (4,10),
+  (4,11),
+  (4,12),
+  (4,13),
+  (4,14),
+  (4,15),
+  (4,16),
+  (4,17),
+  (4,18),
+  (4,19),
+  (4,20),
+  (4,21),
+  (4,22),
+  (4,23),
+  (4,24),
+  (4,25),
+  (4,26),
+  (4,27),
+  (4,28),
+  (4,29),
 
-    --ads
-    ('fernando.gabriel@example.com', 'senha123', 'PROFESSOR'),
-    ('marcelo.mazon@example.com', 'senha123', 'PROFESSOR'),
-    ('christine.vieira@example.com', 'senha123', 'PROFESSOR'),
-    ('dayana.ricken@example.com', 'senha123', 'PROFESSOR'),
-    ('jossuan@example.com', 'senha123', 'PROFESSOR'), --19
+  (3,30),
+  (4,30); --LUCAS
 
-
-    ('lucas.bonfantecoordenador@example.com', 'senha456', 'COORDENADOR'), -- 20
-
-    ('daniel.goulart@example.com', 'senha123', 'PROFESSOR'),
-    ('rogerio.cortina@example.com', 'senha123', 'PROFESSOR'),
-    ('muriel.benhardt@example.com', 'senha123', 'PROFESSOR'),
-    ('roberto.medeiros@example.com', 'senha123', 'PROFESSOR'),--24
-
-
-    ('jorge.henrique.silva@example.com', 'senha123', 'PROFESSOR'),
-    ('roni.edson@example.com', 'senha123', 'PROFESSOR'),
-    ('bruno.kurzawe@example.com', 'senha123', 'PROFESSOR'),
-    ('liliane.fernandes@example.com', 'senha123', 'PROFESSOR'),
-    ('cledemilson.santos@example.com', 'senha123', 'PROFESSOR'),
-    ('lucas.bonfanteprofessor@example.com', 'senha123', 'PROFESSOR');--30
-
-----PROFESSOR
+-- PROFESSOR
 --INSERT INTO professor
---  (cpf,nome_completo, telefone, usuario_id)
+-- (email, telefone, usuario_id)
 --VALUES
-----MODA
---  ('12345678901', 'Gabriel Valga', '48996212844', 3),
---  ('23456789012', 'Marina Casagrande', '48996212954', 4),
---  ('34567890123', 'Endy Carlos', '48996212844', 5),
---  ('45678901234', 'Débora Volpato', '48996212954', 6),
---  ('56789012345', 'Josiane Minato', '48996212954', 7),
---  ('67890123456', 'Lavinia Maccari', '48997554040', 8),
---  ('78901234567', 'Fabiano Reis', '48996508090', 9),
---
---  ('89012345678', 'Maria Matias', '45995709000', 10),
---  ('90123456789', 'Polyane Reis', '45995709001', 11),
---  ('01234567890', 'Ellen Fabrini', '44994700610', 12),
---  ('12345566000', 'Eduardo Ribeiro', '44994700611', 13), -- 11
---
---  ('01234501010', 'Katiane Araújo', '44994700610', 14),
---  ('01010167890', 'Josilene Della', '44994700610', 15), --13
---
-----ADS
---  ('23456789012', 'Dayana Ricken', '44994700612', 16),
---  ('34567890123', 'Fernando Gabriel', '44994700613', 17),
---  ('45678901234', 'Marcelo Mazon', '44994700614', 18),
---  ('56789012345', 'Christine Vieira', '44994700615', 19),
---  ('67890123456', 'Jossuan Diniz', '44994700616', 20), -- 18
---
---  ('30067890123', 'Daniel Goulart', '44994700613', 21),
---  ('45008901234', 'Rogério Cortina', '44994700614', 22),
---  ('56009012345', 'Muriel Bernhardt', '44994700615', 23),
---  ('67012012056', 'Roberto Fermino Medeiros', '44994700616', 24), --22
---
---  ('67007799056', 'Jorge Henrique da Silva Naspolini', '44994700616', 25),
---  ('00012012056', 'Roni Edson dos Santos', '44994700616', 26),
---  ('11012012056', 'Bruno Kurzawe', '44994700616', 27),
---  ('67011012056', 'Liliane Fernandes', '44994700616', 28),
---  ('62222012056', 'Cledemilson dos Santos', '44994700616', 29),
---  ('67012014456', 'Lucas Bonfante Rebelo', '44994700616', 30);-- 28
+--    ('gabriel.valga@example.com', '48996212844', 3), --3
+--    ('marina.casagrande@example.com', '48996212954', 4), --4
+--    ('endy.carlos@example.com', '48996212844', 5), --5
+--    ('debora.volpato@example.com', '48996212954', 6), --6
+--    ('josiane.minato@example.com', '48996212954', 7), --7
+--    ('lavinia.maccari@example.com', '48997554040', 8), --8
+--    ('fabiano.reis@example.com',  '48996508090', 9), --9
+--    ('maria.matias@example.com', '45995709000', 10), --10
+--    ('polyane.reis@example.com',  '45995709001', 11), --11
+--    ('ellen.fabrini@example.com', '44994700610', 12), --12
+--    ('eduardo.ribeiro@example.com',  '44994700611', 13), --13
+--    ('katiane.araujo@example.com', '44994700610', 14), --14
+--    ('josilene.della@example.com',  '44994700610', 15), --15
+--    ('dayana.ricken@example.com', '44994700612', 16), --16
+--    ('fernando.gabriel@example.com',  '44994700613', 17), --17
+--    ('marcelo.mazon@example.com', '44994700614', 18), --18
+--    ('christine.vieira@example.com', '44994700615', 19), --19
+--    ('jossuan@example.com', '44994700616', 20), --20
+--    ('daniel.goulart@example.com', '44994700613', 21), --21
+--    ('rogerio.cortina@example.com','44994700614', 22), --22
+--    ('muriel.benhardt@example.com', '44994700615', 23), --23
+--    ('roberto.medeiros@example.com','44994700616', 24), --24
+--    ('jorge.henrique.silva@example.com','44994700616', 25), --25
+--    ('roni.edson@example.com','44994700616', 26), --26
+--    ('bruno.kurzawe@example.com','44994700616', 27), --27
+--    ('liliane.fernandes@example.com', '44994700616', 28), --28
+--    ('cledemilson.santos@example.com', '44994700616', 29), --29
+--    ('lucas.bonfanteprofessor@example.com','44994700616', 30); --30
 --
 ---- DIA DA SEMANA DISPONIVEL
 --INSERT INTO dia_semana_disponivel
@@ -278,10 +409,10 @@ VALUES
 --
 ----COORDENADOR
 --INSERT INTO coordenador
---  (nome_completo, cpf, telefone, usuario_id)
+--  (email, telefone, usuario_id)
 --VALUES
---  ('MODA', '15264859523', '48595962856', 2),
---  ('Lucas', '21524859523', '48595962856', 20);
+--  ('teste@hotmail.com.br','48595962856', 2),
+--  ('lucas.bonfanteprofessor@example.com','44994700616', 30);
 --
 ----FASE
 --INSERT INTO fase

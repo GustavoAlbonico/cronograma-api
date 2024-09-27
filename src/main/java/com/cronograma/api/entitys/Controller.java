@@ -17,10 +17,12 @@ public class Controller {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String nome;
 
-    @ManyToMany
+    private String descricao;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "controller_funcionalidade",
             joinColumns = @JoinColumn(name = "controller_id"),

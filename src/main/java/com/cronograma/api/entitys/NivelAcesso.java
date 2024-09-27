@@ -22,7 +22,7 @@ public class NivelAcesso {
 
     private String descricao;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "nivel_acesso_controller",
             joinColumns = @JoinColumn(name = "nivel_acesso_id"),
