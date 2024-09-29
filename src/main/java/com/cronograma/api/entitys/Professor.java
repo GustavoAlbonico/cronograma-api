@@ -23,10 +23,7 @@ public class Professor {
     private Long id;
 
     @Column(nullable = false)
-    private String nomeCompleto;
-
-    @Column(nullable = false, length = 11)
-    private String cpf;
+    private String email;
 
     @Column(nullable = false, length = 50)
     private String telefone;
@@ -43,15 +40,7 @@ public class Professor {
     @OneToMany(mappedBy = "professor")
     private Set<DiaSemanaDisponivel> diasSemanaDisponivel =  new HashSet<>();
 
-    @OneToMany(mappedBy = "professor")
+    @OneToMany(mappedBy = "professor",fetch = FetchType.EAGER)
     private Set<Disciplina> disciplinas = new HashSet<>();
 
-    @Override
-    public String toString() {
-        return "Professor{" +
-                "id=" + id +
-                ", nomeCompleto='" + nomeCompleto + '\'' +
-                ", diasSemanaDisponivel=" + diasSemanaDisponivel +
-                '}';
-    }
 }

@@ -12,5 +12,4 @@ import lombok.Setter;
 public class CronogramaRequestDom{
     private Long periodoId;
     private Long cursoId;
-    private Long usuarioId;
 }

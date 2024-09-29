@@ -24,7 +24,7 @@ public interface CronogramaDisciplinaMapper {
 
     @Named("buscarProfessorNome")
     default String buscarProfessorNome(Professor professor){
-        return professor != null ? professor.getNomeCompleto() : "Contratando";
+        return professor != null ? professor.getUsuario().getNome() : "Contratando";
     }
 
     default Set<Disciplina> disciplinasParaDisciplinasNovaInstancia(Set<Disciplina> disciplinasEncontradas){

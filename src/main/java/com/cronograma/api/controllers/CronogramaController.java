@@ -4,6 +4,7 @@ import com.cronograma.api.useCases.cronograma.CronogramaService;
 import com.cronograma.api.useCases.cronograma.domains.CronogramaResponseDom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin//remover
@@ -14,6 +15,7 @@ public class CronogramaController {
     @Autowired
     private CronogramaService cronogramaService;
 
+    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('CRONOGRAMA_CONTROLLER','CARREGAR')")
     @GetMapping("/carregar/periodo/{periodoId}/curso/{cursoId}/fase/{faseId}")
         public ResponseEntity<?> carregarCronograma(@PathVariable Long periodoId,@PathVariable Long cursoId, @PathVariable Long faseId){
         CronogramaResponseDom response = cronogramaService.carregarCronograma(periodoId,cursoId,faseId);
@@ -21,6 +23,7 @@ public class CronogramaController {
     }
 
     @DeleteMapping("/excluir/{cronogramaId}")
+    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('CRONOGRAMA_CONTROLLER','EXCLUIR')")
     public ResponseEntity<?> excluirCronograma(@PathVariable Long cronogramaId){
         cronogramaService.excluirCronograma(cronogramaId);
         return ResponseEntity.ok(null);

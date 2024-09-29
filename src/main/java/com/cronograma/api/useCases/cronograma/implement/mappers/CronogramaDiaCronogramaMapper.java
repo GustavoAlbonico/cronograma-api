@@ -35,7 +35,7 @@ public interface CronogramaDiaCronogramaMapper {
     }
     @Named("buscarProfessorNome")
     default String buscarProfessorNome(Disciplina disciplina){
-        return disciplina != null ? disciplina.getProfessor() != null ? disciplina.getProfessor().getNomeCompleto() : "Contratando" : null;
+        return disciplina != null ? disciplina.getProfessor() != null ? disciplina.getProfessor().getUsuario().getNome() : "Contratando" : null;
     }
     @Named("buscarDisciplinaNome")
     default String buscarDisciplinaNome(Disciplina disciplina){

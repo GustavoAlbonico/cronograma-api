@@ -34,8 +34,15 @@ public class Curso {
     private StatusEnum statusEnum;
 
     @ManyToMany
-    @JoinTable(name = "curso_fase",joinColumns = @JoinColumn(name = "curso_id"),inverseJoinColumns = @JoinColumn(name = "fase_id"))
+    @JoinTable(
+            name = "curso_fase",
+            joinColumns = @JoinColumn(name = "curso_id"),
+            inverseJoinColumns = @JoinColumn(name = "fase_id")
+    )
     private Set<Fase> fases = new HashSet<>();
+
+    @OneToMany(mappedBy = "curso")
+    private Set<Aluno> alunos =  new HashSet<>();
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne
