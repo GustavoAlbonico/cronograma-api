@@ -2,6 +2,7 @@ package com.cronograma.api.useCases.cronograma;
 
 import com.cronograma.api.entitys.*;
 import com.cronograma.api.entitys.enums.*;
+import com.cronograma.api.exceptions.AuthorizationException;
 import com.cronograma.api.exceptions.CronogramaException;
 import com.cronograma.api.useCases.cronograma.domains.*;
 import com.cronograma.api.useCases.cronograma.implement.mappers.CronogramaDiaCronogramaMapper;
@@ -10,6 +11,8 @@ import com.cronograma.api.useCases.cronograma.implement.mappers.CronogramaMapper
 import com.cronograma.api.useCases.cronograma.implement.repositorys.*;
 import com.cronograma.api.useCases.diaCronograma.DiaCronogramaService;
 import com.cronograma.api.useCases.periodo.PeriodoService;
+import com.cronograma.api.useCases.usuario.UsuarioService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -22,47 +25,74 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CronogramaService {
 
-    @Autowired
-    private CronogramaDisciplinaRepository cronogramaDisciplinaRepository;
+    private final CronogramaDisciplinaRepository cronogramaDisciplinaRepository;
+    private final CronogramaFaseRepository cronogramaFaseRepository;
+    private final CronogramaDataBloqueadaRepository cronogramaDataBloqueadaRepository;
+    private final CronogramaCursoRepository cronogramaCursoRepository;
+    private final CronogramaPeriodoRepository cronogramaPeriodoRepository;
+    private final CronogramaRepository cronogramaRepository;
+    private final CronogramaDiaCronogramaRepository cronogramaDiaCronogramaRepository;
 
-    @Autowired
-    private CronogramaFaseRepository cronogramaFaseRepository;
-
-    @Autowired
-    private CronogramaDataBloqueadaRepository cronogramaDataBloqueadaRepository;
-
-    @Autowired
-    private CronogramaCursoRepository cronogramaCursoRepository;
-
-    @Autowired
-    private CronogramaPeriodoRepository cronogramaPeriodoRepository;
-
-    @Autowired
-    private CronogramaRepository cronogramaRepository;
-
-    @Autowired
-    private CronogramaDiaCronogramaRepository cronogramaDiaCronogramaRepository;
-
-    @Autowired
-    private CronogramaMapper cronogramaMapper;
-
-    @Autowired
-    private CronogramaDisciplinaMapper cronogramaDisciplinaMapper;
-
-    @Autowired
-    private CronogramaDiaCronogramaMapper cronogramaDiaCronogramaMapper;
+    private final CronogramaMapper cronogramaMapper;
+    private final CronogramaDisciplinaMapper cronogramaDisciplinaMapper;
+    private final CronogramaDiaCronogramaMapper cronogramaDiaCronogramaMapper;
 
     private final PeriodoService periodoService;
     private final DiaCronogramaService diaCronogramaService;
+    private final UsuarioService usuarioService;
 
-    public CronogramaService(PeriodoService periodoService, DiaCronogramaService diaCronogramaService) {
-        this.periodoService = periodoService;
-        this.diaCronogramaService = diaCronogramaService;
+
+    private void validarUsuarioPertenceCurso(Long cursoId){
+       final Usuario usuario = usuarioService.buscarUsuarioAutenticado();
+
+        if(
+           usuario.getCoordenador() != null &&
+           usuario.getNiveisAcesso().stream().noneMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 2)
+        ){
+            if(usuario.getCoordenador().getCursos().stream().noneMatch(curso -> curso.getId().equals(cursoId))){
+                throw new CronogramaException("Você não possui acesso a este curso!");
+            }
+        }
     }
 
+    private void validarUsuarioPertenceCursoFase(Long cursoId,Long faseId){
+        final Usuario usuario = usuarioService.buscarUsuarioAutenticado();
+
+        if(
+            usuario.getAluno() != null &&
+            usuario.getNiveisAcesso().stream().noneMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 4)
+        ){
+            if(
+               !usuario.getAluno().getCurso().getId().equals(cursoId) ||
+                usuario.getAluno().getFases().stream().noneMatch(fase -> fase.getId().equals(faseId))
+            ){
+                throw new CronogramaException("Você não possui acesso a este curso ou fase!");
+            }
+        } else if(
+           usuario.getProfessor() != null &&
+           usuario.getNiveisAcesso().stream().noneMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 3)
+        ){
+          if(usuario.getProfessor().getDisciplinas().stream().noneMatch(disciplina ->
+                                    disciplina.getCurso().getId().equals(cursoId) &&
+                                    disciplina.getFase().getId().equals(faseId))
+          ){
+                throw new CronogramaException("Você não possui acesso a este curso ou fase!");
+          }
+        } else if(
+           usuario.getCoordenador() != null &&
+           usuario.getNiveisAcesso().stream().noneMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 2)
+        ){
+            if(usuario.getCoordenador().getCursos().stream().noneMatch(curso -> curso.getId().equals(cursoId))){
+                throw new CronogramaException("Você não possui acesso a este curso!");
+            }
+        }
+    }
     public CronogramaResponseDom carregarCronograma(Long periodoId,Long cursoId,Long faseId){
+
+        validarUsuarioPertenceCursoFase(cursoId, faseId);
 
         Periodo periodo = cronogramaPeriodoRepository.findById(periodoId).orElseThrow(() -> new CronogramaException("Nenhum periodo encontrado!"));
         Curso curso = cronogramaCursoRepository.findById(cursoId).orElseThrow(() -> new CronogramaException("Nenhum curso encontrado!"));
@@ -114,12 +144,13 @@ public class CronogramaService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void excluirCronograma(Long id){
+        Cronograma cronograma = cronogramaRepository.findById(id).orElseThrow(() -> new CronogramaException("Cronograma não encontrado"));
+        validarUsuarioPertenceCurso(cronograma.getCurso().getId());
         cronogramaRepository.deleteById(id);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Long gerarCronograma(CronogramaRequestDom cronograma){
-
         validarExisteCronograma(cronograma);
 
         Periodo periodoAtivo = periodoService.buscarPeriodoAtivoAtual();

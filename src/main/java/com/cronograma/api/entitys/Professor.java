@@ -40,14 +40,7 @@ public class Professor {
     @OneToMany(mappedBy = "professor")
     private Set<DiaSemanaDisponivel> diasSemanaDisponivel =  new HashSet<>();
 
-    @OneToMany(mappedBy = "professor")
+    @OneToMany(mappedBy = "professor",fetch = FetchType.EAGER)
     private Set<Disciplina> disciplinas = new HashSet<>();
 
-    @Override
-    public String toString() {
-        return "Professor{" +
-                "id=" + id +
-                ", diasSemanaDisponivel=" + diasSemanaDisponivel +
-                '}';
-    }
 }

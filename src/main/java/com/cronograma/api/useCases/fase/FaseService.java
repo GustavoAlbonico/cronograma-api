@@ -27,6 +27,34 @@ public class FaseService {
     @Autowired
     private FaseMapper faseMapper;
 
+    public List<FaseResponseDom> carregarFaseAtivoPorCurso(Long cursoId){
+        List<Fase> fasesEncontradas = faseRepository.buscaTodosPorStatusEnumPorCursoId(StatusEnum.ATIVO.toString(), cursoId);
+
+        return fasesEncontradas.stream()
+                .map(fase -> faseMapper.faseParaFaseResponseDom(fase))
+                .sorted(Comparator.comparing(FaseResponseDom::getNumero))
+                .toList();
+    }
+
+    public List<FaseResponseDom> carregarFaseAtivo(){
+        List<Fase> fasesEncontradas = faseRepository.findAllByStatusEnum(StatusEnum.ATIVO);
+
+        return fasesEncontradas.stream()
+                .map(fase -> faseMapper.faseParaFaseResponseDom(fase))
+                .sorted(Comparator.comparing(FaseResponseDom::getNumero))
+                .toList();
+    }
+
+    public List<FaseResponseDom> carregarFase(){
+        List<Fase> fasesEncontradas = faseRepository.findAll();
+
+        return fasesEncontradas.stream()
+                .map(fase -> faseMapper.faseParaFaseResponseDom(fase))
+                .sorted(Comparator.comparing(FaseResponseDom::getStatusEnum)
+                        .thenComparing(FaseResponseDom::getNumero))
+                .toList();
+    }
+
     public void criarFase(FaseRequestDom fase) {
         validarCampos(fase);
         Fase faseEntidade = faseMapper.faseRequestDomParaFase(fase);
@@ -40,28 +68,18 @@ public class FaseService {
        faseRepository.save(faseEncontrada);
     }
 
-    public List<FaseResponseDom> carregarFase(){
-        List<Fase> fasesEncontradas = faseRepository.findAll();
-
-        return fasesEncontradas.stream()
-                .map(fase -> faseMapper.faseParaFaseResponseDom(fase))
-                .sorted(Comparator.comparing(FaseResponseDom::getStatusEnum)
-                        .thenComparing(FaseResponseDom::getNumero))
-                .toList();
-    }
-
     public void inativarFase(Long id){
         Fase faseEncontrada = faseRepository.findById(id).orElseThrow( () -> new FaseException("Nenhuma fase encontrada!"));
         if (faseEncontrada.getStatusEnum().equals(StatusEnum.INATIVO)){
             throw new FaseException("A fase ja está Inativada");
         }
-        if(faseRepository.buscarQuantidadeCursoFasePorFaseId(id) > 0){
+        if(faseRepository.existeCursoFasePorFaseId(id)){
             throw new FaseException("A fase está sendo utilizado em cursos");
         }
-//        if(faseDisciplinaRepository.buscarQuantidadeAlunoFasePorFaseId(id) > 0){
-//            throw new FaseException("A fase está sendo utilizado em alunos");
-//        }
-        if(faseDisciplinaRepository.countByFaseId(id) > 0){
+        if(faseRepository.existeAlunoFasePorFaseId(id)){
+            throw new FaseException("A fase está sendo utilizado em alunos");
+        }
+        if(faseDisciplinaRepository.existsByFaseId(id)){
             throw new FaseException("A fase está sendo utilizada em disciplinas");
         }
 
@@ -86,7 +104,7 @@ public class FaseService {
             errorMessages.add("Número é um campo obrigatório!");
         } else if(fase.getNumero() < 1){
             errorMessages.add("Número inválido!");
-        } else if(faseRepository.findByNumero(fase.getNumero()).isPresent()){
+        } else if(faseRepository.existsByNumero(fase.getNumero())){
             errorMessages.add("Número da fase já existe");
         }
 

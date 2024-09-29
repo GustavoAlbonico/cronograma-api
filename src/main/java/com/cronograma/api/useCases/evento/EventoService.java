@@ -1,6 +1,7 @@
 package com.cronograma.api.useCases.evento;
 
 import com.cronograma.api.entitys.Evento;
+import com.cronograma.api.entitys.Usuario;
 import com.cronograma.api.entitys.enums.EventoStatusEnum;
 import com.cronograma.api.exceptions.CronogramaException;
 import com.cronograma.api.exceptions.EventoException;
@@ -12,6 +13,8 @@ import com.cronograma.api.useCases.evento.implement.repositorys.EventoCursoRepos
 import com.cronograma.api.useCases.evento.implement.repositorys.EventoPeriodoRepository;
 import com.cronograma.api.useCases.evento.implement.repositorys.EventoRepository;
 import com.cronograma.api.useCases.evento.implement.repositorys.EventoUsuarioRepository;
+import com.cronograma.api.useCases.usuario.UsuarioService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,36 +22,39 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class EventoService {
 
-    @Autowired
-    private EventoRepository eventoRepository;
+    private final EventoRepository eventoRepository;
+    private final EventoPeriodoRepository eventoPeriodoRepository;
+    private final EventoCursoRepository eventoCursoRepository;
+    private final EventoUsuarioRepository eventoUsuarioRepository;
 
-    @Autowired
-    private EventoPeriodoRepository eventoPeriodoRepository;
+    private final EventoMapper eventoMapper;
 
-    @Autowired
-    private EventoCursoRepository eventoCursoRepository;
+    private final CronogramaService cronogramaService;
+    private final UsuarioService usuarioService;
 
-    @Autowired
-    private EventoUsuarioRepository eventoUsuarioRepository;
-
-    @Autowired
-    private EventoMapper eventoMapper;
-
-    final private CronogramaService cronogramaService;
-
-
-    public EventoService(CronogramaService cronogramaService) {
-        this.cronogramaService = cronogramaService;
+    private void validarUsuarioPertenceCurso(Long cursoId, final Usuario usuario){
+        if(
+            usuario.getCoordenador() != null &&
+            usuario.getNiveisAcesso().stream().noneMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 2)
+        ){
+            if(usuario.getCoordenador().getCursos().stream().noneMatch(curso -> curso.getId().equals(cursoId))){
+                throw new EventoException("Você não possui acesso a este curso!");
+            }
+        }
     }
-
     @Transactional
     public void criarEventoCronograma(EventoCronogramaRequestDom cronograma){
+
+        final Usuario usuario = usuarioService.buscarUsuarioAutenticado();
+        validarUsuarioPertenceCurso(cronograma.getCursoId(),usuario);
+
         Long cronogramaId = null;
         try {
-            validarExisteEventoExecucao(cronograma);
-            removerEventoAntigo(cronograma);
+            validarExisteEventoExecucao(cronograma,usuario.getId());
+            removerEventoAntigo(cronograma,usuario.getId());
 
             EventoRequestDom eventoPendente = new EventoRequestDom(
                     null,
@@ -57,7 +63,7 @@ public class EventoService {
                     EventoStatusEnum.EXECUTANDO,
                     cronograma.getCursoId(),
                     cronograma.getPeriodoId(),
-                    cronograma.getUsuarioId()
+                    usuario.getId()
             );
             Evento evento = criarEvento(eventoPendente);
             try {
@@ -91,11 +97,11 @@ public class EventoService {
         return eventoRepository.save(evento);
     }
 
-    private void validarExisteEventoExecucao(EventoCronogramaRequestDom cronograma){
+    private void validarExisteEventoExecucao(EventoCronogramaRequestDom cronograma,Long usuarioId){
         List<Evento> eventos = eventoRepository.findAll();
         for (Evento evento: eventos){
             if (
-                evento.getUsuario().getId().equals(cronograma.getUsuarioId()) &&
+                evento.getUsuario().getId().equals(usuarioId) &&
                 evento.getCurso().getId().equals(cronograma.getCursoId()) &&
                 evento.getPeriodo().getId().equals(cronograma.getPeriodoId()) &&
                 evento.getEventoStatusEnum().equals(EventoStatusEnum.EXECUTANDO)
@@ -105,11 +111,11 @@ public class EventoService {
         }
     }
 
-    private void removerEventoAntigo(EventoCronogramaRequestDom cronograma){
+    private void removerEventoAntigo(EventoCronogramaRequestDom cronograma,Long usuarioId){
         List<Evento> eventos = eventoRepository.findAll();
         for (Evento evento: eventos){
             if (
-                evento.getUsuario().getId().equals(cronograma.getUsuarioId()) &&
+                evento.getUsuario().getId().equals(usuarioId) &&
                 evento.getCurso().getId().equals(cronograma.getCursoId()) &&
                 evento.getPeriodo().getId().equals(cronograma.getPeriodoId()) &&
                 !evento.getEventoStatusEnum().equals(EventoStatusEnum.EXECUTANDO)

@@ -22,6 +22,9 @@ public class NivelAcesso {
 
     private String descricao;
 
+    @Column(nullable = false)
+    private Integer rankingAcesso;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "nivel_acesso_controller",
@@ -33,4 +36,5 @@ public class NivelAcesso {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToMany(mappedBy = "niveisAcesso", fetch = FetchType.LAZY)
     private Set<Usuario> usuarios =  new HashSet<>();
+
 }

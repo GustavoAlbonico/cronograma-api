@@ -32,6 +32,10 @@ public class Fase {
     @ManyToMany(mappedBy = "fases" , fetch = FetchType.LAZY)
     private Set<Curso> cursos = new HashSet<>();
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToMany(mappedBy = "fases" , fetch = FetchType.LAZY)
+    private Set<Aluno> alunos = new HashSet<>();
+
     @OneToMany(mappedBy = "fase")
     private Set<Disciplina> disciplinas = new HashSet<>();
 

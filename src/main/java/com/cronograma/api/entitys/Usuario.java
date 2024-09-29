@@ -53,10 +53,13 @@ public class Usuario {
     @OneToOne(mappedBy = "usuario")
     private Coordenador coordenador;
 
-    @OneToMany(mappedBy = "usuario",fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "usuario")
+    private Aluno aluno;
+
+    @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
     private Set<DataBloqueada> datasBloqueadas = new HashSet<>();
 
-    @OneToMany(mappedBy = "usuario",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
     private Set<Evento> eventos =  new HashSet<>();
 
     @PrePersist
@@ -64,19 +67,4 @@ public class Usuario {
         statusEnum = StatusEnum.ATIVO;
     }
 
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", cpf='" + cpf + '\'' +
-                ", senha='" + senha + '\'' +
-                ", statusEnum=" + statusEnum +
-                ", niveisAcesso=" + niveisAcesso +
-                ", professor=" + professor +
-                ", coordenador=" + coordenador +
-                ", datasBloqueadas=" + datasBloqueadas +
-                ", eventos=" + eventos +
-                '}';
-    }
 }

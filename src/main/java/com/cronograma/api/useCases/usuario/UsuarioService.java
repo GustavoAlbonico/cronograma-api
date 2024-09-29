@@ -2,7 +2,6 @@ package com.cronograma.api.useCases.usuario;
 
 import com.cronograma.api.entitys.NivelAcesso;
 import com.cronograma.api.entitys.Usuario;
-import com.cronograma.api.exceptions.AuthenticationException;
 import com.cronograma.api.exceptions.AuthorizationException;
 import com.cronograma.api.infra.security.TokenService;
 import com.cronograma.api.useCases.usuario.domains.UsuarioLoginRequestDom;
@@ -11,6 +10,7 @@ import com.cronograma.api.useCases.usuario.domains.UsuarioResponseDom;
 import com.cronograma.api.useCases.usuario.implement.repositorys.UsuarioNivelAcessoRepository;
 import com.cronograma.api.useCases.usuario.implement.repositorys.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +43,6 @@ public class UsuarioService {
 
         if (usuarioEncontrado.isEmpty()){
 
-            //criar validacao
             Usuario usuario = new Usuario();
             usuario.setSenha(passwordEncoder.encode(usuarioCadastroRequestDom.senha()));
             usuario.setCpf(usuarioCadastroRequestDom.cpf());
@@ -57,5 +56,9 @@ public class UsuarioService {
             return new UsuarioResponseDom(usuario.getNome(), token);
         }
         throw new AuthorizationException("Cpf já está sendo utilizado!");
+    }
+
+    public Usuario buscarUsuarioAutenticado(){
+        return (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

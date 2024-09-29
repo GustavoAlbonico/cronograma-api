@@ -19,6 +19,20 @@ public class FaseController {
     @Autowired
     private FaseService faseService;
 
+    @GetMapping("/carregar/ativo/curso/{cursoId}")
+    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('FASE_CONTROLLER','CARREGAR_ATIVO_POR_CURSO')")
+    public ResponseEntity<?> carregarFaseAtivoPorCurso(@PathVariable Long cursoId){
+        List<FaseResponseDom> response = faseService.carregarFaseAtivoPorCurso(cursoId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/carregar/ativo")
+    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('FASE_CONTROLLER','CARREGAR_ATIVO')")
+    public ResponseEntity<?> carregarFaseAtivo(){
+        List<FaseResponseDom> response = faseService.carregarFaseAtivo();
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/carregar")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('FASE_CONTROLLER','CARREGAR')")
     public ResponseEntity<?> carregarFase(){
