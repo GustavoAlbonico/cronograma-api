@@ -13,8 +13,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@SQLDelete(sql = "UPDATE usuario SET status_enum = 'INATIVO' WHERE id=?")
-@SQLRestriction("status_enum = 'ATIVO'")
 @Getter
 @Setter
 public class Curso {
@@ -57,4 +55,9 @@ public class Curso {
 
     @OneToOne(mappedBy = "curso")
     private Evento evento;
+
+    @PrePersist
+    void defaultStatusEnum(){
+        statusEnum = StatusEnum.ATIVO;
+    }
 }

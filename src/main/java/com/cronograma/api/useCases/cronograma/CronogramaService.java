@@ -913,7 +913,6 @@ public class CronogramaService {
                 if (!diaSemanaEnum.equals(DiaSemanaEnum.DOMINGO)){
                     DiaSemanaDisponivel diaSemanaDisponivel = new DiaSemanaDisponivel();
                     diaSemanaDisponivel.setDiaSemanaEnum(diaSemanaEnum);
-                    diaSemanaDisponivel.setStatusEnum(StatusEnum.ATIVO);
 
                     diasSemanaDisponiveis.add(diaSemanaDisponivel);
                 }

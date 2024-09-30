@@ -1,6 +1,7 @@
 package com.cronograma.api.infra.security;
 
 import com.cronograma.api.entitys.Usuario;
+import com.cronograma.api.entitys.enums.StatusEnum;
 import com.cronograma.api.exceptions.AuthenticationException;
 import com.cronograma.api.useCases.usuario.implement.repositorys.UsuarioRepository;
 import jakarta.servlet.FilterChain;
@@ -29,7 +30,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         var login = tokenService.validaToken(token);
 
         if(login != null){
-            Usuario usuario = usuarioRepository.findByCpf(login).orElseThrow(() -> new AuthenticationException("Cpf não encontrado"));
+            Usuario usuario = usuarioRepository.findByCpfAndStatusEnum(login, StatusEnum.ATIVO).orElseThrow(() -> new AuthenticationException("Cpf não encontrado"));
             var authorities = usuario.getNiveisAcesso().stream().map(nivelAcesso -> new SimpleGrantedAuthority(nivelAcesso.getNome())).toList();
             var authentication = new UsernamePasswordAuthenticationToken(usuario, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);

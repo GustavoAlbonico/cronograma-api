@@ -13,8 +13,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@SQLDelete(sql = "UPDATE usuario SET status_enum = 'INATIVO' WHERE id=?")
-@SQLRestriction("status_enum = 'ATIVO'")
 @Getter
 @Setter
 public class Coordenador {
@@ -29,10 +27,6 @@ public class Coordenador {
     @Column(nullable = false, length = 50)
     private String telefone;
 
-    @Column(nullable = false,columnDefinition = "VARCHAR(255) DEFAULT 'ATIVO'")
-    @Enumerated(EnumType.STRING)
-    private StatusEnum statusEnum;
-
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToOne
     @JoinColumn(nullable = false)
@@ -40,4 +34,6 @@ public class Coordenador {
 
     @OneToMany(mappedBy = "coordenador",fetch = FetchType.EAGER)
     private Set<Curso> cursos = new HashSet<>();
+
+
 }

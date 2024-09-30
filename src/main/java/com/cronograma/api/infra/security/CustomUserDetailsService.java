@@ -1,6 +1,7 @@
 package com.cronograma.api.infra.security;
 
 import com.cronograma.api.entitys.Usuario;
+import com.cronograma.api.entitys.enums.StatusEnum;
 import com.cronograma.api.useCases.usuario.implement.repositorys.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UsuarioRepository usuarioRepository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = this.usuarioRepository.findByCpf(username).orElseThrow(() -> new UsernameNotFoundException("Cpf não encontrado"));
+        Usuario usuario = this.usuarioRepository.findByCpfAndStatusEnum(username, StatusEnum.ATIVO).orElseThrow(() -> new UsernameNotFoundException("Cpf não encontrado"));
         return new org.springframework.security.core.userdetails.User(usuario.getCpf(), usuario.getSenha(),new ArrayList<>());
 
     }

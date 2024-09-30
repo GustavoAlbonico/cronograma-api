@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@SQLDelete(sql = "UPDATE usuario SET status_enum = 'INATIVO' WHERE id=?")
 @Getter
 @Setter
 public class Periodo {
@@ -36,4 +35,9 @@ public class Periodo {
 
     @OneToMany(mappedBy = "periodo")
     private Set<Evento> eventos = new HashSet<>();
+
+    @PrePersist
+    void defaultStatusEnum(){
+        statusEnum = StatusEnum.ATIVO;
+    }
 }

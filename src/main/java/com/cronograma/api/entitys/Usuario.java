@@ -16,8 +16,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@SQLDelete(sql = "UPDATE usuario SET status_enum = 'INATIVO' WHERE id=?")
-@SQLRestriction("status_enum = 'ATIVO'")
 @Getter
 @Setter
 public class Usuario {

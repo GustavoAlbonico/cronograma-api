@@ -1,6 +1,12 @@
 package com.cronograma.api.useCases.usuario.domains;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
-public record UsuarioCadastroRequestDom(String cpf, String senha, String nome, List<Long> niveisAcessoId){
+@Getter
+@Setter
+public class UsuarioCadastroRequestDom extends UsuarioRequestDom{
+    private List<Long> niveisAcessoId;
 }

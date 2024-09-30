@@ -11,8 +11,6 @@ import org.hibernate.annotations.SQLRestriction;
 import java.time.LocalDate;
 
 @Entity
-@SQLDelete(sql = "UPDATE usuario SET status_enum = 'INATIVO' WHERE id=?")
-@SQLRestriction("status_enum = 'ATIVO'")
 @Getter
 @Setter
 public class DataBloqueada {
@@ -26,10 +24,6 @@ public class DataBloqueada {
 
     @Column(nullable = false)
     private LocalDate data;
-
-    @Column(nullable = false,columnDefinition = "VARCHAR(255) DEFAULT 'ATIVO'")
-    @Enumerated(EnumType.STRING)
-    private StatusEnum statusEnum;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne
