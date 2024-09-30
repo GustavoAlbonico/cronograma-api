@@ -5,9 +5,7 @@ import com.cronograma.api.entitys.Usuario;
 import com.cronograma.api.useCases.coordenador.domains.CoordenadorRequestDom;
 import com.cronograma.api.useCases.coordenador.domains.CoordenadorResponseDom;
 import com.cronograma.api.useCases.coordenador.domains.CoordenadorUsuarioRequestDom;
-import com.cronograma.api.useCases.usuario.domains.UsuarioRequestDom;
-import com.cronograma.api.utils.RegexUtil;
-import jdk.jfr.Name;
+import com.cronograma.api.utils.regex.RegexUtil;
 import org.mapstruct.*;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,

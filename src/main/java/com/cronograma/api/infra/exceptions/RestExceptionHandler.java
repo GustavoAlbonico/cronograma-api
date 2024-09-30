@@ -20,6 +20,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         RestErrorMessage errorResponse = new RestErrorMessage(HttpStatus.UNAUTHORIZED,exception.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
+
+    @ExceptionHandler(PaginacaoException.class)
+    private ResponseEntity<RestErrorMessage> paginacaoException(PaginacaoException exception){
+        RestErrorMessage errorResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST,exception.getMessages());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
     @ExceptionHandler(CronogramaException.class)
     private ResponseEntity<RestErrorMessage> cronogramaException(CronogramaException exception){
         RestErrorMessage errorResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST,exception.getMessage());
@@ -46,6 +53,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CoordenadorException.class)
     private ResponseEntity<RestErrorMessage> coordenadorException(CoordenadorException exception){
+        RestErrorMessage errorResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST,exception.getMessages());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(ProfessorException.class)
+    private ResponseEntity<RestErrorMessage> professorException(ProfessorException exception){
         RestErrorMessage errorResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST,exception.getMessages());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }

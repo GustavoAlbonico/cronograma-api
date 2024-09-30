@@ -34,7 +34,7 @@ VALUES
   ('EXCLUIR', 'Exclui uma informação do banco de dados'),--6
   ('IMPORTAR', 'importa um arquivo para dentro do sistema'),--7
   ('CARREGAR_ATIVO', 'Busca todos os dados ativos'),--8
-  ('ASSOCIAR_COORDENADOR', 'associa um coordenador a um professor'),--9
+  ('ASSOCIAR', 'associa um coordenador a um professor'),--9
   ('CARREGAR_POR_ID', 'carregar uma informação pelo id'),--10
   ('FORMULARIO_DIA_SEMANA_DISPONIVEL', 'envia um formulario com os dias da semana disponiveis'),--11
   ('EDITAR_EMAIL', 'edita o email'),--12
@@ -73,11 +73,12 @@ VALUES
 
   (2,1),--CRIAR
   (2,2),--EDITAR
-  (2,3),--CARREGAR  -- PROFESSOR
-  (2,4),--INATIVAR
+  (2,3),--CARREGAR
+  (2,4),--INATIVAR -- PROFESSOR
   (2,5),--ATIVAR
   (2,8),--CARREGAR_ATIVO
-  (2,9),--ASSOCIAR_COORDENADOR
+  (2,9),--ASSOCIAR
+  (2,10),--CARREGAR_POR_ID
 
   (3,1),--CRIAR
   (3,2),--EDITAR

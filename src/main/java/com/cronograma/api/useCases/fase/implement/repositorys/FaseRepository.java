@@ -24,6 +24,7 @@ public interface FaseRepository extends JpaRepository<Fase, Long> {
             "AND fase.status_enum = :statusEnum"
             ,nativeQuery = true)
     List<Fase> buscaTodosPorStatusEnumPorCursoId(@Param("statusEnum") String statusEnum,@Param("cursoId") Long cursoId);
+
     boolean existsByNumero(Integer numero);
 
     @Query(value =

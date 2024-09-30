@@ -78,7 +78,7 @@ public class FaseService {
     public void inativarFase(Long id){
         Fase faseEncontrada = faseRepository.findById(id).orElseThrow( () -> new FaseException("Nenhuma fase encontrada!"));
         if (faseEncontrada.getStatusEnum().equals(StatusEnum.INATIVO)){
-            throw new FaseException("A fase ja está Inativada");
+            throw new FaseException("A fase já está Inativada");
         }
         if(faseRepository.existeCursoFasePorFaseId(id)){
             throw new FaseException("A fase está sendo utilizado em cursos");
@@ -97,7 +97,7 @@ public class FaseService {
     public void ativarFase(Long id){
         Fase faseEncontrada = faseRepository.findById(id).orElseThrow( () -> new FaseException("Nenhuma fase encontrada!"));
         if (faseEncontrada.getStatusEnum().equals(StatusEnum.ATIVO)){
-            throw new FaseException("A fase ja está Ativa");
+            throw new FaseException("A fase já está Ativa");
         } else {
             faseEncontrada.setStatusEnum(StatusEnum.ATIVO);
             faseRepository.save(faseEncontrada);

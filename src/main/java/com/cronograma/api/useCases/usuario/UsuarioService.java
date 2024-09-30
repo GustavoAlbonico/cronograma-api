@@ -10,7 +10,7 @@ import com.cronograma.api.useCases.usuario.domains.*;
 import com.cronograma.api.useCases.usuario.implement.mappers.UsuarioMapper;
 import com.cronograma.api.useCases.usuario.implement.repositorys.UsuarioNivelAcessoRepository;
 import com.cronograma.api.useCases.usuario.implement.repositorys.UsuarioRepository;
-import com.cronograma.api.utils.RegexUtil;
+import com.cronograma.api.utils.regex.RegexUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;

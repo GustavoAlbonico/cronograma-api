@@ -11,7 +11,7 @@ import com.cronograma.api.useCases.coordenador.implement.repositorys.Coordenador
 import com.cronograma.api.useCases.coordenador.implement.repositorys.CoordenadorRepository;
 import com.cronograma.api.useCases.coordenador.implement.repositorys.CoordenadorUsuarioRepository;
 import com.cronograma.api.useCases.usuario.UsuarioService;
-import com.cronograma.api.utils.RegexUtil;
+import com.cronograma.api.utils.regex.RegexUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
