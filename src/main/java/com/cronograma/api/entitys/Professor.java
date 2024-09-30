@@ -12,8 +12,6 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Entity
-@SQLDelete(sql = "UPDATE usuario SET status_enum = 'INATIVO' WHERE id=?")
-@SQLRestriction("status_enum = 'ATIVO'")
 @Getter
 @Setter
 public class Professor {
@@ -42,5 +40,10 @@ public class Professor {
 
     @OneToMany(mappedBy = "professor",fetch = FetchType.EAGER)
     private Set<Disciplina> disciplinas = new HashSet<>();
+
+    @PrePersist
+    void defaultStatusEnum(){
+        statusEnum = StatusEnum.ATIVO;
+    }
 
 }

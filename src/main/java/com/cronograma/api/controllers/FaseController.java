@@ -33,6 +33,13 @@ public class FaseController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/carregar/{id}")
+    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('FASE_CONTROLLER','CARREGAR_POR_ID')")
+    public ResponseEntity<?> carregarFasePorId(@PathVariable Long id){
+        FaseResponseDom response = faseService.carregarFasePorId(id);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/carregar")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('FASE_CONTROLLER','CARREGAR')")
     public ResponseEntity<?> carregarFase(){
@@ -44,7 +51,7 @@ public class FaseController {
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('FASE_CONTROLLER','CRIAR')")
     public ResponseEntity<?> criarFase(@RequestBody FaseRequestDom fase){
         faseService.criarFase(fase);
-        return ResponseEntity.status(201).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
     @PutMapping("/editar/{id}")

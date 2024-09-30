@@ -13,8 +13,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@SQLDelete(sql = "UPDATE usuario SET status_enum = 'INATIVO' WHERE id=?")
-@SQLRestriction("status_enum = 'ATIVO'")
 @Getter
 @Setter
 public class Disciplina {
@@ -61,13 +59,8 @@ public class Disciplina {
     @OneToMany(mappedBy = "disciplina")
     private Set<DiaCronograma> diasCronograma = new HashSet<>();
 
-    @Override
-    public String toString() {
-        return "Disciplina{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", cargaHoraria=" + cargaHoraria +
-                ", professor=" + professor +
-                '}';
+    @PrePersist
+    void defaultStatusEnum(){
+        statusEnum = StatusEnum.ATIVO;
     }
 }

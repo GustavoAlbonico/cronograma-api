@@ -31,7 +31,7 @@ public class FaseService {
         List<Fase> fasesEncontradas = faseRepository.buscaTodosPorStatusEnumPorCursoId(StatusEnum.ATIVO.toString(), cursoId);
 
         return fasesEncontradas.stream()
-                .map(fase -> faseMapper.faseParaFaseResponseDom(fase))
+                .map(faseMapper::faseParaFaseResponseDom)
                 .sorted(Comparator.comparing(FaseResponseDom::getNumero))
                 .toList();
     }
@@ -40,16 +40,23 @@ public class FaseService {
         List<Fase> fasesEncontradas = faseRepository.findAllByStatusEnum(StatusEnum.ATIVO);
 
         return fasesEncontradas.stream()
-                .map(fase -> faseMapper.faseParaFaseResponseDom(fase))
+                .map(faseMapper::faseParaFaseResponseDom)
                 .sorted(Comparator.comparing(FaseResponseDom::getNumero))
                 .toList();
+    }
+
+    public FaseResponseDom carregarFasePorId(Long id){
+        Fase faseEncontrada = faseRepository.findById(id)
+                .orElseThrow(() -> new FaseException("Nenhuma fase encontrada!"));
+
+        return faseMapper.faseParaFaseResponseDom(faseEncontrada);
     }
 
     public List<FaseResponseDom> carregarFase(){
         List<Fase> fasesEncontradas = faseRepository.findAll();
 
         return fasesEncontradas.stream()
-                .map(fase -> faseMapper.faseParaFaseResponseDom(fase))
+                .map(faseMapper::faseParaFaseResponseDom)
                 .sorted(Comparator.comparing(FaseResponseDom::getStatusEnum)
                         .thenComparing(FaseResponseDom::getNumero))
                 .toList();
