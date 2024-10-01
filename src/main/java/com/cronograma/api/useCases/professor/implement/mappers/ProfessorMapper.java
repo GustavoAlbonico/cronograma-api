@@ -36,18 +36,24 @@ public interface ProfessorMapper {
         professor.setUsuario(usuario);
     }
 
-    @Mapping(source = "usuario",target = "nome", qualifiedByName = "buscaNome")
-    @Mapping(source = "usuario",target = "cpf", qualifiedByName = "buscaCpf")
+    @Mapping(source = "usuario",target = "nome", qualifiedByName = "buscarNome")
+    @Mapping(source = "usuario",target = "cpf", qualifiedByName = "buscarCpf")
+    @Mapping(source = "usuario",target = "email", qualifiedByName = "buscarEmail")
     ProfessorResponseDom professorParaProfessorResponseDom(Professor professor);
 
-    @Named("buscaNome")
-    default String buscaNome(Usuario usuario){
+    @Named("buscarNome")
+    default String buscarNome(Usuario usuario){
         return usuario.getNome();
     }
 
-    @Named("buscaCpf")
-    default String buscaCpf(Usuario usuario){
+    @Named("buscarCpf")
+    default String buscarCpf(Usuario usuario){
         return usuario.getCpf();
+    }
+
+    @Named("buscarEmail")
+    default String buscarEmail(Usuario usuario){
+        return usuario.getEmail();
     }
 
     @Mapping(target = "id", ignore = true)

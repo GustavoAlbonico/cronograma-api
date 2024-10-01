@@ -197,53 +197,55 @@ VALUES
 
   (5,16); --CRONOGRAMA_CONTROLLER   -- ALUNOS
 
+
+
 -- USUÁRIO
 INSERT INTO usuario
-  (cpf, senha, nome)
+  (email ,cpf, senha, nome)
 VALUES
-    ('99999999999', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'ADMINISTRADOR'),-- ADMIN
-    ('12385484901', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Moda coordenador'), --2 -- COORD
+    ('admin.valga@example.com','99999999999', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'ADMINISTRADOR'),-- ADMIN
+    ('coordenadormoda.valga@example.com','12385484901', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Moda coordenador'), --2 -- COORD
 
-    ('12345678901', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Gabriel Valga'), --3
-    ('23456789012', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Marina Casagrande'), --4
-    ('34567890123', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Endy Carlos'), --5
-    ('45678901234', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Débora Volpato'), --6
-    ('56789012345', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Josiane Minato'), --7
-    ('67890123456', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Lavinia Maccari'), --8
-    ('78901234567', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Fabiano Reis'), --9
-    ('89012345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Maria Matias'), --10
-    ('90123456789', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Polyane Reis'), --11
-    ('01234567890', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Ellen Fabrini'), --12
-    ('12345566000', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Eduardo Ribeiro'), --13
-    ('01234501010', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Katiane Araújo'), --14     --PROF
-    ('01010167890', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Josilene Della'), --15
-    ('23456789013', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Dayana Ricken'), --16
-    ('34567890124', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Fernando Gabriel'), --17
-    ('45678901235', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Marcelo Mazon'), --18
-    ('56789012346', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Christine Vieira'), --19
-    ('67890123457', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Jossuan Diniz'), --20
-    ('30067890123', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Daniel Goulart'), --21
-    ('45008901234', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Rogério Cortina'), --22
-    ('56009012345', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Muriel Bernhardt'), --23
-    ('67012012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Roberto Fermino Medeiros'), --24
-    ('67007799056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Jorge Henrique da Silva Naspolini'), --25
-    ('00012012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Roni Edson dos Santos'), --26
-    ('11012012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Bruno Kurzawe'), --27
-    ('67011012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Liliane Fernandes'), --28
-    ('62222012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Cledemilson dos Santos'), --29
+    ('gabriel.valga@example.com', '12345678901', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Gabriel Valga'), --3
+    ('marina.casagrande@example.com', '23456789012', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Marina Casagrande'), --4
+    ('endy.carlos@example.com', '34567890123', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Endy Carlos'), --5
+    ('debora.volpato@example.com', '45678901234', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Débora Volpato'), --6
+    ('josiane.minato@example.com', '56789012345', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Josiane Minato'), --7
+    ('lavinia.maccari@example.com', '67890123456', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Lavinia Maccari'), --8
+    ('fabiano.reis@example.com', '78901234567', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Fabiano Reis'), --9
+    ('maria.matias@example.com', '89012345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Maria Matias'), --10
+    ('polyane.reis@example.com', '90123456789', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Polyane Reis'), --11
+    ('ellen.fabrini@example.com', '01234567890', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Ellen Fabrini'), --12
+    ('eduardo.ribeiro@example.com', '12345566000', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Eduardo Ribeiro'), --13
+    ('katiane.araujo@example.com', '01234501010', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Katiane Araújo'), --14
+    ('josilene.della@example.com', '01010167890', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Josilene Della'), --15
+    ('dayana.ricken@example.com', '23456789013', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Dayana Ricken'), --16
+    ('fernando.gabriel@example.com', '34567890124', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Fernando Gabriel'), --17
+    ('marcelo.mazon@example.com', '45678901235', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Marcelo Mazon'), --18
+    ('christine.vieira@example.com', '56789012346', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Christine Vieira'), --19
+    ('jossuan@example.com', '67890123457', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Jossuan Diniz'), --20
+    ('daniel.goulart@example.com', '30067890123', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Daniel Goulart'), --21
+    ('rogerio.cortina@example.com', '45008901234', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Rogério Cortina'), --22
+    ('muriel.benhardt@example.com', '56009012345', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Muriel Bernhardt'), --23
+    ('roberto.medeiros@example.com', '67012012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Roberto Fermino Medeiros'), --24
+    ('jorge.henrique.silva@example.com', '67007799056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Jorge Henrique da Silva Naspolini'), --25
+    ('roni.edson@example.com', '00012012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Roni Edson dos Santos'), --26
+    ('bruno.kurzawe@example.com', '11012012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Bruno Kurzawe'), --27
+    ('liliane.fernandes@example.com', '67011012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Liliane Fernandes'), --28
+    ('cledemilson.santos@example.com', '62222012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Cledemilson dos Santos'), --29
 
-    ('67012014456', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Lucas Bonfante Rebelo'), --30 --COORDE PROF
+    ('lucas.bonfanteprofessor@example.com', '67012014456', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Lucas Bonfante Rebelo'), --30 --COORDE PROF
 
-    ('88012345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Felipe Soares'), --31
-    ('99012345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Ana Clara Lima'), --32
-    ('11112345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Rodrigo Araujo'), --33
-    ('22212345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Juliana Mendes'), --34
-    ('33312345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Beatriz Souza'), --35 --ALUNOS
-    ('44412345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Caio Pereira'), --36
-    ('55512345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Luana Martins'), --37
-    ('66612345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Mateus Silva'), --38
-    ('77712345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Isabella Farias'), --39
-    ('88812345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'João Pedro Ribeiro'); --40
+    ('felipe.soares@email.com', '88012345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Felipe Soares'), --31
+    ('ana.clara.lima@email.com', '99012345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Ana Clara Lima'), --32
+    ('rodrigo.araujo@email.com', '11112345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Rodrigo Araujo'), --33
+    ('juliana.mendes@email.com', '22212345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Juliana Mendes'), --34
+    ('beatriz.souza@email.com', '33312345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Beatriz Souza'), --35
+    ('caio.pereira@email.com', '44412345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Caio Pereira'), --36  --ALUNO
+    ('luana.martins@email.com', '55512345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Luana Martins'), --37
+    ('mateus.silva@email.com', '66612345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Mateus Silva'), --38
+    ('isabella.farias@email.com', '77712345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Isabella Farias'), --39
+    ('joao.pedro.ribeiro@email.com', '88812345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'João Pedro Ribeiro'); --40
 
 INSERT INTO  usuario_nivel_acesso
   (nivel_acesso_id, usuario_id)
@@ -294,36 +296,36 @@ VALUES
 
  --PROFESSOR
 INSERT INTO professor
- (email, telefone, usuario_id)
+ (telefone, usuario_id)
 VALUES
-    ('gabriel.valga@example.com', '48996212844', 3), --3
-    ('marina.casagrande@example.com', '48996212954', 4), --4
-    ('endy.carlos@example.com', '48996212844', 5), --5
-    ('debora.volpato@example.com', '48996212954', 6), --6
-    ('josiane.minato@example.com', '48996212954', 7), --7
-    ('lavinia.maccari@example.com', '48997554040', 8), --8
-    ('fabiano.reis@example.com',  '48996508090', 9), --9
-    ('maria.matias@example.com', '45995709000', 10), --10
-    ('polyane.reis@example.com',  '45995709001', 11), --11
-    ('ellen.fabrini@example.com', '44994700610', 12), --12
-    ('eduardo.ribeiro@example.com',  '44994700611', 13), --13
-    ('katiane.araujo@example.com', '44994700610', 14), --14
-    ('josilene.della@example.com',  '44994700610', 15), --15
-    ('dayana.ricken@example.com', '44994700612', 16), --16
-    ('fernando.gabriel@example.com',  '44994700613', 17), --17
-    ('marcelo.mazon@example.com', '44994700614', 18), --18
-    ('christine.vieira@example.com', '44994700615', 19), --19
-    ('jossuan@example.com', '44994700616', 20), --20
-    ('daniel.goulart@example.com', '44994700613', 21), --21
-    ('rogerio.cortina@example.com','44994700614', 22), --22
-    ('muriel.benhardt@example.com', '44994700615', 23), --23
-    ('roberto.medeiros@example.com','44994700616', 24), --24
-    ('jorge.henrique.silva@example.com','44994700616', 25), --25
-    ('roni.edson@example.com','44994700616', 26), --26
-    ('bruno.kurzawe@example.com','44994700616', 27), --27
-    ('liliane.fernandes@example.com', '44994700616', 28), --28
-    ('cledemilson.santos@example.com', '44994700616', 29), --29
-    ('lucas.bonfanteprofessor@example.com','44994700616', 30); --30
+    ('48996212844', 3), --3
+    ('48996212954', 4), --4
+    ('48996212844', 5), --5
+    ('48996212954', 6), --6
+    ('48996212954', 7), --7
+    ('48997554040', 8), --8
+    ('48996508090', 9), --9
+    ('45995709000', 10), --10
+    ('45995709001', 11), --11
+    ('44994700610', 12), --12
+    ('44994700611', 13), --13
+    ('44994700610', 14), --14
+    ('44994700610', 15), --15
+    ('44994700612', 16), --16
+    ('44994700613', 17), --17
+    ('44994700614', 18), --18
+    ('44994700615', 19), --19
+    ('44994700616', 20), --20
+    ('44994700613', 21), --21
+    ('44994700614', 22), --22
+    ('44994700615', 23), --23
+    ('44994700616', 24), --24
+    ('44994700616', 25), --25
+    ('44994700616', 26), --26
+    ('44994700616', 27), --27
+    ('44994700616', 28), --28
+    ('44994700616', 29), --29
+    ('44994700616', 30); --30
 
 -- DIA DA SEMANA DISPONIVEL
 INSERT INTO dia_semana_disponivel
@@ -439,10 +441,10 @@ VALUES
 
 --COORDENADOR
 INSERT INTO coordenador
-  (email, telefone, usuario_id)
+  (telefone, usuario_id)
 VALUES
-  ('teste@hotmail.com.br','48595962856', 2),
-  ('lucas.bonfanteprofessor@example.com','44994700616', 30);
+  ('48595962856', 2),
+  ('44994700616', 30);
 
 --FASE
 INSERT INTO fase
@@ -558,19 +560,19 @@ VALUES
 
 --ALUNO
 INSERT INTO aluno
-  (email, telefone, usuario_id, curso_id)
+  (telefone, usuario_id, curso_id)
 VALUES
-  ('felipe.soares@email.com', '11987654321', 31, 1), -- Felipe Soares
-  ('ana.clara.lima@email.com', '11987654322', 32, 1), -- Ana Clara Lima
-  ('rodrigo.araujo@email.com', '11987654323', 33, 1), -- Rodrigo Araujo --MODA
-  ('juliana.mendes@email.com', '11987654324', 34, 1), -- Juliana Mendes
-  ('beatriz.souza@email.com', '11987654325', 35, 1), -- Beatriz Souza
+  ('11987654321', 31, 1), -- Felipe Soares
+  ('11987654322', 32, 1), -- Ana Clara Lima
+  ('11987654323', 33, 1), -- Rodrigo Araujo --MODA
+  ('11987654324', 34, 1), -- Juliana Mendes
+  ('11987654325', 35, 1), -- Beatriz Souza
 
-  ('caio.pereira@email.com', '11987654326', 36, 2), -- Caio Pereira
-  ('luana.martins@email.com', '11987654327', 37, 2), -- Luana Martins
-  ('mateus.silva@email.com', '11987654328', 38, 2), -- Mateus Silva -- ADS
-  ('isabella.farias@email.com', '11987654329', 39, 2), -- Isabella Farias
-  ('joao.pedro.ribeiro@email.com', '11987654330', 40, 2); -- João Pedro Ribeiro
+  ('11987654326', 36, 2), -- Caio Pereira
+  ('11987654327', 37, 2), -- Luana Martins
+  ('11987654328', 38, 2), -- Mateus Silva -- ADS
+  ('11987654329', 39, 2), -- Isabella Farias
+  ('11987654330', 40, 2); -- João Pedro Ribeiro
 
 --ALUNO_FASE
 INSERT INTO  aluno_fase

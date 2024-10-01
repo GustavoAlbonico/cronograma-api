@@ -1,5 +1,6 @@
 package com.cronograma.api.useCases.professor;
 
+import com.cronograma.api.entitys.Coordenador;
 import com.cronograma.api.entitys.Professor;
 import com.cronograma.api.entitys.Usuario;
 import com.cronograma.api.entitys.enums.StatusEnum;
@@ -10,6 +11,7 @@ import com.cronograma.api.useCases.professor.domains.ProfessorResponseDom;
 import com.cronograma.api.useCases.professor.domains.ProfessorUsuarioRequestDom;
 import com.cronograma.api.useCases.professor.implement.mappers.ProfessorMapper;
 import com.cronograma.api.useCases.professor.implement.mappers.ProfessorPaginacaoMapper;
+import com.cronograma.api.useCases.professor.implement.repositorys.ProfessorCoordenadorRepository;
 import com.cronograma.api.useCases.professor.implement.repositorys.ProfessorDisciplinaRepository;
 import com.cronograma.api.useCases.professor.implement.repositorys.ProfessorRepository;
 import com.cronograma.api.useCases.professor.implement.repositorys.ProfessorUsuarioRepository;
@@ -33,6 +35,7 @@ public class ProfessorService {
     private final ProfessorRepository professorRepository;
     private final ProfessorUsuarioRepository professorUsuarioRepository;
     private final ProfessorDisciplinaRepository professorDisciplinaRepository;
+    private final ProfessorCoordenadorRepository professorCoordenadorRepository;
 
     private final ProfessorMapper professorMapper;
     private final ProfessorPaginacaoMapper professorPaginacaoMapper;
@@ -62,7 +65,7 @@ public class ProfessorService {
 
     @Transactional
     public void criarProfessor(ProfessorRequestDom professorRequestDom){
-        validarCamposCriar(professorRequestDom);
+        validarCampos(professorRequestDom, null);
 
         ProfessorUsuarioRequestDom professorUsuarioRequestDom =
                 professorMapper.professorRequestDomParaProfessorUsuarioRequestDom(professorRequestDom);
@@ -77,7 +80,7 @@ public class ProfessorService {
         Professor professorEncontrado = professorRepository.findById(id)
                 .orElseThrow(() -> new ProfessorException("Nenhum professor encontrado!"));
 
-        validarCamposEditar(professorRequestDom,professorEncontrado);
+        validarCampos(professorRequestDom,professorEncontrado.getUsuario().getCpf());
 
         ProfessorUsuarioRequestDom professorUsuarioRequestDom =
                 professorMapper.professorRequestDomParaProfessorUsuarioRequestDom(professorRequestDom);
@@ -85,6 +88,13 @@ public class ProfessorService {
 
         usuarioService.editarUsuario(professorEncontrado.getUsuario().getId(),professorUsuarioRequestDom);
         professorRepository.save(professorEncontrado);
+    }
+
+    public void associarProfessor(Long coordenadorId){
+        Coordenador coordenadorEncontrado = professorCoordenadorRepository.findById(coordenadorId)
+                .orElseThrow(() -> new ProfessorException("Nenhum coordenador encontrado!"));
+
+
     }
 
     public void inativarProfessor(Long id){
@@ -114,7 +124,7 @@ public class ProfessorService {
         }
     }
 
-    private void validarCamposCriar(ProfessorRequestDom professor){
+    private void validarCampos(ProfessorRequestDom professor, String cpfAtual){
         List<String> errorMessages =  new ArrayList<>();
 
         if(professor.getNome() == null || professor.getNome().isBlank()){
@@ -125,29 +135,17 @@ public class ProfessorService {
             errorMessages.add("Cpf é um campo obrigatório!");
         } else if(RegexUtil.retornarNumeros(professor.getCpf()).length() != 11){
             errorMessages.add("Cpf inválido!");
+        } else if (cpfAtual != null){
+            if (
+                !RegexUtil.retornarNumeros(professor.getCpf()).equals(cpfAtual) &&
+                professorUsuarioRepository.existsByCpf(RegexUtil.retornarNumeros(professor.getCpf()))
+            ) {
+                errorMessages.add("Cpf já está sendo utilizado!");
+            }
         } else if (professorUsuarioRepository.existsByCpf(RegexUtil.retornarNumeros(professor.getCpf()))) {
             errorMessages.add("Cpf já está sendo utilizado!");
         }
 
-        if(professor.getSenha() == null || professor.getSenha().isBlank()){
-            errorMessages.add("Senha é um campo obrigatório!");
-        } else {
-
-            if(professor.getSenha().length() < 8){
-                errorMessages.add("Senha precisa conter no minimo 8 caracteres!");
-            }
-            if(!RegexUtil.existeCaracterEspecial(professor.getSenha())){
-                errorMessages.add("Senha precisa conter no minimo 1 caracter especial!");
-            }
-            if(!RegexUtil.existeLetraMaiuscula(professor.getSenha())){
-                errorMessages.add("Senha precisa conter no minimo 1 letra maiuscula!");
-            }
-            if(!RegexUtil.existeNumero(professor.getSenha())){
-                errorMessages.add("Senha precisa conter no minimo minimo 1 número!");
-            }
-
-        }
-
         if(professor.getEmail() == null || professor.getEmail().isBlank()){
             errorMessages.add("E-mail é um campo obrigatório!");
         } else if (!RegexUtil.validarEmail(professor.getEmail())) {
@@ -156,42 +154,11 @@ public class ProfessorService {
 
         if(professor.getTelefone() == null || RegexUtil.retornarNumeros(professor.getTelefone()).isBlank()){
             errorMessages.add("Telefone é um campo obrigatório!");
-        }else if(RegexUtil.retornarNumeros(professor.getTelefone()).length() > 50){
-            errorMessages.add("Telefone inválido!");
-        }
-
-        if(!errorMessages.isEmpty()){
-            throw new ProfessorException(errorMessages);
-        }
-    }
-
-    private void validarCamposEditar(ProfessorRequestDom professor,Professor professorEncontrado){
-        List<String> errorMessages =  new ArrayList<>();
-
-        if(professor.getNome() == null || professor.getNome().isBlank()){
-            errorMessages.add("Nome é um campo obrigatório!");
-        }
-
-        if(professor.getCpf() == null || RegexUtil.retornarNumeros(professor.getCpf()).isBlank()){
-            errorMessages.add("Cpf é um campo obrigatório!");
-        } else if(RegexUtil.retornarNumeros(professor.getCpf()).length() != 11){
-            errorMessages.add("Cpf inválido!");
-        } else if (
-            !RegexUtil.retornarNumeros(professor.getCpf()).equals(professorEncontrado.getUsuario().getCpf()) &&
-            professorUsuarioRepository.existsByCpf(RegexUtil.retornarNumeros(professor.getCpf()))
-        ) {
-            errorMessages.add("Cpf já está sendo utilizado!");
-        }
-
-        if(professor.getEmail() == null || professor.getEmail().isBlank()){
-            errorMessages.add("E-mail é um campo obrigatório!");
-        } else if (!RegexUtil.validarEmail(professor.getEmail())) {
-            errorMessages.add("E-mail inválido!");
-        }
-
-        if(professor.getTelefone() == null || RegexUtil.retornarNumeros(professor.getTelefone()).isBlank()){
-            errorMessages.add("Telefone é um campo obrigatório!");
-        }else if(RegexUtil.retornarNumeros(professor.getTelefone()).length() > 50){
+        }else if(
+            RegexUtil.retornarNumeros(professor.getTelefone()).length() > 50 ||
+            RegexUtil.retornarNumeros(professor.getTelefone()).length() < 11 ||
+            RegexUtil.retornarNumeros(professor.getTelefone()).charAt(2) != '9'
+        ){
             errorMessages.add("Telefone inválido!");
         }
 

@@ -7,6 +7,9 @@ import java.util.List;
 
 @Getter
 @Setter
-public class UsuarioCadastroRequestDom extends UsuarioRequestDom{
+public class UsuarioCadastroRequestDom{
     private List<Long> niveisAcessoId;
+    private String cpf;
+    private String senha;
+    private String nome;
 }

@@ -50,6 +50,13 @@ public class ProfessorController {
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
+    @PostMapping("/associar/{coordenadorId}")
+    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PROFESSOR_CONTROLLER','ASSOCIAR')")
+    public ResponseEntity<?> associarProfessor(@PathVariable Long coordenadorId){
+        professorService.associarProfessor(coordenadorId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    }
+
     @PutMapping("/editar/{id}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PROFESSOR_CONTROLLER','EDITAR')")
     public ResponseEntity<?> editarProfessor(@PathVariable Long id,@RequestBody ProfessorRequestDom professorRequestDom){

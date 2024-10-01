@@ -49,7 +49,7 @@ public class CoordenadorService {
 
     @Transactional
     public void criarCoordenador(CoordenadorRequestDom coordenadorRequestDom){
-        validarCamposCriar(coordenadorRequestDom);
+        validarCampos(coordenadorRequestDom,null);
 
         CoordenadorUsuarioRequestDom coordenadorUsuarioRequestDom =
                 coordenadorMapper.coordenadorRequestDomParaCoordenadorUsuarioRequestDom(coordenadorRequestDom);
@@ -64,7 +64,7 @@ public class CoordenadorService {
         Coordenador coordenadorEncontrado = coordenadorRepository.findById(id)
                 .orElseThrow(() -> new CoordenadorException("Nenhum coordenador encontrado!"));
 
-        validarCamposEditar(coordenadorRequestDom,coordenadorEncontrado);
+        validarCampos(coordenadorRequestDom,coordenadorEncontrado.getUsuario().getCpf());
 
         CoordenadorUsuarioRequestDom coordenadorUsuarioRequestDom =
                 coordenadorMapper.coordenadorRequestDomParaCoordenadorUsuarioRequestDom(coordenadorRequestDom);
@@ -90,7 +90,7 @@ public class CoordenadorService {
         }
     }
     
-    private void validarCamposCriar(CoordenadorRequestDom coordenador){
+    private void validarCampos(CoordenadorRequestDom coordenador, String cpfAtual){
         List<String> errorMessages =  new ArrayList<>();
 
         if(coordenador.getNome() == null || coordenador.getNome().isBlank()){
@@ -101,29 +101,17 @@ public class CoordenadorService {
             errorMessages.add("Cpf é um campo obrigatório!");
         } else if(RegexUtil.retornarNumeros(coordenador.getCpf()).length() != 11){
             errorMessages.add("Cpf inválido!");
+        }else if (cpfAtual != null){
+            if (
+                !RegexUtil.retornarNumeros(coordenador.getCpf()).equals(cpfAtual) &&
+                coordenadorUsuarioRepository.existsByCpf(RegexUtil.retornarNumeros(coordenador.getCpf()))
+            ) {
+                errorMessages.add("Cpf já está sendo utilizado!");
+            }
         } else if (coordenadorUsuarioRepository.existsByCpf(RegexUtil.retornarNumeros(coordenador.getCpf()))) {
             errorMessages.add("Cpf já está sendo utilizado!");
         }
 
-        if(coordenador.getSenha() == null || coordenador.getSenha().isBlank()){
-            errorMessages.add("Senha é um campo obrigatório!");
-        } else {
-
-            if(coordenador.getSenha().length() < 8){
-                errorMessages.add("Senha precisa conter no minimo 8 caracteres!");
-            }
-            if(!RegexUtil.existeCaracterEspecial(coordenador.getSenha())){
-                errorMessages.add("Senha precisa conter no minimo 1 caracter especial!");
-            }
-            if(!RegexUtil.existeLetraMaiuscula(coordenador.getSenha())){
-                errorMessages.add("Senha precisa conter no minimo 1 letra maiuscula!");
-            }
-            if(!RegexUtil.existeNumero(coordenador.getSenha())){
-                errorMessages.add("Senha precisa conter no minimo minimo 1 número!");
-            }
-
-        }
-
         if(coordenador.getEmail() == null || coordenador.getEmail().isBlank()){
             errorMessages.add("E-mail é um campo obrigatório!");
         } else if (!RegexUtil.validarEmail(coordenador.getEmail())) {
@@ -132,7 +120,11 @@ public class CoordenadorService {
 
         if(coordenador.getTelefone() == null || RegexUtil.retornarNumeros(coordenador.getTelefone()).isBlank()){
             errorMessages.add("Telefone é um campo obrigatório!");
-        }else if(RegexUtil.retornarNumeros(coordenador.getTelefone()).length() > 50){
+        }else if(
+             RegexUtil.retornarNumeros(coordenador.getTelefone()).length() > 50 ||
+             RegexUtil.retornarNumeros(coordenador.getTelefone()).length() < 11 ||
+             RegexUtil.retornarNumeros(coordenador.getTelefone()).charAt(2) != '9'
+        ){
             errorMessages.add("Telefone inválido!");
         }
         
@@ -140,41 +132,6 @@ public class CoordenadorService {
             throw new CoordenadorException(errorMessages);
         }
         
-    }
-    private void validarCamposEditar(CoordenadorRequestDom coordenador,Coordenador coordenadorEncontrado){
-        List<String> errorMessages =  new ArrayList<>();
-
-        if(coordenador.getNome() == null || coordenador.getNome().isBlank()){
-            errorMessages.add("Nome é um campo obrigatório!");
-        }
-
-        if(coordenador.getCpf() == null || RegexUtil.retornarNumeros(coordenador.getCpf()).isBlank()){
-            errorMessages.add("Cpf é um campo obrigatório!");
-        } else if(RegexUtil.retornarNumeros(coordenador.getCpf()).length() != 11){
-            errorMessages.add("Cpf inválido!");
-        } else if (
-            !RegexUtil.retornarNumeros(coordenador.getCpf()).equals(coordenadorEncontrado.getUsuario().getCpf()) &&
-            coordenadorUsuarioRepository.existsByCpf(RegexUtil.retornarNumeros(coordenador.getCpf()))
-        ) {
-            errorMessages.add("Cpf já está sendo utilizado!");
-        }
-
-        if(coordenador.getEmail() == null || coordenador.getEmail().isBlank()){
-            errorMessages.add("E-mail é um campo obrigatório!");
-        } else if (!RegexUtil.validarEmail(coordenador.getEmail())) {
-            errorMessages.add("E-mail inválido!");
-        }
-
-        if(coordenador.getTelefone() == null || RegexUtil.retornarNumeros(coordenador.getTelefone()).isBlank()){
-            errorMessages.add("Telefone é um campo obrigatório!");
-        }else if(RegexUtil.retornarNumeros(coordenador.getTelefone()).length() > 50){
-            errorMessages.add("Telefone inválido!");
-        }
-
-        if(!errorMessages.isEmpty()){
-            throw new CoordenadorException(errorMessages);
-        }
-
     }
 
 }

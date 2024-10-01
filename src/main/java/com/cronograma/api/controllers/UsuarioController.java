@@ -3,14 +3,13 @@ package com.cronograma.api.controllers;
 import com.cronograma.api.useCases.usuario.UsuarioService;
 import com.cronograma.api.useCases.usuario.domains.UsuarioCadastroRequestDom;
 import com.cronograma.api.useCases.usuario.domains.UsuarioLoginRequestDom;
+import com.cronograma.api.useCases.usuario.domains.UsuarioRedefinirSenhaRequestDom;
 import com.cronograma.api.useCases.usuario.domains.UsuarioResponseDom;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/usuario")
@@ -21,7 +20,7 @@ public class UsuarioController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UsuarioLoginRequestDom usuarioLoginRequestDom){
-        UsuarioResponseDom response =  usuarioService.login(usuarioLoginRequestDom);
+        UsuarioResponseDom response = usuarioService.login(usuarioLoginRequestDom);
         return ResponseEntity.ok(response);
     }
 
@@ -30,6 +29,23 @@ public class UsuarioController {
     public ResponseEntity<?> cadastro(@RequestBody UsuarioCadastroRequestDom usuarioRequestDom){
         UsuarioResponseDom response =  usuarioService.cadastro(usuarioRequestDom);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/esqueciminhasenha/{cpf}")
+    public ResponseEntity<?> esqueciMinhaSenha(@PathVariable String cpf) throws MessagingException {
+        usuarioService.esqueciMinhaSenha(cpf);
+        return ResponseEntity.ok(null);
+    }
+
+    @PostMapping("/redefinirsenha/validartoken")
+    public ResponseEntity<?> redefinirSenhaValidarToken() {
+        return ResponseEntity.ok(null);
+    }
+
+    @PutMapping("/redefinirsenha")
+    public ResponseEntity<?> redefinirsenha(@RequestBody UsuarioRedefinirSenhaRequestDom UsuarioRedefinirSenhaRequestDom) {
+        usuarioService.redefinirsenha(UsuarioRedefinirSenhaRequestDom);
+        return ResponseEntity.ok(null);
     }
 
 }

@@ -6,11 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CoordenadorRequestDom {
-
     private String cpf;
     private String nome;
-    private String senha;
     private String telefone;
     private String email;
-
 }

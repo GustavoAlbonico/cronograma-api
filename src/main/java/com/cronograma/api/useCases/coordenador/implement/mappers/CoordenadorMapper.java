@@ -37,17 +37,22 @@ public interface CoordenadorMapper {
         coordenador.setUsuario(usuario);
     }
 
-    @Mapping(source = "usuario",target = "nome", qualifiedByName = "buscaNome")
-    @Mapping(source = "usuario",target = "cpf", qualifiedByName = "buscaCpf")
+    @Mapping(source = "usuario",target = "nome", qualifiedByName = "buscarNome")
+    @Mapping(source = "usuario",target = "cpf", qualifiedByName = "buscarCpf")
+    @Mapping(source = "usuario",target = "email", qualifiedByName = "buscarEmail")
     CoordenadorResponseDom coordenadorParaCoordenadorResponseDom(Coordenador coordenador);
 
-    @Named("buscaNome")
-    default String buscaNome(Usuario usuario){
+    @Named("buscarNome")
+    default String buscarNome(Usuario usuario){
         return usuario.getNome();
     }
+    @Named("buscarEmail")
+    default String buscarEmail(Usuario usuario){
+        return usuario.getEmail();
+    }
 
-    @Named("buscaCpf")
-    default String buscaCpf(Usuario usuario){
+    @Named("buscarCpf")
+    default String buscarCpf(Usuario usuario){
         return usuario.getCpf();
     }
 
