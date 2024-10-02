@@ -36,7 +36,7 @@ VALUES
   ('CARREGAR_ATIVO', 'Busca todos os dados ativos'),--8
   ('ASSOCIAR', 'associa um coordenador a um professor'),--9
   ('CARREGAR_POR_ID', 'carregar uma informação pelo id'),--10
-  ('FORMULARIO_DIA_SEMANA_DISPONIVEL', 'envia um formulario com os dias da semana disponiveis'),--11
+  ('FORMULARIO', 'envia um formulario com os dias da semana disponiveis relacionado ao professor'),--11
   ('EDITAR_EMAIL', 'edita o email'),--12
   ('REDEFINIR_SENHA', 'redefine a senha'),--13
   ('VALIDAR_TOKEN_REDEFINIR_SENHA', 'valida o token para redefinição da senha'), --14
@@ -46,7 +46,7 @@ VALUES
 INSERT INTO controller
   (nome,descricao)
 VALUES
-  ('USUARIO_CONTROLLER',null),--1
+  ('USUARIO_CONTROLLER','ADMINISTRADOR'),--1
   ('PROFESSOR_CONTROLLER',null),--2
   ('COORDENADOR_CONTROLLER',null),--3
   ('ALUNO_CONTROLLER',null),--4
@@ -63,13 +63,16 @@ VALUES
   ('PROFESSOR_CONTROLLER','personalizado para professores'),--14
   ('CRONOGRAMA_CONTROLLER','personalizado para professores'),--15
 
-  ('CRONOGRAMA_CONTROLLER','personalizado para alunos');--16
+  ('CRONOGRAMA_CONTROLLER','personalizado para alunos'),--16
+
+  ('USUARIO_CONTROLLER','todos os usuarios tirando o administrador');--17
 
 --CONTROLLER_FUNCIONALIDADE
 INSERT INTO  controller_funcionalidade
   (controller_id, funcionalidade_id)
 VALUES
   (1,1),--CRIAR --USUARIO
+  (1,13),--REDEFINIR_SENHA
 
   (2,1),--CRIAR
   (2,2),--EDITAR
@@ -136,12 +139,15 @@ VALUES
   (13,2),--EDITAR  --DIA_CRONOGRAMA_CONTROLLER
 ----------
 
-  (14,11),--FORMULARIO_DIA_SEMANA_DISPONIVEL -- PROFESSOR
+  (14,11),--FORMULARIO -- PROFESSOR
 
   (15,3),--CARREGAR  --CRONOGRAMA_CONTROLLER
 
 ------------------
-  (16,3);--CARREGAR  --CRONOGRAMA_CONTROLLER
+  (16,3),--CARREGAR  --CRONOGRAMA_CONTROLLER
+
+  ------------------------
+  (17,13);--REDEFINIR_SENHA --USUARIO_CONTROLLER
 
 --NIVEL ACESSO
 INSERT INTO nivel_acesso
@@ -182,6 +188,7 @@ VALUES
   (2,11), --HISTORICO_CONTROLLER
   (2,12), --CRONOGRAMA_CONTROLLER
   (2,13), --DIA_CRONOGRAMA_CONTROLLER
+  (2,17), --USUARIO_CONTROLLER
 
   (3,2), --PROFESSOR_CONTROLLER
   (3,4), --ALUNO_CONTROLLER
@@ -191,11 +198,14 @@ VALUES
   (3,11), --HISTORICO_CONTROLLER
   (3,12), --CRONOGRAMA_CONTROLLER
   (3,13), --DIA_CRONOGRAMA_CONTROLLER
+  (3,17), --USUARIO_CONTROLLER
 
-  (4,14), --PROFESSOR_CONTROLLER    --PROFESSOR
-  (4,15), --CRONOGRAMA_CONTROLLER
+  (4,14), --PROFESSOR_CONTROLLER
+  (4,15), --CRONOGRAMA_CONTROLLER --PROFESSOR
+  (4,17), --USUARIO_CONTROLLER
 
-  (5,16); --CRONOGRAMA_CONTROLLER   -- ALUNOS
+  (5,16), --CRONOGRAMA_CONTROLLER   -- ALUNOS
+  (5,17); --USUARIO_CONTROLLER
 
 
 
@@ -327,107 +337,116 @@ VALUES
     ('44994700616', 29), --29
     ('44994700616', 30); --30
 
--- DIA DA SEMANA DISPONIVEL
-INSERT INTO dia_semana_disponivel
-  (dia_semana_enum, professor_id)
+INSERT INTO  dia_semana_disponivel
+  (dia_semana_enum)
+VALUES
+  ('SEGUNDA_FEIRA'),
+  ('TERCA_FEIRA'),
+  ('QUARTA_FEIRA'),
+  ('QUINTA_FEIRA'),
+  ('SEXTA_FEIRA'),
+  ('SABADO');
+
+INSERT INTO
+  professor_dia_semana_disponivel
+  (dia_semana_disponivel_id, professor_id)
 VALUES
 --moda
-   ('SEGUNDA_FEIRA', 1),
-   ('TERCA_FEIRA', 1),
-   ('QUINTA_FEIRA', 1), --Gabriel Valga
-   ('SABADO', 1),
+  (1, 1),  -- SEGUNDA_FEIRA
+  (2, 1),  -- TERCA_FEIRA
+  (4, 1),  -- QUINTA_FEIRA --Gabriel Valga
+  (6, 1),  -- SABADO
 
-  ('SEGUNDA_FEIRA', 2), --Marina Casagrande
+  (1, 2),  -- SEGUNDA_FEIRA --Marina Casagrande
 
-  ('TERCA_FEIRA', 3),
-  ('QUINTA_FEIRA', 3), --Endy Carlos
-  ('SEXTA_FEIRA', 3),
+  (2, 3),  -- TERCA_FEIRA
+  (4, 3),  -- QUINTA_FEIRA --Endy Carlos
+  (5, 3),  -- SEXTA_FEIRA
 
-  ('QUARTA_FEIRA', 4), --Débora Volpato
+  (3, 4),  -- QUARTA_FEIRA --Débora Volpato
 
-  ('QUINTA_FEIRA', 5), --Josiane Minato
-  ('SEXTA_FEIRA', 5),
+  (4, 5),  -- QUINTA_FEIRA
+  (5, 5),  -- SEXTA_FEIRA --Josiane Minato
 
-  ('TERCA_FEIRA', 6), --Lavinia Maccari
-  ('QUINTA_FEIRA', 6),
+  (2, 6),  -- TERCA_FEIRA --Lavinia Maccari
+  (4, 6),  -- QUINTA_FEIRA
 
-  ('SEGUNDA_FEIRA', 7), --Fabiano Reis
-  ('SEXTA_FEIRA', 7),
-  ('QUARTA_FEIRA', 7),--dataex
+  (1, 7),  -- SEGUNDA_FEIRA
+  (5, 7),  -- SEXTA_FEIRA --Fabiano Reis
+  (3, 7),  -- QUARTA_FEIRA --dataex
 
-  ('TERCA_FEIRA', 8), --Maria Matias
-  ('QUARTA_FEIRA', 8), --dataex
+  (2, 8),  -- TERCA_FEIRA --Maria Matias
+  (3, 8),  -- QUARTA_FEIRA --dataex
 
-  ('QUARTA_FEIRA', 9), --Polyane Reis
+  (3, 9),  -- QUARTA_FEIRA --Polyane Reis
 
-  ('TERCA_FEIRA', 10),
-  ('QUINTA_FEIRA', 10), --Ellen Fabrini
-  ('SABADO', 10), --dataex
+  (2, 10), -- TERCA_FEIRA
+  (4, 10), -- QUINTA_FEIRA --Ellen Fabrini
+  (6, 10), -- SABADO  --dataex
 
-  ('SEXTA_FEIRA', 11), --Eduardo Ribeiro
-  ('QUINTA_FEIRA', 11), --dataex
+  (5, 11), -- SEXTA_FEIRA --Eduardo Ribeiro
+  (4, 11), -- QUINTA_FEIRA --dataex
 
-  ('QUARTA_FEIRA', 12), --Katiane Araújo
-  ('SABADO', 12), --dataex
+  (3, 12), -- QUARTA_FEIRA --Katiane Araújo
+  (6, 12), -- SABADO --dataex
 
-  ('SEXTA_FEIRA', 13), --Josilene Della
-  ('SABADO', 13), --dataex
+  (5, 13), -- SEXTA_FEIRA --Josilene Della
+  (6, 13), -- SABADO --dataex
 
     --VARIOS CURSOS
-  ('SEGUNDA_FEIRA', 14),
-  ('TERCA_FEIRA', 14),--Dayana Ricken
-  ('QUINTA_FEIRA', 14),
-  ('SABADO', 14),
+  (1, 14), -- SEGUNDA_FEIRA
+  (2, 14), -- TERCA_FEIRA --Dayana Ricken
+  (4, 14), -- QUINTA_FEIRA
+  (6, 14), -- SABADO
 
-   --ADS
+  --ADS
 
-  ('SEGUNDA_FEIRA', 15), --Fernando Gabriel
-  ('QUARTA_FEIRA', 15),
-  ('QUINTA_FEIRA', 15),--dataex
+  (1, 15), -- SEGUNDA_FEIRA  --Fernando Gabriel
+  (3, 15), -- QUARTA_FEIRA
+  (4, 15), -- QUINTA_FEIRA --dataex
 
-  ('TERCA_FEIRA', 16),
-  ('SEGUNDA_FEIRA', 16), --Marcelo Mazon
-  ('SEXTA_FEIRA', 16),
-  ('SABADO', 16),
+  (2, 16), -- TERCA_FEIRA
+  (1, 16), -- SEGUNDA_FEIRA --Marcelo Mazon
+  (5, 16), -- SEXTA_FEIRA
+  (6, 16), -- SABADO
 
-  ('QUARTA_FEIRA', 17),--Christine Vieira
-  ('SEXTA_FEIRA', 17),
-  ('QUINTA_FEIRA', 17), --dataex
+  (3, 17), -- QUARTA_FEIRA
+  (5, 17), -- SEXTA_FEIRA --Christine Vieira
+  (4, 17), -- QUINTA_FEIRA --dataex
 
-  ('SEGUNDA_FEIRA', 18),--Jossuan Diniz
-  ('QUINTA_FEIRA', 18),
+  (1, 18), -- SEGUNDA_FEIRA --Jossuan Diniz
+  (4, 18), -- QUINTA_FEIRA
 
-  ('SEGUNDA_FEIRA', 19),--Daniel Goulart
-  ('TERCA_FEIRA', 19),
+  (1, 19), -- SEGUNDA_FEIRA --Daniel Goulart
+  (2, 19), -- TERCA_FEIRA
 
-  ('SEGUNDA_FEIRA', 20),--Rogério Cortina
-  ('TERCA_FEIRA', 20),
+  (1, 20), -- SEGUNDA_FEIRA --Rogério Cortina
+  (2, 20), -- TERCA_FEIRA
 
-  ('QUARTA_FEIRA', 21),
-  ('QUINTA_FEIRA', 21), --Muriel Bernhardt
-  ('SEXTA_FEIRA', 21),
+  (3, 21), -- QUARTA_FEIRA
+  (4, 21), -- QUINTA_FEIRA --Muriel Bernhardt
+  (5, 21), -- SEXTA_FEIRA
 
-  ('TERCA_FEIRA', 22),
-  ('QUARTA_FEIRA', 22),
-  ('QUINTA_FEIRA',22), --Roberto Fermino Medeiros
-  ('SEXTA_FEIRA', 22),
-  ('SABADO',22),
+  (2, 22), -- TERCA_FEIRA
+  (3, 22), -- QUARTA_FEIRA --Roberto Fermino Medeiros
+  (4, 22), -- QUINTA_FEIRA
+  (5, 22), -- SEXTA_FEIRA
+  (6, 22), -- SABADO
 
-  ('QUARTA_FEIRA', 23),-- Jorge Henrique da Silva Naspolini
-  ('SEXTA_FEIRA', 23),
-  ('QUINTA_FEIRA', 23),--dataex
+  (3, 23), -- QUARTA_FEIRA -- Jorge Henrique da Silva Naspolini
+  (5, 23), -- SEXTA_FEIRA
+  (4, 23), -- QUINTA_FEIRA --dataex
 
-  ('QUINTA_FEIRA', 24),--Roni Edson dos Santos
+  (4, 24), -- QUINTA_FEIRA --Roni Edson dos Santos
 
-  ('SABADO', 25), --Bruno Kurzawe
+  (6, 25), -- SABADO --Bruno Kurzawe
 
-  ('SEGUNDA_FEIRA', 26), --Liliane Fernandes
+  (1, 26), -- SEGUNDA_FEIRA  --Liliane Fernandes
 
-  ('QUINTA_FEIRA', 27), --Cledemilson dos Santos
-  ('SEXTA_FEIRA', 27),
+  (4, 27), -- QUINTA_FEIRA  --Cledemilson dos Santos
+  (5, 27), -- SEXTA_FEIRA
 
-  ('SABADO', 28);--Lucas Bonfante Rebelo
-
+  (6, 28); -- SABADO --Lucas Bonfante Rebelo
 --ADS
 
 -- DATA BLOQUEADA

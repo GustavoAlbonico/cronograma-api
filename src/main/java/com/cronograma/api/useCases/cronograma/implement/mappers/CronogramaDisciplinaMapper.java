@@ -48,6 +48,6 @@ public interface CronogramaDisciplinaMapper {
                 .map(this::diaSemanaDisponivelParaDiaSemanaDisponivelNovaInstancia).collect(Collectors.toSet());
     }
 
-    @Mapping(target = "professor", ignore = true)
+    @Mapping(target = "professores", ignore = true)
     DiaSemanaDisponivel diaSemanaDisponivelParaDiaSemanaDisponivelNovaInstancia(DiaSemanaDisponivel diaSemanaDisponivel);
 }

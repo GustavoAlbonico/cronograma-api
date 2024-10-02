@@ -3,6 +3,8 @@ package com.cronograma.api.useCases.professor.domains;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class ProfessorResponseDom {
@@ -11,4 +13,5 @@ public class ProfessorResponseDom {
     private String nome;
     private String telefone;
     private String email;
+    private List<ProfessorDiaSemanaDisponivelResponseDom> professorDiasSemanaDisponiveisResponseDom;
 }

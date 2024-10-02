@@ -8,10 +8,6 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ProfessorRequestDom {
-    private String cpf;
-    private String nome;
-    private String telefone;
-    private String email;
+public class ProfessorFormularioRequestDom {
     private List<Long> diaSemanaDisponivelIds;
 }

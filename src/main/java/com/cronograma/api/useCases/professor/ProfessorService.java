@@ -1,20 +1,20 @@
 package com.cronograma.api.useCases.professor;
 
 import com.cronograma.api.entitys.Coordenador;
+import com.cronograma.api.entitys.DiaSemanaDisponivel;
 import com.cronograma.api.entitys.Professor;
 import com.cronograma.api.entitys.Usuario;
 import com.cronograma.api.entitys.enums.StatusEnum;
+import com.cronograma.api.exceptions.CoordenadorException;
 import com.cronograma.api.exceptions.FaseException;
 import com.cronograma.api.exceptions.ProfessorException;
+import com.cronograma.api.useCases.professor.domains.ProfessorFormularioRequestDom;
 import com.cronograma.api.useCases.professor.domains.ProfessorRequestDom;
 import com.cronograma.api.useCases.professor.domains.ProfessorResponseDom;
 import com.cronograma.api.useCases.professor.domains.ProfessorUsuarioRequestDom;
 import com.cronograma.api.useCases.professor.implement.mappers.ProfessorMapper;
 import com.cronograma.api.useCases.professor.implement.mappers.ProfessorPaginacaoMapper;
-import com.cronograma.api.useCases.professor.implement.repositorys.ProfessorCoordenadorRepository;
-import com.cronograma.api.useCases.professor.implement.repositorys.ProfessorDisciplinaRepository;
-import com.cronograma.api.useCases.professor.implement.repositorys.ProfessorRepository;
-import com.cronograma.api.useCases.professor.implement.repositorys.ProfessorUsuarioRepository;
+import com.cronograma.api.useCases.professor.implement.repositorys.*;
 import com.cronograma.api.useCases.usuario.UsuarioService;
 import com.cronograma.api.utils.paginacao.PaginacaoRequestUtil;
 import com.cronograma.api.utils.paginacao.PaginacaoResponseUtil;
@@ -36,11 +36,13 @@ public class ProfessorService {
     private final ProfessorUsuarioRepository professorUsuarioRepository;
     private final ProfessorDisciplinaRepository professorDisciplinaRepository;
     private final ProfessorCoordenadorRepository professorCoordenadorRepository;
+    private final ProfessorDiaSemanaDisponivelRepository professorDiaSemanaDisponivelRepository;
 
     private final ProfessorMapper professorMapper;
     private final ProfessorPaginacaoMapper professorPaginacaoMapper;
 
     private final UsuarioService usuarioService;
+
 
     public List<ProfessorResponseDom> carregarProfessorAtivo(){
         List<Professor> professoresEncontrados = professorRepository.findAllByStatusEnum(StatusEnum.ATIVO);
@@ -71,7 +73,15 @@ public class ProfessorService {
                 professorMapper.professorRequestDomParaProfessorUsuarioRequestDom(professorRequestDom);
 
         Usuario usuario = usuarioService.criarUsuario(professorUsuarioRequestDom,"PROFESSOR");
-        Professor professor = professorMapper.professorRequestDomParaProfessor(professorRequestDom,usuario);
+
+        List<DiaSemanaDisponivel> diasSemanaDisponiveisEncontrados =
+                professorDiaSemanaDisponivelRepository.findAllById(professorRequestDom.getDiaSemanaDisponivelIds());
+
+        if (diasSemanaDisponiveisEncontrados.isEmpty()){
+            throw new ProfessorException("Nenhum dia da semana encontrado!");
+        }
+
+        Professor professor = professorMapper.professorRequestDomParaProfessor(professorRequestDom,usuario,diasSemanaDisponiveisEncontrados);
         professorRepository.save(professor);
     }
 
@@ -84,17 +94,48 @@ public class ProfessorService {
 
         ProfessorUsuarioRequestDom professorUsuarioRequestDom =
                 professorMapper.professorRequestDomParaProfessorUsuarioRequestDom(professorRequestDom);
-        professorMapper.professorRequestDomParaProfessorEncontrado(professorRequestDom,professorEncontrado);
+
+        List<DiaSemanaDisponivel> diasSemanaDisponiveisEncontrados =
+                professorDiaSemanaDisponivelRepository.findAllById(professorRequestDom.getDiaSemanaDisponivelIds());
+
+        if (diasSemanaDisponiveisEncontrados.isEmpty()){
+            throw new ProfessorException("Nenhum dia da semana encontrado!");
+        }
+
+        professorMapper.professorRequestDomParaProfessorEncontrado(professorRequestDom,professorEncontrado,diasSemanaDisponiveisEncontrados);
 
         usuarioService.editarUsuario(professorEncontrado.getUsuario().getId(),professorUsuarioRequestDom);
         professorRepository.save(professorEncontrado);
     }
 
-    public void associarProfessor(Long coordenadorId){
+    public Long associarProfessor(Long coordenadorId){
         Coordenador coordenadorEncontrado = professorCoordenadorRepository.findById(coordenadorId)
                 .orElseThrow(() -> new ProfessorException("Nenhum coordenador encontrado!"));
 
+        if (coordenadorEncontrado.getUsuario().getProfessor() != null){
+            throw new ProfessorException("O coordenador já está associado a um professor");
+        }
 
+        Professor professor = professorMapper.coordenadorEncontradoParaProfessor(coordenadorEncontrado);
+       return professorRepository.save(professor).getId();
+    }
+
+    public void formularioProfessor(ProfessorFormularioRequestDom professorFormularioRequestDom){
+        Professor professorEncontrado = usuarioService.buscarUsuarioAutenticado().getProfessor();
+
+        if (!professorEncontrado.getDiasSemanaDisponivel().isEmpty()){
+            throw new ProfessorException("Os dias da semana disponíveis já foram informados neste periodo!");
+        }
+
+        List<DiaSemanaDisponivel> diasSemanaDisponiveisEncontrados =
+                professorDiaSemanaDisponivelRepository.findAllById(professorFormularioRequestDom.getDiaSemanaDisponivelIds());
+
+        if (diasSemanaDisponiveisEncontrados.isEmpty()){
+            throw new ProfessorException("Nenhum dia da semana encontrado!");
+        }
+
+        professorMapper.professorFormularioRequestDomParaProfessor(professorFormularioRequestDom, professorEncontrado,diasSemanaDisponiveisEncontrados);
+        professorRepository.save(professorEncontrado);
     }
 
     public void inativarProfessor(Long id){
@@ -155,15 +196,21 @@ public class ProfessorService {
         if(professor.getTelefone() == null || RegexUtil.retornarNumeros(professor.getTelefone()).isBlank()){
             errorMessages.add("Telefone é um campo obrigatório!");
         }else if(
-            RegexUtil.retornarNumeros(professor.getTelefone()).length() > 50 ||
-            RegexUtil.retornarNumeros(professor.getTelefone()).length() < 11 ||
-            RegexUtil.retornarNumeros(professor.getTelefone()).charAt(2) != '9'
+                RegexUtil.retornarNumeros(professor.getTelefone()).length() > 50 ||
+                        RegexUtil.retornarNumeros(professor.getTelefone()).length() < 11 ||
+                        RegexUtil.retornarNumeros(professor.getTelefone()).charAt(2) != '9'
         ){
             errorMessages.add("Telefone inválido!");
         }
 
-        if(!errorMessages.isEmpty()){
-            throw new ProfessorException(errorMessages);
+        if(professor.getDiaSemanaDisponivelIds() == null || professor.getDiaSemanaDisponivelIds().isEmpty()){
+            throw new ProfessorException("Nenhum dia da semana informado!");
         }
+
+        if(!errorMessages.isEmpty()){
+            throw new CoordenadorException(errorMessages);
+        }
+
     }
+
 }

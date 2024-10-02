@@ -3,6 +3,7 @@ package com.cronograma.api.controllers;
 import com.cronograma.api.useCases.fase.domains.FaseRequestDom;
 import com.cronograma.api.useCases.fase.domains.FaseResponseDom;
 import com.cronograma.api.useCases.professor.ProfessorService;
+import com.cronograma.api.useCases.professor.domains.ProfessorFormularioRequestDom;
 import com.cronograma.api.useCases.professor.domains.ProfessorRequestDom;
 import com.cronograma.api.useCases.professor.domains.ProfessorResponseDom;
 import com.cronograma.api.utils.paginacao.PaginacaoRequestUtil;
@@ -53,8 +54,15 @@ public class ProfessorController {
     @PostMapping("/associar/{coordenadorId}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PROFESSOR_CONTROLLER','ASSOCIAR')")
     public ResponseEntity<?> associarProfessor(@PathVariable Long coordenadorId){
-        professorService.associarProfessor(coordenadorId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        Long professorId = professorService.associarProfessor(coordenadorId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(professorId);
+    }
+
+    @PutMapping("/formulario")
+    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PROFESSOR_CONTROLLER','FORMULARIO')")
+    public ResponseEntity<?> formularioProfessor(@RequestBody ProfessorFormularioRequestDom professorFormularioRequestDom){
+        professorService.formularioProfessor(professorFormularioRequestDom);
+        return ResponseEntity.ok(null);
     }
 
     @PutMapping("/editar/{id}")
