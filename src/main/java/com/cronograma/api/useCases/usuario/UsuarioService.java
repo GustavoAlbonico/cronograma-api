@@ -5,12 +5,16 @@ import com.cronograma.api.entitys.Usuario;
 import com.cronograma.api.entitys.enums.StatusEnum;
 import com.cronograma.api.exceptions.AuthorizationException;
 import com.cronograma.api.exceptions.UsuarioException;
+
+import com.cronograma.api.infra.mensageria.EmailService;
 import com.cronograma.api.infra.security.TokenService;
 import com.cronograma.api.useCases.usuario.domains.*;
 import com.cronograma.api.useCases.usuario.implement.mappers.UsuarioMapper;
 import com.cronograma.api.useCases.usuario.implement.repositorys.UsuarioNivelAcessoRepository;
 import com.cronograma.api.useCases.usuario.implement.repositorys.UsuarioRepository;
-import com.cronograma.api.utils.RegexUtil;
+import com.cronograma.api.utils.SenhaPadraoUtil;
+import com.cronograma.api.utils.regex.RegexUtil;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,15 +27,23 @@ import java.util.*;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final TokenService tokenService;
     private final UsuarioNivelAcessoRepository usuarioNivelAcessoRepository;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final TokenService tokenService;
+
+    private final EmailService emailService;
     private final UsuarioMapper usuarioMapper;
 
     public UsuarioResponseDom login(UsuarioLoginRequestDom usuarioLoginRequestDom) {
 
         Usuario usuario = this.usuarioRepository.findByCpfAndStatusEnum(usuarioLoginRequestDom.cpf(), StatusEnum.ATIVO)
                 .orElseThrow(() -> new AuthorizationException("Cpf não encontrado"));
+
+        if(verificarPrimeiroLogin(usuarioLoginRequestDom,usuario)){
+            return null;
+        }
 
         if (this.passwordEncoder.matches(usuarioLoginRequestDom.senha(), usuario.getSenha())) {
             String token = this.tokenService.gerarToken(usuario);
@@ -46,25 +58,26 @@ public class UsuarioService {
         throw new AuthorizationException("Senha inválida!");
     }
 
+    private boolean verificarPrimeiroLogin(UsuarioLoginRequestDom usuarioLoginRequestDom, Usuario usuario){
+        return this.passwordEncoder.matches(SenhaPadraoUtil.getSenha(), usuario.getSenha()) &&
+                usuarioLoginRequestDom.senha().equals(SenhaPadraoUtil.getSenha());
+    }
+
     public UsuarioResponseDom cadastro(UsuarioCadastroRequestDom usuarioCadastroRequestDom) {
         usuarioCadastroRequestDom.setCpf(RegexUtil.retornarNumeros(usuarioCadastroRequestDom.getCpf()));
-        List<String> errorMessages =  validarCamposCriar(usuarioCadastroRequestDom);
+        validarCampos(usuarioCadastroRequestDom);
 
-        if (errorMessages.isEmpty()){
+        Set<NivelAcesso> niveisAcesso = new HashSet<>(usuarioNivelAcessoRepository.findAllById(usuarioCadastroRequestDom.getNiveisAcessoId()));
+        Usuario usuario = usuarioMapper.usuarioCadastroRequestDomParaUsuario(usuarioCadastroRequestDom,niveisAcesso,passwordEncoder);
+        usuarioRepository.save(usuario);
 
-            Set<NivelAcesso> niveisAcesso = new HashSet<>(usuarioNivelAcessoRepository.findAllById(usuarioCadastroRequestDom.getNiveisAcessoId()));
-            Usuario usuario = usuarioMapper.usuarioRequestDomParaUsuario(usuarioCadastroRequestDom,niveisAcesso,passwordEncoder);
-            usuarioRepository.save(usuario);
+        List<UsuarioNivelAcessoResponseDom> niveisAcessoResponse = usuario.getNiveisAcesso().stream()
+                 .map(nivelAcesso ->
+                         new UsuarioNivelAcessoResponseDom(nivelAcesso.getNome(), nivelAcesso.getRankingAcesso()))
+                 .toList();
 
-            List<UsuarioNivelAcessoResponseDom> niveisAcessoResponse = usuario.getNiveisAcesso().stream()
-                    .map(nivelAcesso ->
-                            new UsuarioNivelAcessoResponseDom(nivelAcesso.getNome(), nivelAcesso.getRankingAcesso()))
-                    .toList();
-
-            String token = this.tokenService.gerarToken(usuario);
-            return new UsuarioResponseDom(usuario.getNome(), token,niveisAcessoResponse);
-        }
-        throw new UsuarioException(errorMessages);
+        String token = this.tokenService.gerarToken(usuario);
+        return new UsuarioResponseDom(usuario.getNome(), token,niveisAcessoResponse);
     }
 
     public Usuario criarUsuario(UsuarioRequestDom usuarioRequestDom, String nomeNivelAcesso){
@@ -83,6 +96,36 @@ public class UsuarioService {
         usuarioRepository.save(usuarioEncontrado);
     }
 
+    public void esqueciMinhaSenha(String cpf) throws MessagingException {
+        Usuario usuario = this.usuarioRepository.findByCpfAndStatusEnum(cpf, StatusEnum.ATIVO)
+                .orElseThrow(() -> new AuthorizationException("Cpf não encontrado"));
+        emailService.enviarEmailEsqueciMinhaSenha(usuario);
+    }
+    public void redefinirsenha(UsuarioRedefinirSenhaRequestDom usuarioRedefinirSenhaRequestDom){
+        Usuario usuario = this.buscarUsuarioAutenticado();
+        List<String> errorMessages = validarSenha(usuarioRedefinirSenhaRequestDom.getSenha(),usuario.getSenha());
+
+        if(!errorMessages.isEmpty()){
+            throw new UsuarioException(errorMessages);
+        }
+
+        usuario.setSenha(passwordEncoder.encode(usuarioRedefinirSenhaRequestDom.getSenha()));
+        usuarioRepository.save(usuario);
+    }
+
+    public void inativarUsuario(Long id){
+        Usuario usuarioEncontrado = usuarioRepository.findById(id)
+                .orElseThrow(() -> new UsuarioException("Nenhum usuario encontrado!"));
+        usuarioEncontrado.setStatusEnum(StatusEnum.INATIVO);
+        usuarioRepository.save(usuarioEncontrado);
+    }
+
+    public void ativarUsuario(Long id){
+        Usuario usuarioEncontrado = usuarioRepository.findById(id)
+                .orElseThrow(() -> new UsuarioException("Nenhum usuario encontrado!"));
+        usuarioEncontrado.setStatusEnum(StatusEnum.ATIVO);
+        usuarioRepository.save(usuarioEncontrado);
+    }
 
     public void excluirUsuario(Long id){
         usuarioRepository.deleteById(id);
@@ -92,9 +135,8 @@ public class UsuarioService {
         return (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    private List<String> validarCamposCriar(UsuarioRequestDom usuario){
-
-        List<String> errorMessages =  new ArrayList<>();
+    private void validarCampos(UsuarioCadastroRequestDom usuario){
+        List<String> errorMessages =  new ArrayList<>(validarSenha(usuario.getSenha(),null));
 
         if(usuario.getNome() == null || usuario.getNome().isBlank()){
             errorMessages.add("Nome é um campo obrigatório!");
@@ -108,24 +150,34 @@ public class UsuarioService {
             errorMessages.add("Cpf já está sendo utilizado!");
         }
 
+        if(!errorMessages.isEmpty()){
+            throw new UsuarioException(errorMessages);
+        }
+    }
 
-        if(usuario.getSenha() == null || usuario.getSenha().isBlank()){
+    private List<String> validarSenha(String senha, String senhaAtual){
+        List<String> errorMessages =  new ArrayList<>();
+
+        if(senha == null || senha.isBlank()){
             errorMessages.add("Senha é um campo obrigatório!");
         } else {
-
-           if(usuario.getSenha().length() < 8){
-               errorMessages.add("Senha precisa conter no minimo 8 caracteres!");
-           }
-           if(!RegexUtil.existeCaracterEspecial(usuario.getSenha())){
-               errorMessages.add("Senha precisa conter no minimo 1 caracter especial!");
-           }
-           if(!RegexUtil.existeLetraMaiuscula(usuario.getSenha())){
-               errorMessages.add("Senha precisa conter no minimo 1 letra maiuscula!");
-           }
-           if(!RegexUtil.existeNumero(usuario.getSenha())){
-               errorMessages.add("Senha precisa conter no minimo minimo 1 número!");
-           }
-
+            if(senha.length() < 8){
+                errorMessages.add("Senha precisa conter no minimo 8 caracteres!");
+            }
+            if(!RegexUtil.existeCaracterEspecial(senha)){
+                errorMessages.add("Senha precisa conter no minimo 1 caracter especial!");
+            }
+            if(!RegexUtil.existeLetraMaiuscula(senha)){
+                errorMessages.add("Senha precisa conter no minimo 1 letra maiuscula!");
+            }
+            if(!RegexUtil.existeNumero(senha)){
+                errorMessages.add("Senha precisa conter no minimo minimo 1 número!");
+            }
+            if (senhaAtual != null){
+                if (this.passwordEncoder.matches(senha, senhaAtual)){
+                    errorMessages.add("Nova Senha precisa ser diferente da antiga senha!");
+                }
+            }
         }
         return errorMessages;
     }

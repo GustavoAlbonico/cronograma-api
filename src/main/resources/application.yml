@@ -1,4 +1,15 @@
 spring:
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 587
+    username: 000ed3f206b85c
+    password: c84c2726a21e91
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   jpa:
     database: POSTGRESQL
     hibernate:
@@ -16,3 +27,5 @@ spring:
   security:
     token:
       secret: "faltatempo"
+  cors:
+    origin: "http://localhost:3000"

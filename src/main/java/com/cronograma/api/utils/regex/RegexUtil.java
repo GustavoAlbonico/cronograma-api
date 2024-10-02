@@ -1,4 +1,4 @@
-package com.cronograma.api.utils;
+package com.cronograma.api.utils.regex;
 
 public class RegexUtil {
 

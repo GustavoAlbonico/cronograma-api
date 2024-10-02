@@ -11,7 +11,6 @@ import lombok.Setter;
 @Setter
 public class UsuarioRequestDom {
    private String cpf;
-   private String senha;
    private String nome;
-
+   private String email;
 }

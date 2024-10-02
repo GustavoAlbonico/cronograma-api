@@ -49,4 +49,23 @@ public class TokenService {
     private Instant gerarExpiracaoData(){
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
+
+    public String gerarTokenRedefinirSenha(Usuario usuario){
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+
+            String token = JWT.create()
+                    .withIssuer("cronograma-api")
+                    .withSubject(usuario.getCpf())
+                    .withExpiresAt(this.gerarExpiracaoDataRedefinirSenha())
+                    .sign(algorithm);
+            return token;
+        }catch (JWTCreationException ex){
+            throw new AuthenticationException("Erro ao gerar token!");
+        }
+    }
+
+    private Instant gerarExpiracaoDataRedefinirSenha(){
+        return LocalDateTime.now().plusMinutes(10).toInstant(ZoneOffset.of("-03:00"));
+    }
 }

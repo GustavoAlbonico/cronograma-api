@@ -12,6 +12,8 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -27,7 +29,6 @@ public class DiaSemanaDisponivel {
     private DiaSemanaEnum diaSemanaEnum;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Professor professor;
+    @ManyToMany(mappedBy = "diasSemanaDisponivel" , fetch = FetchType.LAZY)
+    private Set<Professor> professores = new HashSet<>();
 }

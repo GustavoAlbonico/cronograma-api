@@ -20,9 +20,6 @@ public class Professor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String email;
-
     @Column(nullable = false, length = 50)
     private String telefone;
 
@@ -35,7 +32,12 @@ public class Professor {
     @JoinColumn(nullable = false)
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "professor")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "professor_dia_semana_disponivel",
+            joinColumns = @JoinColumn(name = "professor_id"),
+            inverseJoinColumns = @JoinColumn(name = "dia_semana_disponivel_id")
+    )
     private Set<DiaSemanaDisponivel> diasSemanaDisponivel =  new HashSet<>();
 
     @OneToMany(mappedBy = "professor",fetch = FetchType.EAGER)
