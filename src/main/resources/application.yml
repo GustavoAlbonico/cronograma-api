@@ -1,15 +1,4 @@
 spring:
-  mail:
-    host: sandbox.smtp.mailtrap.io
-    port: 587
-    username: 000ed3f206b85c
-    password: c84c2726a21e91
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
   jpa:
     database: POSTGRESQL
     hibernate:
@@ -22,10 +11,21 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/cronograma
     username: postgres
-    password: postgres
+    password: postgress
     driverClassName: org.postgresql.Driver
   security:
     token:
       secret: "faltatempo"
   cors:
     origin: "http://localhost:3000"
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: 'true'
+          auth: 'true'
+    host: smtp.gmail.com
+    username: senacplancriciuma@gmail.com
+    password: "drlv onev jtcq kmqd"
+    port: '587'

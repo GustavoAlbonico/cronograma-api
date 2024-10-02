@@ -17,7 +17,8 @@ public class EmailService {
     private final JavaMailSender mailSender;
     private final TokenService tokenService;
 
-    private static final String REMETENTE = "senacplan@hotmail.com";
+    @Value("spring.mail.username")
+    private String remetente;
 
     @Value("${spring.cors.origin}")
     private String urlBase;
@@ -29,7 +30,7 @@ public class EmailService {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-        helper.setFrom(REMETENTE);
+        helper.setFrom(remetente);
         helper.setTo(usuario.getEmail());
         helper.setSubject("SenacPlan - Esqueci minha senha");
 

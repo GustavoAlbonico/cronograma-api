@@ -213,7 +213,7 @@ VALUES
 INSERT INTO usuario
   (email ,cpf, senha, nome)
 VALUES
-    ('admin.valga@example.com','99999999999', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'ADMINISTRADOR'),-- ADMIN
+    ('gustavoalbonico@hotmail.com.br','99999999999', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'ADMINISTRADOR'),-- ADMIN
     ('coordenadormoda.valga@example.com','12385484901', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Moda coordenador'), --2 -- COORD
 
     ('gabriel.valga@example.com', '12345678901', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Gabriel Valga'), --3
