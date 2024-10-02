@@ -113,6 +113,20 @@ public class UsuarioService {
         usuarioRepository.save(usuario);
     }
 
+    public void inativarUsuario(Long id){
+        Usuario usuarioEncontrado = usuarioRepository.findById(id)
+                .orElseThrow(() -> new UsuarioException("Nenhum usuario encontrado!"));
+        usuarioEncontrado.setStatusEnum(StatusEnum.INATIVO);
+        usuarioRepository.save(usuarioEncontrado);
+    }
+
+    public void ativarUsuario(Long id){
+        Usuario usuarioEncontrado = usuarioRepository.findById(id)
+                .orElseThrow(() -> new UsuarioException("Nenhum usuario encontrado!"));
+        usuarioEncontrado.setStatusEnum(StatusEnum.ATIVO);
+        usuarioRepository.save(usuarioEncontrado);
+    }
+
     public void excluirUsuario(Long id){
         usuarioRepository.deleteById(id);
     }

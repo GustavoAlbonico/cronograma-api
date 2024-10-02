@@ -151,6 +151,10 @@ public class ProfessorService {
 
         professorEncontrado.setStatusEnum(StatusEnum.INATIVO);
         professorRepository.save(professorEncontrado);
+
+        if(professorEncontrado.getUsuario().getCoordenador() == null && professorEncontrado.getUsuario().getAluno() == null){
+            usuarioService.inativarUsuario(professorEncontrado.getUsuario().getId());
+        }
     }
 
     public void ativarProfessor(Long id){
@@ -162,6 +166,10 @@ public class ProfessorService {
         } else {
             professorEncontrado.setStatusEnum(StatusEnum.ATIVO);
             professorRepository.save(professorEncontrado);
+
+            if(professorEncontrado.getUsuario().getStatusEnum().equals(StatusEnum.INATIVO)){
+                usuarioService.ativarUsuario(professorEncontrado.getUsuario().getId());
+            }
         }
     }
 
