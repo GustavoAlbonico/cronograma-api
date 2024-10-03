@@ -21,11 +21,11 @@ public class EmailService {
     private String remetente;
 
     @Value("${spring.cors.origin}")
-    private String urlBase;
+    private String origin;
 
     public void enviarEmailEsqueciMinhaSenha(Usuario usuario) throws MessagingException {//tratar
         String token = this.tokenService.gerarTokenRedefinirSenha(usuario);
-        String url = urlBase + "/usuario/redefinirsenha?auth=" + token;
+        String url = origin + "/usuario/redefinirsenha?auth=" + token;
 
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");

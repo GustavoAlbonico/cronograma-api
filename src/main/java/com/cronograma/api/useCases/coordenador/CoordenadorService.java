@@ -79,7 +79,7 @@ public class CoordenadorService {
         Coordenador coordenadorEncontrado = coordenadorRepository.findById(id)
                 .orElseThrow(() -> new CoordenadorException("Nenhum coordenador encontrado!"));
 
-        if(coordenadorCursoRepository.existsByCoordenadorId(id)){
+        if(!coordenadorEncontrado.getCursos().isEmpty()){
             throw new CoordenadorException("O coordenador está sendo utilizado em cursos");
         }
 

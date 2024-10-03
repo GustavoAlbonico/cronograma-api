@@ -50,7 +50,7 @@ public interface ProfessorMapper {
     @Mapping(source = "usuario", target = "nome", qualifiedByName = "buscarNome")
     @Mapping(source = "usuario", target = "cpf", qualifiedByName = "buscarCpf")
     @Mapping(source = "usuario", target = "email", qualifiedByName = "buscarEmail")
-    @Mapping(source = "diasSemanaDisponivel", target = "professorDiasSemanaDisponiveisResponseDom")
+    @Mapping(source = "diasSemanaDisponivel", target = "diasSemanaDisponiveis")
     ProfessorResponseDom professorParaProfessorResponseDom(Professor professor);
 
     @Named("buscarNome")

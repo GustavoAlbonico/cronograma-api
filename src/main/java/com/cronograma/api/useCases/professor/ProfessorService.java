@@ -34,7 +34,6 @@ public class ProfessorService {
 
     private final ProfessorRepository professorRepository;
     private final ProfessorUsuarioRepository professorUsuarioRepository;
-    private final ProfessorDisciplinaRepository professorDisciplinaRepository;
     private final ProfessorCoordenadorRepository professorCoordenadorRepository;
     private final ProfessorDiaSemanaDisponivelRepository professorDiaSemanaDisponivelRepository;
 
@@ -145,7 +144,7 @@ public class ProfessorService {
         if (professorEncontrado.getStatusEnum().equals(StatusEnum.INATIVO)){
             throw new ProfessorException("O professor já está Inativado");
         }
-        if(professorDisciplinaRepository.existsByProfessorId(id)){
+        if(!professorEncontrado.getDisciplinas().isEmpty()){
             throw new ProfessorException("O professor está sendo utilizado em disciplinas");
         }
 

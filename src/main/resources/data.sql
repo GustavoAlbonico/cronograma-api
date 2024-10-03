@@ -118,6 +118,7 @@ VALUES
   (8,4),--INATIVAR
   (8,5),--ATIVAR
   (8,8),--CARREGAR_ATIVO
+  (8,10),--CARREGAR_POR_ID
 
   (9,1),--CRIAR
   (9,2),--EDITAR
