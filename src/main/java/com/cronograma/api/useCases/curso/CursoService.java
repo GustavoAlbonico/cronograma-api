@@ -3,10 +3,7 @@ package com.cronograma.api.useCases.curso;
 import com.cronograma.api.entitys.*;
 import com.cronograma.api.entitys.enums.StatusEnum;
 import com.cronograma.api.exceptions.CursoException;
-import com.cronograma.api.useCases.curso.domains.CursoPorPeriodoFaseResponseDom;
-import com.cronograma.api.useCases.curso.domains.CursoPorPeriodoResponseDom;
-import com.cronograma.api.useCases.curso.domains.CursoRequestDom;
-import com.cronograma.api.useCases.curso.domains.CursoResponseDom;
+import com.cronograma.api.useCases.curso.domains.*;
 import com.cronograma.api.useCases.curso.implement.mappers.CursoMapper;
 import com.cronograma.api.useCases.curso.implement.repositorys.*;
 import com.cronograma.api.useCases.usuario.UsuarioService;
@@ -80,13 +77,12 @@ public class CursoService {
             cursoMapper.cursoParaCursoPorPeriodoResponseDom(cronograma.getCurso(),cursoPorPeriodoResponseDom,fasesPorPeriodoResponse);
             cursosPorPeriodoResponse.add(cursoPorPeriodoResponseDom);
         }
-
+        
         if(usuario.getAluno() != null) {
             for (CursoPorPeriodoResponseDom cursosPorPeriodo : cursosPorPeriodoResponse) {
                 if (cursosPorPeriodo.getId().equals(usuario.getAluno().getCurso().getId())){
                     cursosPorPeriodo.setPossuiCurso(true);
-                    cursosPorPeriodo.setNomeNivelAcesso(buscarNomeNivelAcesso(usuario));
-                    cursosPorPeriodo.setRankingNivelAcesso(buscarRankingAcesso(usuario));
+                    cursosPorPeriodo.setEditavel(false);
 
                     for (CursoPorPeriodoFaseResponseDom fasePorPeriodo : cursosPorPeriodo.getFases()){
                         if(usuario.getAluno().getFases().stream().anyMatch(fase -> fase.getId().equals(fasePorPeriodo.getId()))){
@@ -104,8 +100,7 @@ public class CursoService {
                     .anyMatch(disciplina -> disciplina.getCurso().getId().equals(cursosPorPeriodo.getId()))
                 ){
                     cursosPorPeriodo.setPossuiCurso(true);
-                    cursosPorPeriodo.setNomeNivelAcesso(buscarNomeNivelAcesso(usuario));
-                    cursosPorPeriodo.setRankingNivelAcesso(buscarRankingAcesso(usuario));
+                    cursosPorPeriodo.setEditavel(false);
 
                     for (CursoPorPeriodoFaseResponseDom fasePorPeriodo : cursosPorPeriodo.getFases()){
                         if(
@@ -123,8 +118,7 @@ public class CursoService {
             for (CursoPorPeriodoResponseDom cursosPorPeriodo : cursosPorPeriodoResponse) {
                 if (usuario.getCoordenador().getCursos().stream().anyMatch(curso -> curso.getId().equals(cursosPorPeriodo.getId()))){
                     cursosPorPeriodo.setPossuiCurso(true);
-                    cursosPorPeriodo.setNomeNivelAcesso(buscarNomeNivelAcesso(usuario));
-                    cursosPorPeriodo.setRankingNivelAcesso(buscarRankingAcesso(usuario));
+                    cursosPorPeriodo.setEditavel(true);
 
                     for (CursoPorPeriodoFaseResponseDom fasePorPeriodo : cursosPorPeriodo.getFases()){
                         fasePorPeriodo.setPossuiFase(true);
@@ -136,8 +130,7 @@ public class CursoService {
         if (usuario.getNiveisAcesso().stream().anyMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 2)){
             for (CursoPorPeriodoResponseDom cursosPorPeriodo : cursosPorPeriodoResponse) {
                     cursosPorPeriodo.setPossuiCurso(true);
-                    cursosPorPeriodo.setNomeNivelAcesso(buscarNomeNivelAcesso(usuario));
-                    cursosPorPeriodo.setRankingNivelAcesso(buscarRankingAcesso(usuario));
+                    cursosPorPeriodo.setEditavel(true);
 
                     for (CursoPorPeriodoFaseResponseDom fasePorPeriodo : cursosPorPeriodo.getFases()){
                         fasePorPeriodo.setPossuiFase(true);
@@ -160,22 +153,6 @@ public class CursoService {
                 .sorted(Comparator.comparing(CursoPorPeriodoResponseDom::getNome))
                 .toList();
     }
-
-    private String buscarNomeNivelAcesso(Usuario usuario){
-        return usuario.getNiveisAcesso().stream()
-                      .sorted(Comparator.comparing(NivelAcesso::getRankingAcesso))
-                      .map(NivelAcesso::getNome)
-                      .findFirst()
-                      .orElseThrow(() -> new CursoException("Erro inesperado ao procurar nome do nivel de acesso!"));
-    }
-
-    private Integer buscarRankingAcesso(Usuario usuario){
-        return usuario.getNiveisAcesso().stream()
-                      .mapToInt(NivelAcesso::getRankingAcesso)
-                      .min()
-                      .orElseThrow(() -> new CursoException("Erro inesperado ao procurar o menor ranking de acesso!"));
-    }
-
 
     public void criarCurso(CursoRequestDom cursoRequestDom){
         validarCampos(cursoRequestDom);
