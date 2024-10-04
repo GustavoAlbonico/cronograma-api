@@ -4,15 +4,10 @@ import com.cronograma.api.entitys.Coordenador;
 import com.cronograma.api.entitys.Curso;
 import com.cronograma.api.entitys.Fase;
 import com.cronograma.api.useCases.coordenador.domains.CoordenadorResponseDom;
-import com.cronograma.api.useCases.curso.domains.CursoCoordenadorResponseDom;
-import com.cronograma.api.useCases.curso.domains.CursoRequestDom;
-import com.cronograma.api.useCases.curso.domains.CursoResponseDom;
+import com.cronograma.api.useCases.curso.domains.*;
 import org.mapstruct.*;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Mapper(
@@ -63,4 +58,33 @@ public interface CursoMapper {
         cursoCoordenadorResponseDom.setEmail(coordenador.getUsuario().getEmail());
         return cursoCoordenadorResponseDom;
    }
+
+    @Mapping(target = "fases", ignore = true)
+    void cursoParaCursoPorPeriodoResponseDom(
+            Curso curso,
+            @MappingTarget CursoPorPeriodoResponseDom cursoPorPeriodoResponseDom,
+            @Context List<CursoPorPeriodoFaseResponseDom> fasesPorPeriodo
+    );
+
+    @AfterMapping
+    default void afterCursoParaCursoPorPeriodoResponseDom(
+            @MappingTarget CursoPorPeriodoResponseDom cursoPorPeriodoResponseDom,
+            @Context List<CursoPorPeriodoFaseResponseDom> fasesPorPeriodo
+    ){
+        cursoPorPeriodoResponseDom.setFases(new ArrayList<>(fasesPorPeriodo));
+        cursoPorPeriodoResponseDom.setPossuiCurso(false);
+    }
+
+
+    void faseParaCursoPorPeriodoFaseResponseDom(
+            Fase fase,
+            @MappingTarget CursoPorPeriodoFaseResponseDom fasePorPerido
+    );
+
+    @AfterMapping
+    default void afterFaseParaCursoPorPeriodoFaseResponseDom(
+            @MappingTarget CursoPorPeriodoFaseResponseDom fasePorPerido
+    ){
+        fasePorPerido.setPossuiFase(false);
+    }
 }

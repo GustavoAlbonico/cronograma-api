@@ -9,6 +9,7 @@ import com.cronograma.api.useCases.fase.implement.mappers.FaseMapper;
 import com.cronograma.api.useCases.fase.implement.repositorys.FaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -22,6 +23,7 @@ public class FaseService {
     @Autowired
     private FaseMapper faseMapper;
 
+    @Transactional(readOnly = true)
     public List<FaseResponseDom> carregarFaseAtivoPorCurso(Long cursoId){
         List<Fase> fasesEncontradas = faseRepository.buscaTodosPorStatusEnumPorCursoId(StatusEnum.ATIVO.toString(), cursoId);
 
@@ -31,6 +33,7 @@ public class FaseService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<FaseResponseDom> carregarFaseAtivo(){
         List<Fase> fasesEncontradas = faseRepository.findAllByStatusEnum(StatusEnum.ATIVO);
 
@@ -40,6 +43,7 @@ public class FaseService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public FaseResponseDom carregarFasePorId(Long id){
         Fase faseEncontrada = faseRepository.findById(id)
                 .orElseThrow(() -> new FaseException("Nenhuma fase encontrada!"));
@@ -47,6 +51,7 @@ public class FaseService {
         return faseMapper.faseParaFaseResponseDom(faseEncontrada);
     }
 
+    @Transactional(readOnly = true)
     public List<FaseResponseDom> carregarFase(){
         List<Fase> fasesEncontradas = faseRepository.findAll();
 

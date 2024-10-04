@@ -40,7 +40,8 @@ VALUES
   ('EDITAR_EMAIL', 'edita o email'),--12
   ('REDEFINIR_SENHA', 'redefine a senha'),--13
   ('VALIDAR_TOKEN_REDEFINIR_SENHA', 'valida o token para redefinição da senha'), --14
-  ('CARREGAR_ATIVO_POR_CURSO', 'carregar os dados ativos por curso'); --15
+  ('CARREGAR_ATIVO_POR_CURSO', 'carregar os dados ativos por curso'), --15
+  ('CARREGAR_POR_PERIODO', 'carregar os dados por periodo'); --16
 
 --CONTROLLER
 INSERT INTO controller
@@ -65,7 +66,9 @@ VALUES
 
   ('CRONOGRAMA_CONTROLLER','personalizado para alunos'),--16
 
-  ('USUARIO_CONTROLLER','todos os usuarios tirando o administrador');--17
+  ('USUARIO_CONTROLLER','todos os usuarios tirando o administrador'),--17
+
+  ('CURSO_CONTROLLER','para usuario com nivel abaixo de COORDENADOR_GERAL rankingAcesso > 1');--18
 
 --CONTROLLER_FUNCIONALIDADE
 INSERT INTO  controller_funcionalidade
@@ -119,6 +122,7 @@ VALUES
   (8,5),--ATIVAR
   (8,8),--CARREGAR_ATIVO
   (8,10),--CARREGAR_POR_ID
+  (8,16),--CARREGAR_POR_PERIODO
 
   (9,1),--CRIAR
   (9,2),--EDITAR
@@ -139,16 +143,14 @@ VALUES
 
   (13,2),--EDITAR  --DIA_CRONOGRAMA_CONTROLLER
 ----------
-
   (14,11),--FORMULARIO -- PROFESSOR
-
-  (15,3),--CARREGAR  --CRONOGRAMA_CONTROLLER
-
+  (15,3),--CARREGAR  --CRONOGRAMA_CONTROLLER  -- PROFESSOR
 ------------------
-  (16,3),--CARREGAR  --CRONOGRAMA_CONTROLLER
-
+  (16,3),--CARREGAR  --CRONOGRAMA_CONTROLLER --ALUNO
   ------------------------
-  (17,13);--REDEFINIR_SENHA --USUARIO_CONTROLLER
+  (17,13),--REDEFINIR_SENHA --USUARIO_CONTROLLER -- rankingAcesso > 0
+  --------------
+  (18,16);--CARREGAR_POR_PERIODO  --CURSO -- rankingAcesso > 1
 
 --NIVEL ACESSO
 INSERT INTO nivel_acesso
@@ -193,20 +195,23 @@ VALUES
 
   (3,2), --PROFESSOR_CONTROLLER
   (3,4), --ALUNO_CONTROLLER
-  (3,5), --EVENTO_CONTROLLER      --COORDENADOR
+  (3,5), --EVENTO_CONTROLLER
   (3,9), --DISCIPLINA_CONTROLLER
-  (3,10), --DATA_BLOQUEADA_CONTROLLER
+  (3,10), --DATA_BLOQUEADA_CONTROLLER --COORDENADOR
   (3,11), --HISTORICO_CONTROLLER
   (3,12), --CRONOGRAMA_CONTROLLER
   (3,13), --DIA_CRONOGRAMA_CONTROLLER
   (3,17), --USUARIO_CONTROLLER
+  (3,18), --CURSO_CONTROLLER
 
   (4,14), --PROFESSOR_CONTROLLER
   (4,15), --CRONOGRAMA_CONTROLLER --PROFESSOR
   (4,17), --USUARIO_CONTROLLER
+  (4,18), --CURSO_CONTROLLER
 
   (5,16), --CRONOGRAMA_CONTROLLER   -- ALUNOS
-  (5,17); --USUARIO_CONTROLLER
+  (5,17), --USUARIO_CONTROLLER
+  (5,18); --CURSO_CONTROLLER
 
 
 

@@ -3,6 +3,8 @@ package com.cronograma.api.useCases.curso;
 import com.cronograma.api.entitys.*;
 import com.cronograma.api.entitys.enums.StatusEnum;
 import com.cronograma.api.exceptions.CursoException;
+import com.cronograma.api.useCases.curso.domains.CursoPorPeriodoFaseResponseDom;
+import com.cronograma.api.useCases.curso.domains.CursoPorPeriodoResponseDom;
 import com.cronograma.api.useCases.curso.domains.CursoRequestDom;
 import com.cronograma.api.useCases.curso.domains.CursoResponseDom;
 import com.cronograma.api.useCases.curso.implement.mappers.CursoMapper;
@@ -12,9 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +42,6 @@ public class CursoService {
 
     @Transactional(readOnly = true)
     public CursoResponseDom carregarCursoPorId(Long id){
-        aa();
         Curso cursoEncontrado = cursoRepository.findById(id)
                 .orElseThrow(() -> new CursoException("Nenhum curso encontrado!"));
 
@@ -59,55 +58,122 @@ public class CursoService {
                         .thenComparing(CursoResponseDom::getNome))
                 .toList();
     }
+    @Transactional(readOnly = true)
+    public List<CursoPorPeriodoResponseDom> carregarCursoPorPeriodo(Long id){
+        Usuario usuario = usuarioService.buscarUsuarioAutenticado();
+        List<Cronograma> cronogramasEncontrados = cursoCronogramaRepository.findAllByPeriodoId(id);
 
-    public void aa(){
-//        Usuario usuario = usuarioService.buscarUsuarioAutenticado();
+        List<CursoPorPeriodoResponseDom> cursosPorPeriodoResponse = new ArrayList<>();
 
-        List<Cronograma> cronogramas = cursoCronogramaRepository.findAll();
+        for (Cronograma cronograma : cronogramasEncontrados){
+            List<CursoPorPeriodoFaseResponseDom> fasesPorPeriodoResponse = new ArrayList<>();
 
-
-        cronogramas.stream().forEach(cronograma -> {
-            cronograma.getCurso().getNome();
-            List<Fase> fases = new ArrayList<>();
-            for (DiaCronograma diaCronograma : cronograma.getDiasCronograma()){
-               if(!fases.contains(diaCronograma.getFase())){
-                   fases.add(diaCronograma.getFase());
-               }
+            for (DiaCronograma diaCronograma: cronograma.getDiasCronograma()){
+                if(fasesPorPeriodoResponse.stream().noneMatch(fase -> fase.getId().equals(diaCronograma.getFase().getId()))){
+                    CursoPorPeriodoFaseResponseDom cursoPorPeriodoFaseResponseDom = new CursoPorPeriodoFaseResponseDom();
+                    cursoMapper.faseParaCursoPorPeriodoFaseResponseDom(diaCronograma.getFase(),cursoPorPeriodoFaseResponseDom);
+                    fasesPorPeriodoResponse.add(cursoPorPeriodoFaseResponseDom);
+                }
             }
-            //trasnformar isso em um group by
 
-            for (Fase fase:fases){
-                System.out.println(fase.getNumero());
+            CursoPorPeriodoResponseDom cursoPorPeriodoResponseDom = new CursoPorPeriodoResponseDom();
+            cursoMapper.cursoParaCursoPorPeriodoResponseDom(cronograma.getCurso(),cursoPorPeriodoResponseDom,fasesPorPeriodoResponse);
+            cursosPorPeriodoResponse.add(cursoPorPeriodoResponseDom);
+        }
+
+        if(usuario.getAluno() != null) {
+            for (CursoPorPeriodoResponseDom cursosPorPeriodo : cursosPorPeriodoResponse) {
+                if (cursosPorPeriodo.getId().equals(usuario.getAluno().getCurso().getId())){
+                    cursosPorPeriodo.setPossuiCurso(true);
+                    cursosPorPeriodo.setNomeNivelAcesso(buscarNomeNivelAcesso(usuario));
+                    cursosPorPeriodo.setRankingNivelAcesso(buscarRankingAcesso(usuario));
+
+                    for (CursoPorPeriodoFaseResponseDom fasePorPeriodo : cursosPorPeriodo.getFases()){
+                        if(usuario.getAluno().getFases().stream().anyMatch(fase -> fase.getId().equals(fasePorPeriodo.getId()))){
+                            fasePorPeriodo.setPossuiFase(true);
+                        }
+                    }
+                }
             }
-        });
+        }
+
+        if(usuario.getProfessor() != null){
+            for (CursoPorPeriodoResponseDom cursosPorPeriodo : cursosPorPeriodoResponse) {
+                if (
+                    usuario.getProfessor().getDisciplinas().stream()
+                    .anyMatch(disciplina -> disciplina.getCurso().getId().equals(cursosPorPeriodo.getId()))
+                ){
+                    cursosPorPeriodo.setPossuiCurso(true);
+                    cursosPorPeriodo.setNomeNivelAcesso(buscarNomeNivelAcesso(usuario));
+                    cursosPorPeriodo.setRankingNivelAcesso(buscarRankingAcesso(usuario));
+
+                    for (CursoPorPeriodoFaseResponseDom fasePorPeriodo : cursosPorPeriodo.getFases()){
+                        if(
+                            usuario.getProfessor().getDisciplinas().stream()
+                                   .anyMatch(disciplina -> disciplina.getFase().getId().equals(fasePorPeriodo.getId()))
+                        ){
+                            fasePorPeriodo.setPossuiFase(true);
+                        }
+                    }
+                }
+            }
+        }
+
+        if(usuario.getCoordenador() != null){
+            for (CursoPorPeriodoResponseDom cursosPorPeriodo : cursosPorPeriodoResponse) {
+                if (usuario.getCoordenador().getCursos().stream().anyMatch(curso -> curso.getId().equals(cursosPorPeriodo.getId()))){
+                    cursosPorPeriodo.setPossuiCurso(true);
+                    cursosPorPeriodo.setNomeNivelAcesso(buscarNomeNivelAcesso(usuario));
+                    cursosPorPeriodo.setRankingNivelAcesso(buscarRankingAcesso(usuario));
+
+                    for (CursoPorPeriodoFaseResponseDom fasePorPeriodo : cursosPorPeriodo.getFases()){
+                        fasePorPeriodo.setPossuiFase(true);
+                    }
+                }
+            }
+        }
+
+        if (usuario.getNiveisAcesso().stream().anyMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 2)){
+            for (CursoPorPeriodoResponseDom cursosPorPeriodo : cursosPorPeriodoResponse) {
+                    cursosPorPeriodo.setPossuiCurso(true);
+                    cursosPorPeriodo.setNomeNivelAcesso(buscarNomeNivelAcesso(usuario));
+                    cursosPorPeriodo.setRankingNivelAcesso(buscarRankingAcesso(usuario));
+
+                    for (CursoPorPeriodoFaseResponseDom fasePorPeriodo : cursosPorPeriodo.getFases()){
+                        fasePorPeriodo.setPossuiFase(true);
+                    }
+            }
+        }
 
 
-//        if(
-//            usuario.getAluno() != null &&
-//            usuario.getNiveisAcesso().stream().noneMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 4)
-//        ){
-//
-//
-//
-//        } else if(
-//             usuario.getProfessor() != null &&
-//             usuario.getNiveisAcesso().stream().noneMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 3)
-//        ){
-//            List<Long> cursoIds = usuario.getProfessor().getDisciplinas().stream()
-//        } else if(
-//             usuario.getCoordenador() != null &&
-//             usuario.getNiveisAcesso().stream().noneMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 2)
-//        ){
-//            List<Long> cursoIds = usuario.getCoordenador().getCursos().stream().map(Curso::getId).toList();
-//            List<Cronograma> cronogramaEncontrado = cursoCronogramaRepository.findAllByCursoIds(cursoIds);
-//
-//            cronogramaEncontrado.stream().map(jso -> jso.getDiasCronograma().stream())
-//
-//        } else {
-//
-//        }
+        return cursosPorPeriodoResponse.stream()
+                .filter(CursoPorPeriodoResponseDom::isPossuiCurso)
+                .peek(cursosPorPeriodo -> {
+                    cursosPorPeriodo.getFases().removeIf(fasePorPeriodo -> !fasePorPeriodo.isPossuiFase());
 
+                    List<CursoPorPeriodoFaseResponseDom> fasesOrdenadas = cursosPorPeriodo.getFases().stream()
+                            .sorted(Comparator.comparing(CursoPorPeriodoFaseResponseDom::getNumero))
+                            .toList();
 
+                    cursosPorPeriodo.setFases(fasesOrdenadas);
+                })
+                .sorted(Comparator.comparing(CursoPorPeriodoResponseDom::getNome))
+                .toList();
+    }
+
+    private String buscarNomeNivelAcesso(Usuario usuario){
+        return usuario.getNiveisAcesso().stream()
+                      .sorted(Comparator.comparing(NivelAcesso::getRankingAcesso))
+                      .map(NivelAcesso::getNome)
+                      .findFirst()
+                      .orElseThrow(() -> new CursoException("Erro inesperado ao procurar nome do nivel de acesso!"));
+    }
+
+    private Integer buscarRankingAcesso(Usuario usuario){
+        return usuario.getNiveisAcesso().stream()
+                      .mapToInt(NivelAcesso::getRankingAcesso)
+                      .min()
+                      .orElseThrow(() -> new CursoException("Erro inesperado ao procurar o menor ranking de acesso!"));
     }
 
 

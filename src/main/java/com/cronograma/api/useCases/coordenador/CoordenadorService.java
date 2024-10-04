@@ -7,14 +7,13 @@ import com.cronograma.api.useCases.coordenador.domains.CoordenadorRequestDom;
 import com.cronograma.api.useCases.coordenador.domains.CoordenadorResponseDom;
 import com.cronograma.api.useCases.coordenador.domains.CoordenadorUsuarioRequestDom;
 import com.cronograma.api.useCases.coordenador.implement.mappers.CoordenadorMapper;
-import com.cronograma.api.useCases.coordenador.implement.repositorys.CoordenadorCursoRepository;
 import com.cronograma.api.useCases.coordenador.implement.repositorys.CoordenadorRepository;
 import com.cronograma.api.useCases.coordenador.implement.repositorys.CoordenadorUsuarioRepository;
 import com.cronograma.api.useCases.usuario.UsuarioService;
 import com.cronograma.api.utils.regex.RegexUtil;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -25,12 +24,12 @@ import java.util.List;
 public class CoordenadorService {
 
     private final CoordenadorRepository coordenadorRepository;
-    private final CoordenadorCursoRepository coordenadorCursoRepository;
     private final CoordenadorUsuarioRepository coordenadorUsuarioRepository;
 
     private final CoordenadorMapper coordenadorMapper;
     private final UsuarioService usuarioService;
 
+    @Transactional(readOnly = true)
     public CoordenadorResponseDom carregarCoordenadorPorId(Long id){
         Coordenador coordenadorEncontrado = coordenadorRepository.findById(id)
                 .orElseThrow(() -> new CoordenadorException("Nenhum coordenador encontrado!"));
@@ -38,6 +37,7 @@ public class CoordenadorService {
         return coordenadorMapper.coordenadorParaCoordenadorResponseDom(coordenadorEncontrado);
     }
 
+    @Transactional(readOnly = true)
     public List<CoordenadorResponseDom> carregarCoordenador(){
         List<Coordenador> coordenadoresEncontrados = coordenadorRepository.findAll();
 

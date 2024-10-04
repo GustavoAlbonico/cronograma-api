@@ -1,6 +1,7 @@
 package com.cronograma.api.controllers;
 
 import com.cronograma.api.useCases.curso.CursoService;
+import com.cronograma.api.useCases.curso.domains.CursoPorPeriodoResponseDom;
 import com.cronograma.api.useCases.curso.domains.CursoRequestDom;
 import com.cronograma.api.useCases.curso.domains.CursoResponseDom;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,13 @@ public class CursoController {
 
     @Autowired
     private CursoService cursoService;
+
+    @GetMapping("/carregar/periodo/{id}")
+    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('CURSO_CONTROLLER','CARREGAR_POR_PERIODO')")
+    public ResponseEntity<?> carregarCursoPorPeriodo(@PathVariable Long id){
+        List<CursoPorPeriodoResponseDom> response = cursoService.carregarCursoPorPeriodo(id);
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("/carregar/ativo")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('CURSO_CONTROLLER','CARREGAR_ATIVO')")
