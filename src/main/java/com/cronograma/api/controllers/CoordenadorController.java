@@ -19,8 +19,6 @@ public class CoordenadorController {
     @Autowired
     private CoordenadorService coordenadorService;
 
-
-
     @GetMapping("/carregar/{id}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('COORDENADOR_CONTROLLER','CARREGAR_POR_ID')")
     public ResponseEntity<?> carregarCoordenadorPorId(@PathVariable Long id){

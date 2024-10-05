@@ -6,11 +6,10 @@ import com.cronograma.api.exceptions.FaseException;
 import com.cronograma.api.useCases.fase.domains.FaseRequestDom;
 import com.cronograma.api.useCases.fase.domains.FaseResponseDom;
 import com.cronograma.api.useCases.fase.implement.mappers.FaseMapper;
-import com.cronograma.api.useCases.fase.implement.repositorys.FaseDisciplinaRepository;
 import com.cronograma.api.useCases.fase.implement.repositorys.FaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -22,11 +21,9 @@ public class FaseService {
     private FaseRepository faseRepository;
 
     @Autowired
-    private FaseDisciplinaRepository faseDisciplinaRepository;
-
-    @Autowired
     private FaseMapper faseMapper;
 
+    @Transactional(readOnly = true)
     public List<FaseResponseDom> carregarFaseAtivoPorCurso(Long cursoId){
         List<Fase> fasesEncontradas = faseRepository.buscaTodosPorStatusEnumPorCursoId(StatusEnum.ATIVO.toString(), cursoId);
 
@@ -36,6 +33,7 @@ public class FaseService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<FaseResponseDom> carregarFaseAtivo(){
         List<Fase> fasesEncontradas = faseRepository.findAllByStatusEnum(StatusEnum.ATIVO);
 
@@ -45,6 +43,7 @@ public class FaseService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public FaseResponseDom carregarFasePorId(Long id){
         Fase faseEncontrada = faseRepository.findById(id)
                 .orElseThrow(() -> new FaseException("Nenhuma fase encontrada!"));
@@ -52,6 +51,7 @@ public class FaseService {
         return faseMapper.faseParaFaseResponseDom(faseEncontrada);
     }
 
+    @Transactional(readOnly = true)
     public List<FaseResponseDom> carregarFase(){
         List<Fase> fasesEncontradas = faseRepository.findAll();
 
@@ -80,14 +80,17 @@ public class FaseService {
         if (faseEncontrada.getStatusEnum().equals(StatusEnum.INATIVO)){
             throw new FaseException("A fase já está Inativada");
         }
-        if(faseRepository.existeCursoFasePorFaseId(id)){
+        if(!faseEncontrada.getCursos().isEmpty()){
             throw new FaseException("A fase está sendo utilizado em cursos");
         }
-        if(faseRepository.existeAlunoFasePorFaseId(id)){
+        if(!faseEncontrada.getAlunos().isEmpty()){
             throw new FaseException("A fase está sendo utilizado em alunos");
         }
-        if(faseDisciplinaRepository.existsByFaseId(id)){
+        if(!faseEncontrada.getDisciplinas().isEmpty()){
             throw new FaseException("A fase está sendo utilizada em disciplinas");
+        }
+        if(!faseEncontrada.getDiasCronograma().isEmpty()){
+            throw new FaseException("A fase está sendo utilizada em cronogramas");
         }
 
         faseEncontrada.setStatusEnum(StatusEnum.INATIVO);

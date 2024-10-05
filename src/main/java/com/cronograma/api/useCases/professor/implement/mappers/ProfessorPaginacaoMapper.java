@@ -1,6 +1,7 @@
 package com.cronograma.api.useCases.professor.implement.mappers;
 
 import com.cronograma.api.entitys.Professor;
+import com.cronograma.api.useCases.fase.domains.FaseResponseDom;
 import com.cronograma.api.useCases.professor.domains.ProfessorResponseDom;
 import com.cronograma.api.utils.paginacao.PaginacaoResponseUtil;
 import org.mapstruct.Context;
@@ -23,7 +24,8 @@ public interface ProfessorPaginacaoMapper {
     ){
         List<ProfessorResponseDom> professoresResponseDom = professoresEncontrados.getContent()
                 .stream().map(professorMapper::professorParaProfessorResponseDom)
-                .sorted(Comparator.comparing(ProfessorResponseDom::getNome))
+                .sorted(Comparator.comparing(ProfessorResponseDom::getStatusEnum)
+                        .thenComparing(ProfessorResponseDom::getNome))
                 .toList();
 
         PaginacaoResponseUtil<List<ProfessorResponseDom>> paginacaoResponseUtil= new PaginacaoResponseUtil<>();

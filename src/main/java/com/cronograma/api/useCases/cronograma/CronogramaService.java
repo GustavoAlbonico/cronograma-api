@@ -90,6 +90,8 @@ public class CronogramaService {
             }
         }
     }
+
+    @Transactional(readOnly = true)
     public CronogramaResponseDom carregarCronograma(Long periodoId,Long cursoId,Long faseId){
 
         validarUsuarioPertenceCursoFase(cursoId, faseId);

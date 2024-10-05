@@ -19,10 +19,10 @@ import com.cronograma.api.useCases.usuario.UsuarioService;
 import com.cronograma.api.utils.paginacao.PaginacaoRequestUtil;
 import com.cronograma.api.utils.paginacao.PaginacaoResponseUtil;
 import com.cronograma.api.utils.regex.RegexUtil;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -34,7 +34,6 @@ public class ProfessorService {
 
     private final ProfessorRepository professorRepository;
     private final ProfessorUsuarioRepository professorUsuarioRepository;
-    private final ProfessorDisciplinaRepository professorDisciplinaRepository;
     private final ProfessorCoordenadorRepository professorCoordenadorRepository;
     private final ProfessorDiaSemanaDisponivelRepository professorDiaSemanaDisponivelRepository;
 
@@ -44,6 +43,7 @@ public class ProfessorService {
     private final UsuarioService usuarioService;
 
 
+    @Transactional(readOnly = true)
     public List<ProfessorResponseDom> carregarProfessorAtivo(){
         List<Professor> professoresEncontrados = professorRepository.findAllByStatusEnum(StatusEnum.ATIVO);
 
@@ -53,6 +53,7 @@ public class ProfessorService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public ProfessorResponseDom carregarProfessorPorId(Long id){
         Professor professorEncontrado = professorRepository.findById(id)
                 .orElseThrow(() -> new ProfessorException("Nenhum professor encontrado!"));
@@ -60,6 +61,7 @@ public class ProfessorService {
         return professorMapper.professorParaProfessorResponseDom(professorEncontrado);
     }
 
+    @Transactional(readOnly = true)
     public PaginacaoResponseUtil<List<ProfessorResponseDom>> carregarProfessor(PaginacaoRequestUtil paginacaoRequestUtil){
         Page<Professor> professoresEncontrados = professorRepository.findAll(paginacaoRequestUtil.getPageRequest());
         return professorPaginacaoMapper.pageProfessorParaPaginacaoResponseUtilProfessorResponseDom(professoresEncontrados,professorMapper);
@@ -145,7 +147,7 @@ public class ProfessorService {
         if (professorEncontrado.getStatusEnum().equals(StatusEnum.INATIVO)){
             throw new ProfessorException("O professor já está Inativado");
         }
-        if(professorDisciplinaRepository.existsByProfessorId(id)){
+        if(!professorEncontrado.getDisciplinas().isEmpty()){
             throw new ProfessorException("O professor está sendo utilizado em disciplinas");
         }
 
