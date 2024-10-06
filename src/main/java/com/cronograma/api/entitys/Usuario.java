@@ -58,9 +58,6 @@ public class Usuario {
     private Aluno aluno;
 
     @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
-    private Set<DataBloqueada> datasBloqueadas = new HashSet<>();
-
-    @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
     private Set<Evento> eventos =  new HashSet<>();
 
     @PrePersist

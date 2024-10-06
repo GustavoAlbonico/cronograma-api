@@ -36,14 +36,9 @@ public class Evento {
     private EventoStatusEnum eventoStatusEnum;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToOne
-    @JoinColumn(nullable = false)
-    private Curso curso;
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
-    private Periodo periodo;
+    private Curso curso;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne(fetch = FetchType.LAZY)

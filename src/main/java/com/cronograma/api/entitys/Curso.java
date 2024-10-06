@@ -53,8 +53,8 @@ public class Curso {
     @OneToMany(mappedBy = "curso")
     private Set<Disciplina> disciplinas = new HashSet<>();
 
-    @OneToOne(mappedBy = "curso")
-    private Evento evento;
+    @OneToMany(mappedBy = "curso")
+    private Set<Evento> eventos =  new HashSet<>();
 
     @PrePersist
     void defaultStatusEnum(){

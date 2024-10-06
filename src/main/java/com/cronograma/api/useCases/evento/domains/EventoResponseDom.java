@@ -1,17 +1,15 @@
 package com.cronograma.api.useCases.evento.domains;
-import com.cronograma.api.entitys.enums.EventoStatusEnum;
-import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
+import com.cronograma.api.entitys.enums.EventoStatusEnum;
+import lombok.Getter;
+import lombok.Setter;
+
 @Getter
 @Setter
-public class EventoRequestDom{
-
+public class EventoResponseDom {
     private Long id;
-    private String mensagem;
-    private String acao;
+    private String data;
     private EventoStatusEnum eventoStatusEnum;
-    private Long cursoId;
-    private Long usuarioId;
+    private String mensagem;
+    private String siglaCurso;
 }

@@ -8,17 +8,17 @@ import com.cronograma.api.exceptions.EventoException;
 import com.cronograma.api.useCases.cronograma.CronogramaService;
 import com.cronograma.api.useCases.evento.domains.EventoCronogramaRequestDom;
 import com.cronograma.api.useCases.evento.domains.EventoRequestDom;
+import com.cronograma.api.useCases.evento.domains.EventoResponseDom;
 import com.cronograma.api.useCases.evento.implement.mappers.EventoMapper;
 import com.cronograma.api.useCases.evento.implement.repositorys.EventoCursoRepository;
-import com.cronograma.api.useCases.evento.implement.repositorys.EventoPeriodoRepository;
 import com.cronograma.api.useCases.evento.implement.repositorys.EventoRepository;
 import com.cronograma.api.useCases.evento.implement.repositorys.EventoUsuarioRepository;
 import com.cronograma.api.useCases.usuario.UsuarioService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -26,7 +26,6 @@ import java.util.List;
 public class EventoService {
 
     private final EventoRepository eventoRepository;
-    private final EventoPeriodoRepository eventoPeriodoRepository;
     private final EventoCursoRepository eventoCursoRepository;
     private final EventoUsuarioRepository eventoUsuarioRepository;
 
@@ -35,6 +34,15 @@ public class EventoService {
     private final CronogramaService cronogramaService;
     private final UsuarioService usuarioService;
 
+    public List<EventoResponseDom> carregarEvento(){
+        Usuario usuario = usuarioService.buscarUsuarioAutenticado();
+        List<Evento> eventosEncontrados = eventoRepository.findAllByUsuarioId(usuario.getId());
+
+        return eventosEncontrados.stream()
+                .map(eventoMapper::eventoParaEventoResponseDom)
+                .sorted(Comparator.comparing(EventoResponseDom::getData).reversed())
+                .toList();
+    }
     private void validarUsuarioPertenceCurso(Long cursoId, final Usuario usuario){
         if(
             usuario.getCoordenador() != null &&
@@ -62,7 +70,6 @@ public class EventoService {
                     "gerar cronograma",
                     EventoStatusEnum.EXECUTANDO,
                     cronograma.getCursoId(),
-                    cronograma.getPeriodoId(),
                     usuario.getId()
             );
             Evento evento = criarEvento(eventoPendente);
@@ -93,7 +100,7 @@ public class EventoService {
 
     public Evento criarEvento(EventoRequestDom eventoRequestDom){
         final Evento evento = new Evento();
-        eventoMapper.eventoRequestDomParaEvento(eventoRequestDom,evento,eventoCursoRepository,eventoPeriodoRepository,eventoUsuarioRepository);
+        eventoMapper.eventoRequestDomParaEvento(eventoRequestDom,evento,eventoCursoRepository,eventoUsuarioRepository);
         return eventoRepository.save(evento);
     }
 
@@ -103,7 +110,6 @@ public class EventoService {
             if (
                 evento.getUsuario().getId().equals(usuarioId) &&
                 evento.getCurso().getId().equals(cronograma.getCursoId()) &&
-                evento.getPeriodo().getId().equals(cronograma.getPeriodoId()) &&
                 evento.getEventoStatusEnum().equals(EventoStatusEnum.EXECUTANDO)
             ){
                 throw new EventoException("Já existe um evento em execução!");
@@ -117,7 +123,6 @@ public class EventoService {
             if (
                 evento.getUsuario().getId().equals(usuarioId) &&
                 evento.getCurso().getId().equals(cronograma.getCursoId()) &&
-                evento.getPeriodo().getId().equals(cronograma.getPeriodoId()) &&
                 !evento.getEventoStatusEnum().equals(EventoStatusEnum.EXECUTANDO)
             ){
                 eventoRepository.delete(evento);

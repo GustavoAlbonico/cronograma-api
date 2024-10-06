@@ -24,10 +24,4 @@ public class DataBloqueada {
 
     @Column(nullable = false)
     private LocalDate data;
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Usuario usuario;
-
 }

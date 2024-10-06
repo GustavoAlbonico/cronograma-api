@@ -33,9 +33,6 @@ public class Periodo {
     @OneToMany(mappedBy = "periodo")
     private Set<Cronograma> cronogramas = new HashSet<>();
 
-    @OneToMany(mappedBy = "periodo")
-    private Set<Evento> eventos = new HashSet<>();
-
     @PrePersist
     void defaultStatusEnum(){
         statusEnum = StatusEnum.ATIVO;
