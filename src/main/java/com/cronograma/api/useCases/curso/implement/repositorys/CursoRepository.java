@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CursoRepository extends JpaRepository<Curso, Long> {
     List<Curso> findAllByStatusEnum(StatusEnum statusEnum);
+
+    List<Curso> findAllByIdInAndStatusEnum(List<Long> ids, StatusEnum statusEnum);
 }

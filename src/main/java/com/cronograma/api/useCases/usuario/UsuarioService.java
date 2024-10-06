@@ -88,6 +88,11 @@ public class UsuarioService {
        return usuarioRepository.save(usuario);
     }
 
+    public Usuario criarUsuarioImportar(UsuarioRequestDom usuarioRequestDom,  Set<NivelAcesso> niveisAcesso){
+        Usuario usuario = usuarioMapper.usuarioRequestDomParaUsuario(usuarioRequestDom,niveisAcesso,passwordEncoder);
+        return usuarioRepository.save(usuario);
+    }
+
     public void editarUsuario(Long id,UsuarioRequestDom usuarioRequestDom){
         Usuario usuarioEncontrado = usuarioRepository.findById(id)
                 .orElseThrow(() -> new UsuarioException("Nenhum usuario encontrado!"));
