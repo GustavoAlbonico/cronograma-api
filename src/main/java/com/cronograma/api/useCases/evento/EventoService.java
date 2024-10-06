@@ -34,6 +34,7 @@ public class EventoService {
     private final CronogramaService cronogramaService;
     private final UsuarioService usuarioService;
 
+    @Transactional(readOnly = true)
     public List<EventoResponseDom> carregarEvento(){
         Usuario usuario = usuarioService.buscarUsuarioAutenticado();
         List<Evento> eventosEncontrados = eventoRepository.findAllByUsuarioId(usuario.getId());

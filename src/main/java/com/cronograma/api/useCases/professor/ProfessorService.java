@@ -140,6 +140,21 @@ public class ProfessorService {
         professorRepository.save(professorEncontrado);
     }
 
+    @Transactional(readOnly = true)
+    public boolean possuiDiaSemanaDisponivelProfessor(){
+        Usuario usuario = usuarioService.buscarUsuarioAutenticado();
+
+        if (usuario.getProfessor() == null){
+            return true;
+        }
+
+        if(!usuario.getProfessor().getDiasSemanaDisponivel().isEmpty()){
+            return true;
+        }
+
+        return false;
+    }
+
     public void inativarProfessor(Long id){
         Professor professorEncontrado = professorRepository.findById(id)
                 .orElseThrow( () -> new ProfessorException("Nenhum professor encontrado!"));
