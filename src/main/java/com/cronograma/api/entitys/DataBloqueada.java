@@ -22,6 +22,6 @@ public class DataBloqueada {
     @Column(nullable = false)
     private String motivo;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private LocalDate data;
 }

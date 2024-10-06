@@ -62,6 +62,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    @ExceptionHandler(DataBloqueadaException.class)
+    private ResponseEntity<RestErrorMessage> dataBloqueadaException(DataBloqueadaException exception){
+        RestErrorMessage errorResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST,exception.getMessages());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
     @ExceptionHandler(AlunoException.class)
     private ResponseEntity<RestErrorMessage> alunoException(AlunoException exception){
         RestErrorMessage errorResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST,exception.getMessages());
