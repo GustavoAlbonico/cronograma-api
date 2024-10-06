@@ -5,6 +5,7 @@ import com.cronograma.api.entitys.Disciplina;
 import com.cronograma.api.entitys.Fase;
 import com.cronograma.api.entitys.Professor;
 import com.cronograma.api.useCases.disciplina.domains.DisciplinaRequestDom;
+import com.cronograma.api.useCases.disciplina.domains.DisciplinaResponseDom;
 import org.mapstruct.*;
 
 @Mapper(
@@ -35,4 +36,6 @@ public interface DisciplinaMapper {
        disciplina.setFase(faseEncontrada);
        disciplina.setProfessor(professorEncontrado);
    }
+
+   DisciplinaResponseDom disciplinaParaDisciplinaResponseDom(Disciplina disciplina);
 }

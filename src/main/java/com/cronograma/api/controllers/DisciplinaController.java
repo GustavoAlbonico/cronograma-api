@@ -1,10 +1,8 @@
 package com.cronograma.api.controllers;
 
-import com.cronograma.api.useCases.aluno.domains.AlunoResponseDom;
 import com.cronograma.api.useCases.disciplina.DisciplinaService;
 import com.cronograma.api.useCases.disciplina.domains.DisciplinaRequestDom;
-import com.cronograma.api.useCases.professor.domains.ProfessorRequestDom;
-import com.cronograma.api.useCases.professor.domains.ProfessorResponseDom;
+import com.cronograma.api.useCases.disciplina.domains.DisciplinaResponseDom;
 import com.cronograma.api.utils.paginacao.PaginacaoRequestUtil;
 import com.cronograma.api.utils.paginacao.PaginacaoResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,25 +20,19 @@ public class DisciplinaController {
     @Autowired
     private DisciplinaService disciplinaService;
 
-//    @GetMapping("/carregar/ativo")
-//    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PROFESSOR_CONTROLLER','CARREGAR_ATIVO')")
-//    public ResponseEntity<?> carregarProfessorAtivo(){
-//        List<ProfessorResponseDom> response = professorService.carregarProfessorAtivo();
-//        return ResponseEntity.ok(response);
-//    }
-//    @GetMapping("/carregar/{id}")
-//    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('ALUNO_CONTROLLER','CARREGAR_POR_ID')")
-//    public ResponseEntity<?> carregarAlunoPorId(@PathVariable Long id){
-//        AlunoResponseDom response = alunoService.carregarAlunoPorId(id);
-//        return ResponseEntity.ok(response);
-//    }
-//
-//    @GetMapping("/carregar/curso/{cursoId}/fase/{faseId}")
-//    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('ALUNO_CONTROLLER','CARREGAR')")
-//    public ResponseEntity<?> carregarAluno(@PathVariable Long cursoId, @PathVariable Long faseId, @RequestBody PaginacaoRequestUtil paginacaoRequestUtil){
-//        PaginacaoResponseUtil<List<AlunoResponseDom>> response = alunoService.carregarAluno(cursoId, faseId, paginacaoRequestUtil);
-//        return ResponseEntity.ok(response);
-//    }
+    @GetMapping("/carregar/{id}")
+    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('DISCIPLINA_CONTROLLER','CARREGAR_POR_ID')")
+    public ResponseEntity<?> carregarDisciplinaPorId(@PathVariable Long id){
+        DisciplinaResponseDom response = disciplinaService.carregarDisciplinaPorId(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/carregar/curso/{cursoId}/fase/{faseId}")
+    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('DISCIPLINA_CONTROLLER','CARREGAR')")
+    public ResponseEntity<?> carregarDisciplina(@PathVariable Long cursoId, @PathVariable Long faseId, @RequestBody PaginacaoRequestUtil paginacaoRequestUtil){
+        PaginacaoResponseUtil<List<DisciplinaResponseDom>> response = disciplinaService.carregarDisciplina(cursoId, faseId, paginacaoRequestUtil);
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping("/criar")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('DISCIPLINA_CONTROLLER','CRIAR')")
@@ -55,18 +47,18 @@ public class DisciplinaController {
         disciplinaService.editarDisciplina(id,disciplinaRequestDom);
         return ResponseEntity.ok(null);
     }
-//
-//    @PutMapping("/inativar/{id}")
-//    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PROFESSOR_CONTROLLER','INATIVAR')")
-//    public ResponseEntity<?> inativarProfessor(@PathVariable Long id){
-//        professorService.inativarProfessor(id);
-//        return ResponseEntity.ok(null);
-//    }
-//
-//    @PutMapping("/ativar/{id}")
-//    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PROFESSOR_CONTROLLER','ATIVAR')")
-//    public ResponseEntity<?> ativarProfessor(@PathVariable Long id){
-//        professorService.ativarProfessor(id);
-//        return ResponseEntity.ok(null);
-//    }
+
+    @PutMapping("/inativar/{id}")
+    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('DISCIPLINA_CONTROLLER','INATIVAR')")
+    public ResponseEntity<?> inativarDisciplina(@PathVariable Long id){
+        disciplinaService.inativarDisciplina(id);
+        return ResponseEntity.ok(null);
+    }
+
+    @PutMapping("/ativar/{id}")
+    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('DISCIPLINA_CONTROLLER','ATIVAR')")
+    public ResponseEntity<?> ativarDisciplina(@PathVariable Long id){
+        disciplinaService.ativarDisciplina(id);
+        return ResponseEntity.ok(null);
+    }
 }
