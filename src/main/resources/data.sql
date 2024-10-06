@@ -41,7 +41,8 @@ VALUES
   ('REDEFINIR_SENHA', 'redefine a senha'),--13
   ('VALIDAR_TOKEN_REDEFINIR_SENHA', 'valida o token para redefinição da senha'), --14
   ('CARREGAR_ATIVO_POR_CURSO', 'carregar os dados ativos por curso'), --15
-  ('CARREGAR_POR_PERIODO', 'carregar os dados por periodo'); --16
+  ('CARREGAR_POR_PERIODO', 'carregar os dados por periodo, utlizado em visualizar de cronogramas'), --16
+  ('CARREGAR_POR_USUARIO', 'carregar os dados por usuario, utilizado em index de alunos'); --17
 
 --CONTROLLER
 INSERT INTO controller
@@ -61,14 +62,16 @@ VALUES
   ('CRONOGRAMA_CONTROLLER',null),--12
   ('DIA_CRONOGRAMA_CONTROLLER',null),--13
 
-  ('PROFESSOR_CONTROLLER','personalizado para professores'),--14
-  ('CRONOGRAMA_CONTROLLER','personalizado para professores'),--15
+  ('PROFESSOR_CONTROLLER','PROFESSORES'),--14
+  ('CRONOGRAMA_CONTROLLER','PROFESSORES'),--15
 
-  ('CRONOGRAMA_CONTROLLER','personalizado para alunos'),--16
+  ('CRONOGRAMA_CONTROLLER','ALUNOS'),--16
 
-  ('USUARIO_CONTROLLER','todos os usuarios tirando o administrador'),--17
+  ('USUARIO_CONTROLLER','rankingAcesso > 0'),--17
 
-  ('CURSO_CONTROLLER','para usuario com nivel abaixo de COORDENADOR_GERAL rankingAcesso > 1');--18
+  ('CURSO_CONTROLLER','rankingAcesso == 2'),--18
+
+  ('CURSO_CONTROLLER','rankingAcesso > 2');--19
 
 --CONTROLLER_FUNCIONALIDADE
 INSERT INTO  controller_funcionalidade
@@ -97,6 +100,7 @@ VALUES
   (4,3),--CARREGAR  --ALUNO
   (4,6),--EXCLUIR
   (4,7),--IMPORTAR
+  (4,10),--CARREGAR_POR_ID
 
   (5,1),--CRIAR --EVENTO
 
@@ -123,6 +127,7 @@ VALUES
   (8,8),--CARREGAR_ATIVO
   (8,10),--CARREGAR_POR_ID
   (8,16),--CARREGAR_POR_PERIODO
+  (8,17),--CARREGAR_POR_USUARIO
 
   (9,1),--CRIAR
   (9,2),--EDITAR
@@ -150,7 +155,10 @@ VALUES
   ------------------------
   (17,13),--REDEFINIR_SENHA --USUARIO_CONTROLLER -- rankingAcesso > 0
   --------------
-  (18,16);--CARREGAR_POR_PERIODO  --CURSO -- rankingAcesso > 1
+  (18,16),--CARREGAR_POR_PERIODO  --CURSO -- COORDENADOR
+  (18,17),--CARREGAR_POR_USUARIO
+----------------
+  (19,16);--CARREGAR_POR_PERIODO  --CURSO -- rankingAcesso > 2
 
 --NIVEL ACESSO
 INSERT INTO nivel_acesso
@@ -207,11 +215,11 @@ VALUES
   (4,14), --PROFESSOR_CONTROLLER
   (4,15), --CRONOGRAMA_CONTROLLER --PROFESSOR
   (4,17), --USUARIO_CONTROLLER
-  (4,18), --CURSO_CONTROLLER
+  (4,19), --CURSO_CONTROLLER
 
   (5,16), --CRONOGRAMA_CONTROLLER   -- ALUNOS
   (5,17), --USUARIO_CONTROLLER
-  (5,18); --CURSO_CONTROLLER
+  (5,19); --CURSO_CONTROLLER
 
 
 

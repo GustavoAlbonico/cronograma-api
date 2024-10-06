@@ -58,33 +58,4 @@ public interface CursoMapper {
         cursoCoordenadorResponseDom.setEmail(coordenador.getUsuario().getEmail());
         return cursoCoordenadorResponseDom;
    }
-
-    @Mapping(target = "fases", ignore = true)
-    void cursoParaCursoPorPeriodoResponseDom(
-            Curso curso,
-            @MappingTarget CursoPorPeriodoResponseDom cursoPorPeriodoResponseDom,
-            @Context List<CursoPorPeriodoFaseResponseDom> fasesPorPeriodo
-    );
-
-    @AfterMapping
-    default void afterCursoParaCursoPorPeriodoResponseDom(
-            @MappingTarget CursoPorPeriodoResponseDom cursoPorPeriodoResponseDom,
-            @Context List<CursoPorPeriodoFaseResponseDom> fasesPorPeriodo
-    ){
-        cursoPorPeriodoResponseDom.setFases(new ArrayList<>(fasesPorPeriodo));
-        cursoPorPeriodoResponseDom.setPossuiCurso(false);
-    }
-
-
-    void faseParaCursoPorPeriodoFaseResponseDom(
-            Fase fase,
-            @MappingTarget CursoPorPeriodoFaseResponseDom fasePorPerido
-    );
-
-    @AfterMapping
-    default void afterFaseParaCursoPorPeriodoFaseResponseDom(
-            @MappingTarget CursoPorPeriodoFaseResponseDom fasePorPerido
-    ){
-        fasePorPerido.setPossuiFase(false);
-    }
 }

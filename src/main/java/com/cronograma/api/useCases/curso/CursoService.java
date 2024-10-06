@@ -5,6 +5,8 @@ import com.cronograma.api.entitys.enums.StatusEnum;
 import com.cronograma.api.exceptions.CursoException;
 import com.cronograma.api.useCases.curso.domains.*;
 import com.cronograma.api.useCases.curso.implement.mappers.CursoMapper;
+import com.cronograma.api.useCases.curso.implement.mappers.CursoPorPeriodoMapper;
+import com.cronograma.api.useCases.curso.implement.mappers.CursoPorUsuarioMapper;
 import com.cronograma.api.useCases.curso.implement.repositorys.*;
 import com.cronograma.api.useCases.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,8 @@ public class CursoService {
     private final CursoCronogramaRepository cursoCronogramaRepository;
 
     private final CursoMapper cursoMapper;
+    private final CursoPorPeriodoMapper cursoPorPeriodoMapper;
+    private final CursoPorUsuarioMapper cursoPorUsuarioMapper;
 
     private final UsuarioService usuarioService;
 
@@ -55,6 +59,25 @@ public class CursoService {
                         .thenComparing(CursoResponseDom::getNome))
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public List<CursoPorUsuarioResponseDom> carregarCursoPorUsuario(){
+        Usuario usuario = usuarioService.buscarUsuarioAutenticado();
+
+        List<Curso> cursosEncontrados;
+        if (usuario.getNiveisAcesso().stream().anyMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 2)){
+            cursosEncontrados = cursoRepository.findAllByStatusEnum(StatusEnum.ATIVO);
+        } else {
+            List<Long> cursoIds = usuario.getCoordenador().getCursos().stream().map(Curso::getId).toList();
+            cursosEncontrados = cursoRepository.findAllByIdInAndStatusEnum(cursoIds,StatusEnum.ATIVO);
+        }
+
+        return cursosEncontrados.stream()
+                .map(cursoPorUsuarioMapper::cursoParaCursoPorUsuarioResponseDom)
+                .sorted(Comparator.comparing(CursoPorUsuarioResponseDom::getNome))
+                .toList();
+    }
+
     @Transactional(readOnly = true)
     public List<CursoPorPeriodoResponseDom> carregarCursoPorPeriodo(Long id){
         Usuario usuario = usuarioService.buscarUsuarioAutenticado();
@@ -68,13 +91,13 @@ public class CursoService {
             for (DiaCronograma diaCronograma: cronograma.getDiasCronograma()){
                 if(fasesPorPeriodoResponse.stream().noneMatch(fase -> fase.getId().equals(diaCronograma.getFase().getId()))){
                     CursoPorPeriodoFaseResponseDom cursoPorPeriodoFaseResponseDom = new CursoPorPeriodoFaseResponseDom();
-                    cursoMapper.faseParaCursoPorPeriodoFaseResponseDom(diaCronograma.getFase(),cursoPorPeriodoFaseResponseDom);
+                    cursoPorPeriodoMapper.faseParaCursoPorPeriodoFaseResponseDom(diaCronograma.getFase(),cursoPorPeriodoFaseResponseDom);
                     fasesPorPeriodoResponse.add(cursoPorPeriodoFaseResponseDom);
                 }
             }
 
             CursoPorPeriodoResponseDom cursoPorPeriodoResponseDom = new CursoPorPeriodoResponseDom();
-            cursoMapper.cursoParaCursoPorPeriodoResponseDom(cronograma.getCurso(),cursoPorPeriodoResponseDom,fasesPorPeriodoResponse);
+            cursoPorPeriodoMapper.cursoParaCursoPorPeriodoResponseDom(cronograma.getCurso(),cursoPorPeriodoResponseDom,fasesPorPeriodoResponse);
             cursosPorPeriodoResponse.add(cursoPorPeriodoResponseDom);
         }
         

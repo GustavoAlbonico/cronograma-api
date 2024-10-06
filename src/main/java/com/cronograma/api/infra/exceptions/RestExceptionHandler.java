@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.io.IOException;
 import java.net.SocketException;
 
 @ControllerAdvice
@@ -58,6 +59,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(CoordenadorException.class)
     private ResponseEntity<RestErrorMessage> coordenadorException(CoordenadorException exception){
         RestErrorMessage errorResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST,exception.getMessages());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(AlunoException.class)
+    private ResponseEntity<RestErrorMessage> alunoException(AlunoException exception){
+        RestErrorMessage errorResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST,exception.getMessages());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(IOException.class)
+    private ResponseEntity<RestErrorMessage> alunoImportarException(IOException exception){
+        RestErrorMessage errorResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST,"Erro inesperado ao ler arquivo CSV!");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
