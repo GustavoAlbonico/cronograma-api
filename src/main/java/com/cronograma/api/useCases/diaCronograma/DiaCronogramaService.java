@@ -11,6 +11,7 @@ import com.cronograma.api.useCases.diaCronograma.implement.repositorys.DiaCronog
 import com.cronograma.api.useCases.fase.implement.repositorys.FaseRepository;
 import com.cronograma.api.useCases.usuario.UsuarioService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DiaCronogramaService {
 
     private final DiaCronogramaRepository diaCronogramaRepository;

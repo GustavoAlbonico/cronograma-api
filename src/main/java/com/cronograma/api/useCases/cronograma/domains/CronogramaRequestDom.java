@@ -10,6 +10,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CronogramaRequestDom{
-    private Long periodoId;
     private Long cursoId;
 }

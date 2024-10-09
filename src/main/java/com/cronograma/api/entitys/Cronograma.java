@@ -29,7 +29,7 @@ public class Cronograma {
     @JoinColumn(nullable = false)
     private Periodo periodo;
 
-    @OneToMany(mappedBy = "cronograma",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "cronograma")
     private Set<DiaCronograma> diasCronograma;
 
 }

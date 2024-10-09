@@ -10,6 +10,7 @@ import lombok.Setter;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -26,7 +27,7 @@ public class Evento {
     private LocalDateTime data;
 
     @Column(nullable = false)
-    private String mensagem;
+    private List<String> mensagens;
 
     @Column(nullable = false)
     private String acao;

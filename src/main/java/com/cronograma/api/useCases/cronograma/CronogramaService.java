@@ -4,6 +4,7 @@ import com.cronograma.api.entitys.*;
 import com.cronograma.api.entitys.enums.*;
 import com.cronograma.api.exceptions.AuthorizationException;
 import com.cronograma.api.exceptions.CronogramaException;
+import com.cronograma.api.exceptions.PeriodoException;
 import com.cronograma.api.useCases.cronograma.domains.*;
 import com.cronograma.api.useCases.cronograma.implement.mappers.CronogramaDiaCronogramaMapper;
 import com.cronograma.api.useCases.cronograma.implement.mappers.CronogramaDisciplinaMapper;
@@ -143,18 +144,27 @@ public class CronogramaService {
         return cronogramaResponseDom;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public void excluirCronograma(Long id){
         Cronograma cronograma = cronogramaRepository.findById(id).orElseThrow(() -> new CronogramaException("Cronograma não encontrado"));
         validarUsuarioPertenceCurso(cronograma.getCurso().getId());
+
+        cronogramaDiaCronogramaRepository.deleteAllByCronogramaId(id);
         cronogramaRepository.deleteById(id);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Long gerarCronograma(CronogramaRequestDom cronograma){
-        validarExisteCronograma(cronograma);
-
         Periodo periodoAtivo = periodoService.buscarPeriodoAtivoAtual();
+
+        if (cronograma.getCursoId() == null){
+            throw new CronogramaException("Curso é um campo obrigatório!");
+        }
+
+        Curso cursoEncontrado = cronogramaCursoRepository.findById(cronograma.getCursoId())
+                .orElseThrow(() -> new CronogramaException("Nenhum curso encontrado!"));
+
+        validarExisteCronograma(cronograma,periodoAtivo);
 
         List<DataBloqueada> datasBloqueadas = cronogramaDataBloqueadaRepository.findAll();
 
@@ -199,7 +209,7 @@ public class CronogramaService {
                         professoresLecionandoEmOutroCursoComQuantidadeDiaSemanaOcupados);
 
         final Cronograma cronogramaEntidade = new Cronograma();
-        cronogramaMapper.cronogramaRequestDomParaCronograma(cronograma,cronogramaEntidade,cronogramaCursoRepository,cronogramaPeriodoRepository);
+        cronogramaMapper.cronogramaRequestDomParaCronograma(cronograma,cronogramaEntidade,periodoAtivo,cursoEncontrado);
         Cronograma cronogramaSalvo = cronogramaRepository.save(cronogramaEntidade);
 
         diaCronogramaService.criarDiaCronograma(
@@ -211,13 +221,14 @@ public class CronogramaService {
 
         return cronogramaSalvo.getId();
     }
-    private void validarExisteCronograma(CronogramaRequestDom cronograma){
-        Optional<Cronograma> cronogramaEncontrado = cronogramaRepository.findByCursoIdAndPeriodoId(cronograma.getCursoId(),cronograma.getPeriodoId());
+    private void validarExisteCronograma(CronogramaRequestDom cronograma,Periodo periodoAtivo){
+        Optional<Cronograma> cronogramaEncontrado = cronogramaRepository.findByCursoIdAndPeriodoId(cronograma.getCursoId(),periodoAtivo.getId());
         if (cronogramaEncontrado.isPresent()){
             throw new CronogramaException("É necessário excluir o cronograma antigo para gerar um novo cronograma!");
         }
     }
     private void validarQuantidadeDiasAulaLetivosDisponiveisPorPeriodo(Set<Disciplina> disciplinasEncontradas,List<Fase> fases,Map<DiaSemanaEnum,Double> quantidadeAulasPorDiaDaSemana){
+        List<String> errorMessages =  new ArrayList<>();
 
         final double quantidadeTotalDiaAulaDisponivelPorPeriodo = quantidadeAulasPorDiaDaSemana.values().stream().mapToDouble(Double::doubleValue).sum();
 
@@ -228,25 +239,37 @@ public class CronogramaService {
                     .sum();
 
             if (quantidadeTotalDiaAulaNecessarioPorDisciplinas > quantidadeTotalDiaAulaDisponivelPorPeriodo){
-                throw new CronogramaException("Não existe dias letivos suficiente para a " + fase.getNumero() + "º fase!");
+                errorMessages.add("Não existe dias letivos suficiente para a " + fase.getNumero() + "º fase!");
             }
+        }
+
+        if(!errorMessages.isEmpty()){
+            throw new CronogramaException(errorMessages);
         }
     }
 
     private void validarProfessorPossuiDiaSemanaDisponivelCadastrado(Set<Disciplina> disciplinasEncontradas){
+        List<String> errorMessages =  new ArrayList<>();
+
         for (Disciplina disciplina : disciplinasEncontradas){
             if (disciplina.getProfessor() != null){
                 if (disciplina.getProfessor().getDiasSemanaDisponivel().isEmpty()){
-                    throw new CronogramaException(
+                    errorMessages.add(
                             "O professor " + disciplina.getProfessor().getUsuario().getNome() +
                             " da disciplina " + disciplina.getNome() +
                             " que pertence a " + disciplina.getFase().getNumero() + "º fase não possui dia semana disponivel cadastrado!");
                 }
             }
         }
+
+        if(!errorMessages.isEmpty()){
+            throw new CronogramaException(errorMessages);
+        }
     }
 
     private void validarDisciplinaExtensaoPossuiProfessorDiaSemanaDisponivelSabadoCadastrado(Set<Disciplina> disciplinasEncontradas){
+        List<String> errorMessages =  new ArrayList<>();
+
         for (Disciplina disciplina : disciplinasEncontradas){
             if (disciplina.getExtensaoBooleanEnum().equals(BooleanEnum.SIM) && disciplina.getProfessor() != null){
                final boolean disciplinaExtensaoPossuiProfessorDiaSemanaDisponivelSabadoCadastrado =
@@ -254,12 +277,16 @@ public class CronogramaService {
                                 .noneMatch(diaSemanaDisponivel -> diaSemanaDisponivel.getDiaSemanaEnum().equals(DiaSemanaEnum.SABADO));
 
                if (disciplinaExtensaoPossuiProfessorDiaSemanaDisponivelSabadoCadastrado){
-                   throw new CronogramaException(
+                   errorMessages.add(
                            "O professor " + disciplina.getProfessor().getUsuario().getNome() +
                                    " da disciplina " + disciplina.getNome() +
                                    " que pertence a " + disciplina.getFase().getNumero() + "º fase não possui SABADO cadastrado como dia semana disponivel!");
                }
             }
+        }
+
+        if(!errorMessages.isEmpty()){
+            throw new CronogramaException(errorMessages);
         }
     }
 
