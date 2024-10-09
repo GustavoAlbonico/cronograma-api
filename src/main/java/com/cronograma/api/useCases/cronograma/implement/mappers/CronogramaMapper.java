@@ -19,22 +19,16 @@ public interface CronogramaMapper {
     void cronogramaRequestDomParaCronograma(
             CronogramaRequestDom cronogramaRequestDom,
             @MappingTarget Cronograma cronograma,
-            @Context CronogramaCursoRepository cronogramaCursoRepository,
-            @Context CronogramaPeriodoRepository cronogramaPeriodoRepository);
+            @Context Periodo periodo,
+            @Context Curso curso);
 
     @AfterMapping
     default void afterCronogramaRequestDomParaCronograma(
-            CronogramaRequestDom cronogramaRequestDom,
             @MappingTarget Cronograma cronograma,
-            @Context CronogramaCursoRepository cronogramaCursoRepository,
-            @Context CronogramaPeriodoRepository cronogramaPeriodoRepository
+            @Context Periodo periodo,
+            @Context Curso curso
     ){
-        final Curso cursoEncontrado = cronogramaCursoRepository.findById(cronogramaRequestDom.getCursoId())
-                .orElseThrow(() -> new CronogramaException("Nenhum curso encontrado!"));
-        final Periodo periodoEncontrado = cronogramaPeriodoRepository.findById(cronogramaRequestDom.getPeriodoId())
-                .orElseThrow(() -> new CronogramaException("Nenhum periodo encontrado!"));
-
-        cronograma.setCurso(cursoEncontrado);
-        cronograma.setPeriodo(periodoEncontrado);
+        cronograma.setCurso(curso);
+        cronograma.setPeriodo(periodo);
     }
 }

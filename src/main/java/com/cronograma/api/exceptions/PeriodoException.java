@@ -3,14 +3,14 @@ package com.cronograma.api.exceptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CronogramaException extends RuntimeException{
+public class PeriodoException extends RuntimeException{
 
     private List<String> messageList =  new ArrayList<>();
-    public CronogramaException(String mensagem){
+    public PeriodoException(String mensagem){
         super(mensagem);
     }
 
-    public CronogramaException(List<String> mensagens){
+    public PeriodoException(List<String> mensagens){
         this.messageList = mensagens;
     }
     public List<String> getMessages(){

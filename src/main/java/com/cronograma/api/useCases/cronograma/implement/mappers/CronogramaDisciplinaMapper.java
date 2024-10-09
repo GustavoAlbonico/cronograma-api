@@ -3,6 +3,7 @@ package com.cronograma.api.useCases.cronograma.implement.mappers;
 import com.cronograma.api.entitys.DiaSemanaDisponivel;
 import com.cronograma.api.entitys.Disciplina;
 import com.cronograma.api.entitys.Professor;
+import com.cronograma.api.entitys.Usuario;
 import com.cronograma.api.useCases.cronograma.domains.CronogramaDisciplinaResponseDom;
 import org.mapstruct.*;
 
@@ -36,10 +37,18 @@ public interface CronogramaDisciplinaMapper {
     Disciplina disciplinaParaDisciplinaNovaInstancia(Disciplina disciplina);
 
     @Mapping(target = "disciplinas", ignore = true)
-    @Mapping(target = "usuario", ignore = true)
+    @Mapping(target = "usuario", qualifiedByName = "usuarioParaUsuarioNovaInstancia")
     @Mapping(target = "diasSemanaDisponivel", qualifiedByName = "diasSemanaDisponivelParaDiasSemanaDisponivelNovaInstancia")
     @Named("professorParaProfessorNovaInstancia")
     Professor professorParaProfessorNovaInstancia(Professor professor);
+
+    @Mapping(target = "niveisAcesso", ignore = true)
+    @Mapping(target = "professor", ignore = true)
+    @Mapping(target = "coordenador", ignore = true)
+    @Mapping(target = "aluno", ignore = true)
+    @Mapping(target = "eventos", ignore = true)
+    @Named("usuarioParaUsuarioNovaInstancia")
+    Usuario usuarioParaUsuarioNovaInstancia(Usuario usuario);
 
     @Named("diasSemanaDisponivelParaDiasSemanaDisponivelNovaInstancia")
     default Set<DiaSemanaDisponivel> diasSemanaDisponivelParaDiasSemanaDisponivelNovaInstancia(

@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PeriodoRepository extends JpaRepository<Periodo, Long> {
 
-    Optional<Set<Periodo>> findByStatusEnum (StatusEnum statusEnum);
+    Optional<Set<Periodo>> findAllByStatusEnum (StatusEnum statusEnum);
 }

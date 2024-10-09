@@ -4,11 +4,12 @@ import com.cronograma.api.entitys.DiaCronograma;
 import com.cronograma.api.useCases.diaCronograma.implement.repositorys.DiaCronogramaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+@Repository
 public interface CronogramaDiaCronogramaRepository extends DiaCronogramaRepository {
     @Query(value =
             "SELECT dia_cronograma.* " +
@@ -28,4 +29,6 @@ public interface CronogramaDiaCronogramaRepository extends DiaCronogramaReposito
             "GROUP BY dia_cronograma.id",
     nativeQuery = true)
     List<DiaCronograma> buscarTodosPorProfessoresId(@Param("professoresId") Set<Long> professoresId);
+
+    void deleteAllByCronogramaId(Long cronogramaId);
 }

@@ -94,8 +94,9 @@ VALUES
   (6,1),--CRIAR
   (6,2),--EDITAR
   (6,3),--CARREGAR  --PERIODO
-  (6,4),--INATIVAR
-  (6,8),--CARREGAR_ATIVO
+  (6,6),--EXCLUIR
+  (6,10),--CARREGAR_POR_ID
+
 
   (7,1),--CRIAR
   (7,2),--EDITAR
@@ -597,9 +598,9 @@ ON CONFLICT (id) DO NOTHING;
 
 -- PERIODO
 INSERT INTO  periodo
-  (id,data_inicial, data_final)
+  (id,nome,data_inicial, data_final)
 VALUES
-  (1,'2024-07-29', '2024-12-13')
+  (1,'2º Semestre', '2024-07-29', '2024-12-13')
 ON CONFLICT (id) DO NOTHING;
 
 --ALUNO

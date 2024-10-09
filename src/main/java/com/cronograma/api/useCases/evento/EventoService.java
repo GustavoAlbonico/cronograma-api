@@ -15,14 +15,16 @@ import com.cronograma.api.useCases.evento.implement.repositorys.EventoRepository
 import com.cronograma.api.useCases.evento.implement.repositorys.EventoUsuarioRepository;
 import com.cronograma.api.useCases.usuario.UsuarioService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EventoService {
 
     private final EventoRepository eventoRepository;
@@ -54,48 +56,56 @@ public class EventoService {
             }
         }
     }
-    @Transactional
+
+
     public void criarEventoCronograma(EventoCronogramaRequestDom cronograma){
 
         final Usuario usuario = usuarioService.buscarUsuarioAutenticado();
         validarUsuarioPertenceCurso(cronograma.getCursoId(),usuario);
 
         Long cronogramaId = null;
+        Long eventoId = null;
         try {
             validarExisteEventoExecucao(cronograma,usuario.getId());
             removerEventoAntigo(cronograma,usuario.getId());
 
             EventoRequestDom eventoPendente = new EventoRequestDom(
                     null,
-                    "Gerando cronograma",
+                    List.of("Gerando cronograma"),
                     "gerar cronograma",
                     EventoStatusEnum.EXECUTANDO,
                     cronograma.getCursoId(),
                     usuario.getId()
             );
             Evento evento = criarEvento(eventoPendente);
+            eventoId = evento.getId();
             try {
                 cronogramaId = cronogramaService.gerarCronograma(cronograma);
                 evento.setEventoStatusEnum(EventoStatusEnum.SUCESSO);
-                evento.setMensagem("Cronograma gerado com sucesso!");
+                evento.setMensagens(List.of("Cronograma gerado com sucesso!"));
             } catch (CronogramaException cronogramaException) {
                 evento.setEventoStatusEnum(EventoStatusEnum.ERRO);
-                evento.setMensagem(cronogramaException.getMessage());
+                evento.setMensagens(cronogramaException.getMessages());
             } catch (Exception exception) {
                 evento.setEventoStatusEnum(EventoStatusEnum.ERRO);
-                evento.setMensagem("Erro não mapeado!");
+                evento.setMensagens(List.of("Erro não mapeado!"));
             }
             atualizarEvento(evento);
         } catch (EventoException eventoException){
-            if(cronogramaId != null){
-                cronogramaService.excluirCronograma(cronogramaId);
-            }
+            eventoRollBack(cronogramaId,eventoId);
             throw eventoException;
         } catch (Exception exception){
-            if(cronogramaId != null){
-                cronogramaService.excluirCronograma(cronogramaId);
-            }
+            eventoRollBack(cronogramaId,eventoId);
             throw exception;
+        }
+    }
+
+    private void eventoRollBack(Long cronogramaId, Long eventoId){
+        if(cronogramaId != null){
+            cronogramaService.excluirCronograma(cronogramaId);
+        }
+        if(eventoId != null){
+            eventoRepository.deleteById(eventoId);
         }
     }
 

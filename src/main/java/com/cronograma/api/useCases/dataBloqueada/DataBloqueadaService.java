@@ -22,7 +22,6 @@ public class DataBloqueadaService {
     private final DataBloqueadaRepository dataBloqueadaRepository;
     private final DataBloqueadaMapper dataBloqueadaMapper;
 
-
     @Transactional(readOnly = true)
     public DataBloqueadaResponseDom carregarDataBloqueadaPorId(Long id){
         DataBloqueada dataBloqueadaEncontrada = dataBloqueadaRepository.findById(id)

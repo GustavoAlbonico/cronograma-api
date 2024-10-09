@@ -34,7 +34,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CronogramaException.class)
     private ResponseEntity<RestErrorMessage> cronogramaException(CronogramaException exception){
-        RestErrorMessage errorResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST,exception.getMessage());
+        RestErrorMessage errorResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST,exception.getMessages());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
@@ -94,6 +94,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CursoException.class)
     private ResponseEntity<RestErrorMessage> cursoException(CursoException exception){
+        RestErrorMessage errorResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST,exception.getMessages());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(PeriodoException.class)
+    private ResponseEntity<RestErrorMessage> periodoException(PeriodoException exception){
         RestErrorMessage errorResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST,exception.getMessages());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
