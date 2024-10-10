@@ -3,6 +3,7 @@ package com.cronograma.api.useCases.diaCronograma;
 import com.cronograma.api.entitys.*;
 import com.cronograma.api.entitys.enums.DataStatusEnum;
 import com.cronograma.api.entitys.enums.DiaSemanaEnum;
+import com.cronograma.api.entitys.enums.StatusEnum;
 import com.cronograma.api.exceptions.CronogramaException;
 import com.cronograma.api.exceptions.DiaCronogramaException;
 import com.cronograma.api.useCases.cronograma.domains.CronogramaDisciplinaDom;
@@ -176,6 +177,13 @@ public class DiaCronogramaService {
         }
 
         validarUsuarioPertenceCurso(primeiroDiaCronograma.getCronograma().getCurso().getId());
+
+        if (
+            segundoDiaCronograma.getCronograma().getPeriodo().getStatusEnum().equals(StatusEnum.INATIVO) ||
+            primeiroDiaCronograma.getCronograma().getPeriodo().getStatusEnum().equals(StatusEnum.INATIVO)
+        ){
+            throw new DiaCronogramaException("Não é possivel alterar um cronograma com periodo inativo!");
+        }
 
         validarPossuiConflitoData(primeiroDiaCronograma,segundoDiaCronograma);
         validarPossuiDiaSemanaDisponivel(primeiroDiaCronograma,segundoDiaCronograma);

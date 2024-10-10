@@ -25,10 +25,12 @@ public interface CronogramaDiaCronogramaRepository extends DiaCronogramaReposito
             "SELECT dia_cronograma.* " +
             "FROM dia_cronograma " +
             "JOIN disciplina ON dia_cronograma.disciplina_id = disciplina.id " +
+            "JOIN cronograma ON dia_cronograma.cronograma_id = cronograma.id " +
             "WHERE disciplina.professor_id IN :professoresId " +
+            "AND cronograma.periodo_id = :periodoId " +
             "GROUP BY dia_cronograma.id",
     nativeQuery = true)
-    List<DiaCronograma> buscarTodosPorProfessoresId(@Param("professoresId") Set<Long> professoresId);
+    List<DiaCronograma> buscarTodosPorPeriodoIdPorProfessoresId(@Param("periodoId") Long periodoId, @Param("professoresId") Set<Long> professoresId);
 
     void deleteAllByCronogramaId(Long cronogramaId);
 }

@@ -45,52 +45,6 @@ public class CronogramaService {
     private final UsuarioService usuarioService;
 
 
-    private void validarUsuarioPertenceCurso(Long cursoId){
-       final Usuario usuario = usuarioService.buscarUsuarioAutenticado();
-
-        if(
-           usuario.getCoordenador() != null &&
-           usuario.getNiveisAcesso().stream().noneMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 2)
-        ){
-            if(usuario.getCoordenador().getCursos().stream().noneMatch(curso -> curso.getId().equals(cursoId))){
-                throw new CronogramaException("Você não possui acesso a este curso!");
-            }
-        }
-    }
-
-    private void validarUsuarioPertenceCursoFase(Long cursoId,Long faseId){
-        final Usuario usuario = usuarioService.buscarUsuarioAutenticado();
-
-        if(
-            usuario.getAluno() != null &&
-            usuario.getNiveisAcesso().stream().noneMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 4)
-        ){
-            if(
-               !usuario.getAluno().getCurso().getId().equals(cursoId) ||
-                usuario.getAluno().getFases().stream().noneMatch(fase -> fase.getId().equals(faseId))
-            ){
-                throw new CronogramaException("Você não possui acesso a este curso ou fase!");
-            }
-        } else if(
-           usuario.getProfessor() != null &&
-           usuario.getNiveisAcesso().stream().noneMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 3)
-        ){
-          if(usuario.getProfessor().getDisciplinas().stream().noneMatch(disciplina ->
-                                    disciplina.getCurso().getId().equals(cursoId) &&
-                                    disciplina.getFase().getId().equals(faseId))
-          ){
-                throw new CronogramaException("Você não possui acesso a este curso ou fase!");
-          }
-        } else if(
-           usuario.getCoordenador() != null &&
-           usuario.getNiveisAcesso().stream().noneMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 2)
-        ){
-            if(usuario.getCoordenador().getCursos().stream().noneMatch(curso -> curso.getId().equals(cursoId))){
-                throw new CronogramaException("Você não possui acesso a este curso!");
-            }
-        }
-    }
-
     @Transactional(readOnly = true)
     public CronogramaResponseDom carregarCronograma(Long periodoId,Long cursoId,Long faseId){
 
@@ -171,10 +125,10 @@ public class CronogramaService {
         Map<DiaSemanaEnum, Double> quantidadeAulasPorDiaDaSemana =
                 buscarQuantidadeAulasDisponveisPorDiaDaSemana(periodoAtivo, datasBloqueadas);
 
-        List<Fase> fases = cronogramaFaseRepository.buscarFasesPorCursoId(cronograma.getCursoId())
+        List<Fase> fases = cronogramaFaseRepository.buscarFasesPorCursoIdPorStatusEnum(cronograma.getCursoId(), StatusEnum.ATIVO.toString())
                 .orElseThrow(() -> new CronogramaException("Nenhuma fase encontrada!"));
 
-        Set<Disciplina> disciplinasEncontradas = cronogramaDisciplinaRepository.findByCursoId(cronograma.getCursoId())
+        Set<Disciplina> disciplinasEncontradas = cronogramaDisciplinaRepository.findAllByStatusEnumAndCursoId(StatusEnum.ATIVO,cronograma.getCursoId())
                 .orElseThrow(() -> new CronogramaException("Nenhuma disciplina encontrada!"));
 
         Set<Disciplina> disciplinas = cronogramaDisciplinaMapper.disciplinasParaDisciplinasNovaInstancia(disciplinasEncontradas);
@@ -188,7 +142,7 @@ public class CronogramaService {
 
 
         Set<Long> professoresId = disciplinas.stream().map(disciplina -> disciplina.getProfessor().getId()).collect(Collectors.toSet());
-        List<DiaCronograma> diasCronogramaReferenteProfessoresCursoAtual = cronogramaDiaCronogramaRepository.buscarTodosPorProfessoresId(professoresId);
+        List<DiaCronograma> diasCronogramaReferenteProfessoresCursoAtual = cronogramaDiaCronogramaRepository.buscarTodosPorPeriodoIdPorProfessoresId(periodoAtivo.getId(),professoresId);
         final Map<Long,Map<DiaSemanaEnum, Double>> professoresLecionandoEmOutroCursoComQuantidadeDiaSemanaOcupados = diasCronogramaReferenteProfessoresCursoAtual.stream()
                 .collect(Collectors.groupingBy(diaCronograma -> diaCronograma.getDisciplina().getProfessor().getId(),
                         LinkedHashMap::new,
@@ -221,6 +175,53 @@ public class CronogramaService {
 
         return cronogramaSalvo.getId();
     }
+
+    private void validarUsuarioPertenceCurso(Long cursoId){
+        final Usuario usuario = usuarioService.buscarUsuarioAutenticado();
+
+        if(
+                usuario.getCoordenador() != null &&
+                        usuario.getNiveisAcesso().stream().noneMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 2)
+        ){
+            if(usuario.getCoordenador().getCursos().stream().noneMatch(curso -> curso.getId().equals(cursoId))){
+                throw new CronogramaException("Você não possui acesso a este curso!");
+            }
+        }
+    }
+
+    private void validarUsuarioPertenceCursoFase(Long cursoId,Long faseId){
+        final Usuario usuario = usuarioService.buscarUsuarioAutenticado();
+
+        if(
+                usuario.getAluno() != null &&
+                        usuario.getNiveisAcesso().stream().noneMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 4)
+        ){
+            if(
+                    !usuario.getAluno().getCurso().getId().equals(cursoId) ||
+                            usuario.getAluno().getFases().stream().noneMatch(fase -> fase.getId().equals(faseId))
+            ){
+                throw new CronogramaException("Você não possui acesso a este curso ou fase!");
+            }
+        } else if(
+                usuario.getProfessor() != null &&
+                        usuario.getNiveisAcesso().stream().noneMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 3)
+        ){
+            if(usuario.getProfessor().getDisciplinas().stream().noneMatch(disciplina ->
+                    disciplina.getCurso().getId().equals(cursoId) &&
+                            disciplina.getFase().getId().equals(faseId))
+            ){
+                throw new CronogramaException("Você não possui acesso a este curso ou fase!");
+            }
+        } else if(
+                usuario.getCoordenador() != null &&
+                        usuario.getNiveisAcesso().stream().noneMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 2)
+        ){
+            if(usuario.getCoordenador().getCursos().stream().noneMatch(curso -> curso.getId().equals(cursoId))){
+                throw new CronogramaException("Você não possui acesso a este curso!");
+            }
+        }
+    }
+
     private void validarExisteCronograma(CronogramaRequestDom cronograma,Periodo periodoAtivo){
         Optional<Cronograma> cronogramaEncontrado = cronogramaRepository.findByCursoIdAndPeriodoId(cronograma.getCursoId(),periodoAtivo.getId());
         if (cronogramaEncontrado.isPresent()){
