@@ -54,12 +54,12 @@ public class CronogramaService {
         Curso curso = cronogramaCursoRepository.findById(cursoId).orElseThrow(() -> new CronogramaException("Nenhum curso encontrado!"));
         Fase fase = cronogramaFaseRepository.findById(faseId).orElseThrow(() -> new CronogramaException("Nenhuma fase encontrada!"));
 
-        List<Disciplina> disciplinas = cronogramaDisciplinaRepository.findAllByCursoIdAndFaseId(cursoId,faseId);
+        List<Disciplina> disciplinas = cronogramaDisciplinaRepository.buscarTodasDisciplinasPorPeriodoPorCursoIdPorFaseId(periodoId,cursoId,faseId);
 
         List<CronogramaDisciplinaResponseDom> disciplinasReponse =
                 cronogramaDisciplinaMapper.listaDisciplinaParaListaCronogramaDisciplinaResponseDom(disciplinas);
 
-        List<DiaCronograma> diasCronogramaEncontrado = cronogramaDiaCronogramaRepository.buscarTodosPorCursoIdFaseId(cursoId,faseId);
+        List<DiaCronograma> diasCronogramaEncontrado = cronogramaDiaCronogramaRepository.buscarTodosPorPeriodoPorCursoIdPorFaseId(periodoId,cursoId,faseId);
         List<CronogramaDiaCronogramaResponseDom>  diasCronogramaResponse =
                 cronogramaDiaCronogramaMapper.listaDiaCronogramaParaListaCronogramaDiaCronogramaResponseDom(diasCronogramaEncontrado);
 
