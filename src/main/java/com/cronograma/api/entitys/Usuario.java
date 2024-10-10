@@ -65,4 +65,12 @@ public class Usuario {
         statusEnum = StatusEnum.ATIVO;
     }
 
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "nome='" + nome + '\'' +
+                ", email='" + email + '\'' +
+                ", cpf='" + cpf + '\'' +
+                '}';
+    }
 }

@@ -56,6 +56,9 @@ public class Curso {
     @OneToMany(mappedBy = "curso")
     private Set<Evento> eventos =  new HashSet<>();
 
+    @OneToMany(mappedBy = "curso")
+    private Set<Historico> historicos = new HashSet<>();
+
     @PrePersist
     void defaultStatusEnum(){
         statusEnum = StatusEnum.ATIVO;

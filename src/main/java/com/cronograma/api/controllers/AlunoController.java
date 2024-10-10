@@ -6,6 +6,7 @@ import com.cronograma.api.useCases.aluno.domains.AlunoRequestDom;
 import com.cronograma.api.useCases.aluno.domains.AlunoResponseDom;
 import com.cronograma.api.utils.paginacao.PaginacaoRequestUtil;
 import com.cronograma.api.utils.paginacao.PaginacaoResponseUtil;
+import jakarta.persistence.PrePersist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

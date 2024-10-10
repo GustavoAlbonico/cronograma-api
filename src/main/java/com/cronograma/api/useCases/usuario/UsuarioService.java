@@ -140,6 +140,10 @@ public class UsuarioService {
         return (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
+    public String buscarNomeUsuarioAutenticado(){
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
     private void validarCampos(UsuarioCadastroRequestDom usuario){
         List<String> errorMessages =  new ArrayList<>(validarSenha(usuario.getSenha(),null));
 

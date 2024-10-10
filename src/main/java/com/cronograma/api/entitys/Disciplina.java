@@ -2,6 +2,7 @@ package com.cronograma.api.entitys;
 
 import com.cronograma.api.entitys.enums.BooleanEnum;
 import com.cronograma.api.entitys.enums.StatusEnum;
+import com.cronograma.api.infra.listener.AuditListener;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@EntityListeners(AuditListener.class)
 public class Disciplina {
 
     @Id
