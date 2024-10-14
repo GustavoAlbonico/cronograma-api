@@ -26,7 +26,6 @@ public interface AlunoMapper {
         return RegexUtil.retornarNumeros(cpf);
     }
 
-    @Mapping(target = "telefone", ignore = true)
     @Mapping(target = "usuario", ignore = true)
     @Mapping(target = "curso", ignore = true)
     @Mapping(target = "fases", ignore = true)
@@ -39,13 +38,11 @@ public interface AlunoMapper {
 
     @AfterMapping
     default void afterAlunoRequestDomParaAluno(
-            AlunoRequestDom alunoRequestDom,
             @MappingTarget Aluno aluno,
             @Context Usuario usuario,
             @Context Curso cursoEncontrado,
             @Context List<Fase> fasesEncontradas
     ){
-        aluno.setTelefone(RegexUtil.retornarNumeros(alunoRequestDom.getTelefone()));
         aluno.setUsuario(usuario);
         aluno.setCurso(cursoEncontrado);
         aluno.setFases(new HashSet<>(fasesEncontradas));
@@ -70,30 +67,4 @@ public interface AlunoMapper {
         return usuario.getCpf();
     }
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "telefone",qualifiedByName = "editarTelefone")
-    @Mapping(target = "usuario", ignore = true)
-    @Mapping(target = "curso", ignore = true)
-    @Mapping(target = "fases", ignore = true)
-    void alunoRequestDomParaAlunoEncontrado(
-            AlunoRequestDom alunoRequestDom,
-            @MappingTarget Aluno aluno,
-            @Context Curso cursoEncontrado,
-            @Context List<Fase> fasesEncontradas
-    );
-
-    @AfterMapping
-    default void afterAlunoRequestDomParaAlunoEncontrado(
-            @MappingTarget Aluno aluno,
-            @Context Curso cursoEncontrado,
-            @Context List<Fase> fasesEncontradas
-    ){
-        aluno.setCurso(cursoEncontrado);
-        aluno.setFases(new HashSet<>(fasesEncontradas));
-    }
-
-    @Named("editarTelefone")
-    default String editarTelefone (String telefone){
-        return RegexUtil.retornarNumeros(telefone);
-    }
 }

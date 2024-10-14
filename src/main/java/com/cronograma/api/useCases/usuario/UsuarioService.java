@@ -101,6 +101,14 @@ public class UsuarioService {
         usuarioRepository.save(usuarioEncontrado);
     }
 
+    public void editarUsuarioNivelAcesso(Long id, Set<NivelAcesso> niveisAcesso){
+        Usuario usuarioEncontrado = usuarioRepository.findById(id)
+                .orElseThrow(() -> new UsuarioException("Nenhum usuario encontrado!"));
+
+        usuarioEncontrado.setNiveisAcesso(niveisAcesso);
+        usuarioRepository.save(usuarioEncontrado);
+    }
+
     public void esqueciMinhaSenha(String cpf) throws MessagingException {
         Usuario usuario = this.usuarioRepository.findByCpfAndStatusEnum(cpf, StatusEnum.ATIVO)
                 .orElseThrow(() -> new AuthorizationException("Cpf não encontrado"));

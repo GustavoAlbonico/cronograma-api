@@ -1,6 +1,7 @@
 package com.cronograma.api.useCases.coordenador.implement.mappers;
 
 import com.cronograma.api.entitys.Coordenador;
+import com.cronograma.api.entitys.Professor;
 import com.cronograma.api.entitys.Usuario;
 import com.cronograma.api.useCases.coordenador.domains.CoordenadorRequestDom;
 import com.cronograma.api.useCases.coordenador.domains.CoordenadorResponseDom;
@@ -69,4 +70,7 @@ public interface CoordenadorMapper {
     default String editarTelefone (String telefone){
         return RegexUtil.retornarNumeros(telefone);
     }
+
+    @Mapping(target = "id", ignore = true)
+    Coordenador professorEncontradoParaCoordenador(Professor professorEncontrado);
 }
