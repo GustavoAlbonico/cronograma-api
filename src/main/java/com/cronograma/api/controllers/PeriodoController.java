@@ -20,6 +20,13 @@ public class PeriodoController {
     @Autowired
     private PeriodoService periodoService;
 
+    @GetMapping("/carregar/usuario")
+    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PERIODO_CONTROLLER','CARREGAR_POR_USUARIO')")
+    public ResponseEntity<?> carregarPeriodoPorUsuario(){
+        List<PeriodoResponseDom> response = periodoService.carregarPeriodoPorUsuario();
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/carregar/{id}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PERIODO_CONTROLLER','CARREGAR_POR_ID')")
     public ResponseEntity<?> carregarPeriodoPorId(@PathVariable Long id){

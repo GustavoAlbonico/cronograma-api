@@ -22,10 +22,9 @@ public interface AlunoImportarMapper {
 
     default AlunoImportarDom csvRecordParaAlunoImportarDom(CSVRecord linha){
         return new AlunoImportarDom(
-                linha.get("cpf"),
-                linha.get("nome"),
-                linha.get("telefone"),
-                linha.get("email")
+                RegexUtil.retornarNumeros(linha.get("CPF")),
+                linha.get("Aluno"),
+                linha.get("E-Mail").toLowerCase()
         );
     }
 
@@ -38,7 +37,7 @@ public interface AlunoImportarMapper {
         return RegexUtil.retornarNumeros(cpf);
     }
 
-    @Mapping(target = "telefone", ignore = true)
+
     @Mapping(target = "usuario", ignore = true)
     @Mapping(target = "curso", ignore = true)
     @Mapping(target = "fases", ignore = true)
@@ -51,7 +50,6 @@ public interface AlunoImportarMapper {
 
     @AfterMapping
     default void afterAlunoImportarDomParaAluno(
-            AlunoImportarDom alunoImportarDom,
             @MappingTarget Aluno aluno,
             @Context Usuario usuario,
             @Context Curso cursoEncontrado,
@@ -60,7 +58,6 @@ public interface AlunoImportarMapper {
         Set<Fase> fases = new HashSet<>();
         fases.add(faseEncontrada);
 
-        aluno.setTelefone(RegexUtil.retornarNumeros(alunoImportarDom.getTelefone()));
         aluno.setUsuario(usuario);
         aluno.setCurso(cursoEncontrado);
         aluno.setFases(fases);

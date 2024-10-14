@@ -1,12 +1,18 @@
 package com.cronograma.api.useCases.coordenador;
 
 import com.cronograma.api.entitys.Coordenador;
+import com.cronograma.api.entitys.NivelAcesso;
+import com.cronograma.api.entitys.Professor;
 import com.cronograma.api.entitys.Usuario;
+import com.cronograma.api.entitys.enums.StatusEnum;
 import com.cronograma.api.exceptions.CoordenadorException;
+import com.cronograma.api.exceptions.ProfessorException;
 import com.cronograma.api.useCases.coordenador.domains.CoordenadorRequestDom;
 import com.cronograma.api.useCases.coordenador.domains.CoordenadorResponseDom;
 import com.cronograma.api.useCases.coordenador.domains.CoordenadorUsuarioRequestDom;
 import com.cronograma.api.useCases.coordenador.implement.mappers.CoordenadorMapper;
+import com.cronograma.api.useCases.coordenador.implement.repositorys.CoordenadorNivelAcessoRepository;
+import com.cronograma.api.useCases.coordenador.implement.repositorys.CoordenadorProfessorRepository;
 import com.cronograma.api.useCases.coordenador.implement.repositorys.CoordenadorRepository;
 import com.cronograma.api.useCases.coordenador.implement.repositorys.CoordenadorUsuarioRepository;
 import com.cronograma.api.useCases.usuario.UsuarioService;
@@ -18,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +33,8 @@ public class CoordenadorService {
 
     private final CoordenadorRepository coordenadorRepository;
     private final CoordenadorUsuarioRepository coordenadorUsuarioRepository;
+    private final CoordenadorProfessorRepository coordenadorProfessorRepository;
+    private final CoordenadorNivelAcessoRepository coordenadorNivelAcessoRepository;
 
     private final CoordenadorMapper coordenadorMapper;
     private final UsuarioService usuarioService;
@@ -74,6 +84,25 @@ public class CoordenadorService {
         coordenadorRepository.save(coordenadorEncontrado);
     }
 
+    public void associarCoordenador(Long professorId){
+        Professor professorEncontrado = coordenadorProfessorRepository.findById(professorId)
+                .orElseThrow(() -> new ProfessorException("Nenhum professor encontrado!"));
+
+        if (professorEncontrado.getUsuario().getCoordenador() != null){
+            throw new ProfessorException("O professor já está associado a um coordenador");
+        }
+
+        Coordenador coordenador = coordenadorMapper.professorEncontradoParaCoordenador(professorEncontrado);
+
+        Set<NivelAcesso> niveisAcessos = professorEncontrado.getUsuario().getNiveisAcesso();
+        NivelAcesso nivelAcessoCoordenador = coordenadorNivelAcessoRepository.findByNome("COORDENADOR")
+                .orElseThrow(() -> new CoordenadorException("Nenhum nivel de acesso encontrado!"));
+        niveisAcessos.add(nivelAcessoCoordenador);
+
+        coordenadorRepository.save(coordenador);
+        usuarioService.editarUsuarioNivelAcesso(professorEncontrado.getUsuario().getId(),niveisAcessos);
+    }
+
     @Transactional
     public void excluirCoordenador(Long id){
         Coordenador coordenadorEncontrado = coordenadorRepository.findById(id)
@@ -87,9 +116,23 @@ public class CoordenadorService {
 
         if(coordenadorEncontrado.getUsuario().getProfessor() == null && coordenadorEncontrado.getUsuario().getAluno() == null){
             usuarioService.excluirUsuario(coordenadorEncontrado.getUsuario().getId());
+        } else {
+            Set<NivelAcesso> niveisAcesso = coordenadorEncontrado.getUsuario().getNiveisAcesso().stream()
+                    .filter(nivelAcesso -> !nivelAcesso.getNome().equals("COORDENADOR"))
+                    .collect(Collectors.toSet());
+
+            usuarioService.editarUsuarioNivelAcesso(coordenadorEncontrado.getUsuario().getId(), niveisAcesso);
+        }
+
+        if (
+            coordenadorEncontrado.getUsuario().getProfessor() != null &&
+            coordenadorEncontrado.getUsuario().getAluno() == null &&
+            coordenadorEncontrado.getUsuario().getProfessor().getStatusEnum().equals(StatusEnum.INATIVO)
+        ) {
+            usuarioService.inativarUsuario(coordenadorEncontrado.getUsuario().getId());
         }
     }
-    
+
     private void validarCampos(CoordenadorRequestDom coordenador, String cpfAtual){
         List<String> errorMessages =  new ArrayList<>();
 

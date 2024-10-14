@@ -10,7 +10,6 @@ import java.util.List;
 public class AlunoRequestDom {
     private String cpf;
     private String nome;
-    private String telefone;
     private String email;
     private Long cursoId;
     private List<Long> faseIds;

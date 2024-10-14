@@ -1,9 +1,6 @@
 package com.cronograma.api.useCases.professor;
 
-import com.cronograma.api.entitys.Coordenador;
-import com.cronograma.api.entitys.DiaSemanaDisponivel;
-import com.cronograma.api.entitys.Professor;
-import com.cronograma.api.entitys.Usuario;
+import com.cronograma.api.entitys.*;
 import com.cronograma.api.entitys.enums.StatusEnum;
 import com.cronograma.api.exceptions.CoordenadorException;
 import com.cronograma.api.exceptions.FaseException;
@@ -12,6 +9,8 @@ import com.cronograma.api.useCases.professor.domains.ProfessorFormularioRequestD
 import com.cronograma.api.useCases.professor.domains.ProfessorRequestDom;
 import com.cronograma.api.useCases.professor.domains.ProfessorResponseDom;
 import com.cronograma.api.useCases.professor.domains.ProfessorUsuarioRequestDom;
+import com.cronograma.api.useCases.professor.implement.mappers.ProfessorEncontradoMapper;
+import com.cronograma.api.useCases.professor.implement.mappers.ProfessorFormularioMapper;
 import com.cronograma.api.useCases.professor.implement.mappers.ProfessorMapper;
 import com.cronograma.api.useCases.professor.implement.mappers.ProfessorPaginacaoMapper;
 import com.cronograma.api.useCases.professor.implement.repositorys.*;
@@ -27,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,9 +37,12 @@ public class ProfessorService {
     private final ProfessorUsuarioRepository professorUsuarioRepository;
     private final ProfessorCoordenadorRepository professorCoordenadorRepository;
     private final ProfessorDiaSemanaDisponivelRepository professorDiaSemanaDisponivelRepository;
+    private final ProfessorNivelAcessoRepository professorNivelAcessoRepository;
 
     private final ProfessorMapper professorMapper;
     private final ProfessorPaginacaoMapper professorPaginacaoMapper;
+    private final ProfessorFormularioMapper professorFormularioMapper;
+    private final ProfessorEncontradoMapper professorEncontradoMapper;
 
     private final UsuarioService usuarioService;
 
@@ -76,11 +80,18 @@ public class ProfessorService {
 
         Usuario usuario = usuarioService.criarUsuario(professorUsuarioRequestDom,"PROFESSOR");
 
-        List<DiaSemanaDisponivel> diasSemanaDisponiveisEncontrados =
-                professorDiaSemanaDisponivelRepository.findAllById(professorRequestDom.getDiaSemanaDisponivelIds());
+        List<DiaSemanaDisponivel> diasSemanaDisponiveisEncontrados = null;
+        if(professorRequestDom.getDiaSemanaDisponivelIds() != null){
+            diasSemanaDisponiveisEncontrados =
+                    professorDiaSemanaDisponivelRepository.findAllById(professorRequestDom.getDiaSemanaDisponivelIds());
 
-        if (diasSemanaDisponiveisEncontrados.isEmpty()){
-            throw new ProfessorException("Nenhum dia da semana encontrado!");
+            if (diasSemanaDisponiveisEncontrados.isEmpty()){
+                throw new ProfessorException("Nenhum dia da semana encontrado!");
+            }
+
+            if(diasSemanaDisponiveisEncontrados.size() < professorRequestDom.getDiaSemanaDisponivelIds().size()){
+                throw new ProfessorException("Uma ou mais dos dias da semana disponiveis informados não foram encontrados!");
+            }
         }
 
         Professor professor = professorMapper.professorRequestDomParaProfessor(professorRequestDom,usuario,diasSemanaDisponiveisEncontrados);
@@ -97,28 +108,42 @@ public class ProfessorService {
         ProfessorUsuarioRequestDom professorUsuarioRequestDom =
                 professorMapper.professorRequestDomParaProfessorUsuarioRequestDom(professorRequestDom);
 
-        List<DiaSemanaDisponivel> diasSemanaDisponiveisEncontrados =
-                professorDiaSemanaDisponivelRepository.findAllById(professorRequestDom.getDiaSemanaDisponivelIds());
+        List<DiaSemanaDisponivel> diasSemanaDisponiveisEncontrados = null;
+        if(professorRequestDom.getDiaSemanaDisponivelIds() != null){
+            diasSemanaDisponiveisEncontrados =
+                    professorDiaSemanaDisponivelRepository.findAllById(professorRequestDom.getDiaSemanaDisponivelIds());
 
-        if (diasSemanaDisponiveisEncontrados.isEmpty()){
-            throw new ProfessorException("Nenhum dia da semana encontrado!");
+            if (diasSemanaDisponiveisEncontrados.isEmpty()){
+                throw new ProfessorException("Nenhum dia da semana encontrado!");
+            }
+
+            if(diasSemanaDisponiveisEncontrados.size() < professorRequestDom.getDiaSemanaDisponivelIds().size()){
+                throw new ProfessorException("Uma ou mais dos dias da semana disponiveis informados não foram encontrados!");
+            }
         }
 
-        professorMapper.professorRequestDomParaProfessorEncontrado(professorRequestDom,professorEncontrado,diasSemanaDisponiveisEncontrados);
+        professorEncontradoMapper.professorRequestDomParaProfessorEncontrado(professorRequestDom,professorEncontrado,diasSemanaDisponiveisEncontrados);
 
         usuarioService.editarUsuario(professorEncontrado.getUsuario().getId(),professorUsuarioRequestDom);
         professorRepository.save(professorEncontrado);
     }
 
     public Long associarProfessor(Long coordenadorId){
-        Coordenador coordenadorEncontrado = professorCoordenadorRepository.findById(coordenadorId)
-                .orElseThrow(() -> new ProfessorException("Nenhum coordenador encontrado!"));
+       Coordenador coordenadorEncontrado = professorCoordenadorRepository.findById(coordenadorId)
+               .orElseThrow(() -> new ProfessorException("Nenhum coordenador encontrado!"));
 
-        if (coordenadorEncontrado.getUsuario().getProfessor() != null){
-            throw new ProfessorException("O coordenador já está associado a um professor");
-        }
+       if (coordenadorEncontrado.getUsuario().getProfessor() != null){
+           throw new ProfessorException("O coordenador já está associado a um professor");
+       }
 
-        Professor professor = professorMapper.coordenadorEncontradoParaProfessor(coordenadorEncontrado);
+       Professor professor = professorMapper.coordenadorEncontradoParaProfessor(coordenadorEncontrado);
+
+       Set<NivelAcesso> niveisAcessos = coordenadorEncontrado.getUsuario().getNiveisAcesso();
+       NivelAcesso nivelAcessoProfessor = professorNivelAcessoRepository.findByNome("PROFESSOR")
+               .orElseThrow(() -> new CoordenadorException("Nenhum nivel de acesso encontrado!"));
+       niveisAcessos.add(nivelAcessoProfessor);
+
+       usuarioService.editarUsuarioNivelAcesso(coordenadorEncontrado.getUsuario().getId(),niveisAcessos);
        return professorRepository.save(professor).getId();
     }
 
@@ -136,7 +161,11 @@ public class ProfessorService {
             throw new ProfessorException("Nenhum dia da semana encontrado!");
         }
 
-        professorMapper.professorFormularioRequestDomParaProfessor(professorFormularioRequestDom, professorEncontrado,diasSemanaDisponiveisEncontrados);
+        if(diasSemanaDisponiveisEncontrados.size() < professorFormularioRequestDom.getDiaSemanaDisponivelIds().size()){
+            throw new ProfessorException("Uma ou mais dos dias da semana disponiveis informados não foram encontrados!");
+        }
+
+        professorFormularioMapper.professorFormularioRequestDomParaProfessor(professorFormularioRequestDom, professorEncontrado,diasSemanaDisponiveisEncontrados);
         professorRepository.save(professorEncontrado);
     }
 
@@ -169,6 +198,11 @@ public class ProfessorService {
         professorEncontrado.setStatusEnum(StatusEnum.INATIVO);
         professorRepository.save(professorEncontrado);
 
+        Set<NivelAcesso> niveisAcesso = professorEncontrado.getUsuario().getNiveisAcesso().stream()
+                .filter(nivelAcesso -> !nivelAcesso.getNome().equals("PROFESSOR"))
+                .collect(Collectors.toSet());
+        usuarioService.editarUsuarioNivelAcesso(professorEncontrado.getUsuario().getId(), niveisAcesso);
+
         if(professorEncontrado.getUsuario().getCoordenador() == null && professorEncontrado.getUsuario().getAluno() == null){
             usuarioService.inativarUsuario(professorEncontrado.getUsuario().getId());
         }
@@ -183,6 +217,13 @@ public class ProfessorService {
         } else {
             professorEncontrado.setStatusEnum(StatusEnum.ATIVO);
             professorRepository.save(professorEncontrado);
+
+            Set<NivelAcesso> niveisAcessos = professorEncontrado.getUsuario().getNiveisAcesso();
+            NivelAcesso nivelAcessoProfessor = professorNivelAcessoRepository.findByNome("PROFESSOR")
+                    .orElseThrow(() -> new CoordenadorException("Nenhum nivel de acesso encontrado!"));
+            niveisAcessos.add(nivelAcessoProfessor);
+
+            usuarioService.editarUsuarioNivelAcesso(professorEncontrado.getUsuario().getId(),niveisAcessos);
 
             if(professorEncontrado.getUsuario().getStatusEnum().equals(StatusEnum.INATIVO)){
                 usuarioService.ativarUsuario(professorEncontrado.getUsuario().getId());
@@ -226,10 +267,6 @@ public class ProfessorService {
                         RegexUtil.retornarNumeros(professor.getTelefone()).charAt(2) != '9'
         ){
             errorMessages.add("Telefone inválido!");
-        }
-
-        if(professor.getDiaSemanaDisponivelIds() == null || professor.getDiaSemanaDisponivelIds().isEmpty()){
-            throw new ProfessorException("Nenhum dia da semana informado!");
         }
 
         if(!errorMessages.isEmpty()){

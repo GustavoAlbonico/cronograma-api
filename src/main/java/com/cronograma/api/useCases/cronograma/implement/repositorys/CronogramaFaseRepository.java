@@ -1,6 +1,7 @@
 package com.cronograma.api.useCases.cronograma.implement.repositorys;
 
 import com.cronograma.api.entitys.Fase;
+import com.cronograma.api.entitys.enums.StatusEnum;
 import com.cronograma.api.useCases.fase.implement.repositorys.FaseRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,8 +16,9 @@ public interface CronogramaFaseRepository extends FaseRepository {
             "FROM fase " +
             "JOIN disciplina ON fase.id = disciplina.fase_id " +
             "WHERE disciplina.curso_id = :cursoId " +
+            "AND fase.status_enum = :statusEnum " +
             "GROUP BY fase.id " +
             "ORDER BY fase.numero ASC",
             nativeQuery = true)
-    Optional<List<Fase>> buscarFasesPorCursoId(@Param("cursoId") Long cursoId);
+    Optional<List<Fase>> buscarFasesPorCursoIdPorStatusEnum(@Param("cursoId") Long cursoId, @Param("statusEnum") String statusEnum);
 }

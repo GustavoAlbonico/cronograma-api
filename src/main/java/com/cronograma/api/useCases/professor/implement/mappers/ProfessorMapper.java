@@ -44,7 +44,11 @@ public interface ProfessorMapper {
     ) {
         professor.setTelefone(RegexUtil.retornarNumeros(professorRequestDom.getTelefone()));
         professor.setUsuario(usuario);
-        professor.setDiasSemanaDisponivel(new HashSet<>(diasSemanaDisponiveisEncontrados));
+        if (diasSemanaDisponiveisEncontrados != null){
+            professor.setDiasSemanaDisponivel(new HashSet<>(diasSemanaDisponiveisEncontrados));
+        } else {
+            professor.setDiasSemanaDisponivel(new HashSet<>());
+        }
     }
 
     @Mapping(source = "usuario", target = "nome", qualifiedByName = "buscarNome")
@@ -69,45 +73,6 @@ public interface ProfessorMapper {
     }
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "telefone", qualifiedByName = "editarTelefone")
-    @Mapping(target = "usuario", ignore = true)
-    @Mapping(target = "disciplinas", ignore = true)
-    void professorRequestDomParaProfessorEncontrado(
-            ProfessorRequestDom professorRequestDom,
-            @MappingTarget Professor professor,
-            @Context List<DiaSemanaDisponivel> diasSemanaDisponiveisEncontrados
-    );
-
-    @AfterMapping
-    default void afterProfessorRequestDomParaProfessorEncontrado(
-            @MappingTarget Professor professor,
-            @Context List<DiaSemanaDisponivel> diasSemanaDisponiveisEncontrados
-    ){
-        professor.setDiasSemanaDisponivel(new HashSet<>(diasSemanaDisponiveisEncontrados));
-    }
-
-    @Named("editarTelefone")
-    default String editarTelefone(String telefone) {
-        return RegexUtil.retornarNumeros(telefone);
-    }
-
-    @Mapping(target = "id", ignore = true)
     Professor coordenadorEncontradoParaProfessor(Coordenador coordenadorEncontrado);
-
-
-
-    void professorFormularioRequestDomParaProfessor(
-            ProfessorFormularioRequestDom professorFormularioRequestDom,
-            @MappingTarget Professor professorEncontrado,
-            @Context List<DiaSemanaDisponivel> diasSemanaDisponiveisEncontrados
-    );
-
-    @AfterMapping
-    default void afterProfessorFormularioRequestDomParaProfessor(
-            @MappingTarget Professor professorEncontrado,
-            @Context List<DiaSemanaDisponivel> diasSemanaDisponiveisEncontrados
-    ){
-        professorEncontrado.setDiasSemanaDisponivel(new HashSet<>(diasSemanaDisponiveisEncontrados));
-    }
 
 }

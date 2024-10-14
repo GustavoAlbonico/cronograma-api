@@ -4,6 +4,7 @@ import com.cronograma.api.entitys.*;
 import com.cronograma.api.exceptions.AlunoException;
 import com.cronograma.api.exceptions.UsuarioException;
 import com.cronograma.api.useCases.aluno.domains.*;
+import com.cronograma.api.useCases.aluno.implement.mappers.AlunoEncontradoMapper;
 import com.cronograma.api.useCases.aluno.implement.mappers.AlunoImportarMapper;
 import com.cronograma.api.useCases.aluno.implement.mappers.AlunoMapper;
 import com.cronograma.api.useCases.aluno.implement.mappers.AlunoPaginacaoMapper;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -41,6 +43,7 @@ public class AlunoService {
     private final AlunoMapper alunoMapper;
     private final AlunoPaginacaoMapper alunoPaginacaoMapper;
     private final AlunoImportarMapper alunoImportarMapper;
+    private final AlunoEncontradoMapper alunoEncontradoMapper;
 
     private final UsuarioService usuarioService;
 
@@ -66,7 +69,7 @@ public class AlunoService {
             throw new AlunoException("Formato de arquivo inválido!");
         }
 
-        Reader reader = new InputStreamReader(arquivo.getInputStream());
+        Reader reader = new InputStreamReader(arquivo.getInputStream(), StandardCharsets.ISO_8859_1);
         CSVFormat csvFormat = CSVFormat.Builder.create()
                 .setDelimiter(';')
                 .setIgnoreSurroundingSpaces(true)
@@ -149,7 +152,7 @@ public class AlunoService {
             throw new AlunoException("Uma ou mais das Fases informadas não foram encontradas!");
         }
 
-        alunoMapper.alunoRequestDomParaAlunoEncontrado(alunoRequestDom,alunoEncontrado,cursoEncontrado,fasesEncontradas);
+        alunoEncontradoMapper.alunoRequestDomParaAlunoEncontrado(alunoRequestDom,alunoEncontrado,cursoEncontrado,fasesEncontradas);
 
         usuarioService.editarUsuario(alunoEncontrado.getUsuario().getId(),alunoUsuarioRequestDom);
         alunoRepository.save(alunoEncontrado);
@@ -193,16 +196,6 @@ public class AlunoService {
             errorMessages.add("E-mail é um campo obrigatório!");
         } else if (!RegexUtil.validarEmail(aluno.getEmail())) {
             errorMessages.add("E-mail inválido!");
-        }
-
-        if(aluno.getTelefone() == null || RegexUtil.retornarNumeros(aluno.getTelefone()).isBlank()){
-            errorMessages.add("Telefone é um campo obrigatório!");
-        }else if(
-                RegexUtil.retornarNumeros(aluno.getTelefone()).length() > 50 ||
-                        RegexUtil.retornarNumeros(aluno.getTelefone()).length() < 11 ||
-                        RegexUtil.retornarNumeros(aluno.getTelefone()).charAt(2) != '9'
-        ){
-            errorMessages.add("Telefone inválido!");
         }
 
         if (aluno.getCursoId() == null){
@@ -258,16 +251,6 @@ public class AlunoService {
                 errorMessage = errorMessage.concat(" E-mail");
             } else if (!RegexUtil.validarEmail(alunos.get(posicao).getEmail())) {
                 errorMessage = errorMessage.concat(" E-mail");
-            }
-
-            if(alunos.get(posicao).getTelefone() == null || RegexUtil.retornarNumeros(alunos.get(posicao).getTelefone()).isBlank()){
-                errorMessage = errorMessage.concat(" Telefone");
-            }else if(
-                    RegexUtil.retornarNumeros(alunos.get(posicao).getTelefone()).length() > 50 ||
-                            RegexUtil.retornarNumeros(alunos.get(posicao).getTelefone()).length() < 11 ||
-                            RegexUtil.retornarNumeros(alunos.get(posicao).getTelefone()).charAt(2) != '9'
-            ){
-                errorMessage = errorMessage.concat(" Telefone");
             }
 
             if (!errorMessage.isBlank()){

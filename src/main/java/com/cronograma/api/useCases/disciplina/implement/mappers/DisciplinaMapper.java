@@ -4,6 +4,7 @@ import com.cronograma.api.entitys.Curso;
 import com.cronograma.api.entitys.Disciplina;
 import com.cronograma.api.entitys.Fase;
 import com.cronograma.api.entitys.Professor;
+import com.cronograma.api.useCases.disciplina.domains.DisciplinaProfessorResponseDom;
 import com.cronograma.api.useCases.disciplina.domains.DisciplinaRequestDom;
 import com.cronograma.api.useCases.disciplina.domains.DisciplinaResponseDom;
 import org.mapstruct.*;
@@ -37,5 +38,18 @@ public interface DisciplinaMapper {
        disciplina.setProfessor(professorEncontrado);
    }
 
+   @Mapping(target = "professor", qualifiedByName = "professorParaDisciplinaProfessorResponseDom")
    DisciplinaResponseDom disciplinaParaDisciplinaResponseDom(Disciplina disciplina);
+
+   @Named("professorParaDisciplinaProfessorResponseDom")
+    default DisciplinaProfessorResponseDom professorParaDisciplinaProfessorResponseDom(Professor professor){
+       if (professor != null){
+           DisciplinaProfessorResponseDom disciplinaProfessorResponseDom = new DisciplinaProfessorResponseDom();
+           disciplinaProfessorResponseDom.setId(professor.getId());
+           disciplinaProfessorResponseDom.setNome(professor.getUsuario().getNome());
+           return disciplinaProfessorResponseDom;
+       }else {
+           return null;
+       }
+   }
 }

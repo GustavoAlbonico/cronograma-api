@@ -1,17 +1,17 @@
 package com.cronograma.api.useCases.periodo;
 
+import com.cronograma.api.entitys.Curso;
+import com.cronograma.api.entitys.Disciplina;
 import com.cronograma.api.entitys.Periodo;
+import com.cronograma.api.entitys.Usuario;
 import com.cronograma.api.entitys.enums.StatusEnum;
 import com.cronograma.api.exceptions.CronogramaException;
 import com.cronograma.api.exceptions.PeriodoException;
-import com.cronograma.api.useCases.aluno.AlunoService;
-import com.cronograma.api.useCases.dataBloqueada.DataBloqueadaService;
-import com.cronograma.api.useCases.diaSemanaDisponivel.DiaSemanaDisponivelService;
-import com.cronograma.api.useCases.evento.EventoService;
 import com.cronograma.api.useCases.periodo.domains.PeriodoRequestDom;
 import com.cronograma.api.useCases.periodo.domains.PeriodoResponseDom;
 import com.cronograma.api.useCases.periodo.implement.mappers.PeriodoMapper;
 import com.cronograma.api.useCases.periodo.implement.repositorys.*;
+import com.cronograma.api.useCases.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +28,49 @@ public class PeriodoService {
     private final PeriodoAlunoRepository periodoAlunoRepository;
     private final PeriodoDataBloqueadaRepository periodoDataBloqueadaRepository;
     private final PeriodoProfessorRepository periodoProfessorRepository;
+    private final PeriodoCursoRepository periodoCursoRepository;
 
     private final PeriodoMapper periodoMapper;
+
+    private final UsuarioService usuarioService;
+
+    @Transactional(readOnly = true)
+    public List<PeriodoResponseDom> carregarPeriodoPorUsuario(){
+       Usuario usuario = usuarioService.buscarUsuarioAutenticado();
+
+       Set<Long> cursoIds =  new HashSet<>();
+
+        if(usuario.getAluno() != null){
+            cursoIds.add(usuario.getAluno().getCurso().getId());
+        }
+
+        if(usuario.getProfessor() != null){
+            Set<Long> cursoIdsProfessor = usuario.getProfessor().getDisciplinas().stream()
+                    .map(Disciplina::getCurso)
+                    .map(Curso::getId).collect(Collectors.toSet());
+
+            cursoIds.addAll(cursoIdsProfessor);
+        }
+
+        if(usuario.getCoordenador() != null){
+            Set<Long> cursoIdsCoordenador = usuario.getCoordenador().getCursos().stream()
+                    .map(Curso::getId).collect(Collectors.toSet());
+
+            cursoIds.addAll(cursoIdsCoordenador);
+        }
+
+        if (usuario.getNiveisAcesso().stream().anyMatch(nivelAcesso -> nivelAcesso.getRankingAcesso() < 2)) {
+            Set<Long> cursoIdsEncontrados = periodoCursoRepository.buscarTodosCursoIds();
+            cursoIds.addAll(cursoIdsEncontrados);
+        }
+
+       List<Periodo> periodosEncontrados = periodoRepository.buscarTodosPorCursoIds(cursoIds);
+
+       return periodosEncontrados.stream()
+               .map(periodoMapper::periodoParaPeriodoResponseDom)
+               .sorted(Comparator.comparing(PeriodoResponseDom::getDataInicial))
+               .toList();
+    }
 
     @Transactional(readOnly = true)
     public List<PeriodoResponseDom> carregarPeriodo(){

@@ -12,9 +12,5 @@ import java.util.List;
 
 @Repository
 public interface DisciplinaRepository extends JpaRepository<Disciplina, Long> {
-    List<Disciplina> findAllByCursoIdAndFaseId(Long cursoId, Long faseId);
-
-    List<Disciplina> findAllByStatusEnum(StatusEnum statusEnum);
-
     Page<Disciplina> findAllByCursoIdAndFaseId(Long cursoId , Long faseId, PageRequest pageRequest);
 }

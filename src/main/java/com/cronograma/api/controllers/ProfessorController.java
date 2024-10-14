@@ -58,7 +58,7 @@ public class ProfessorController {
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
-    @PostMapping("/associar/{coordenadorId}")
+    @PostMapping("/associar/coordenador/{coordenadorId}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PROFESSOR_CONTROLLER','ASSOCIAR')")
     public ResponseEntity<?> associarProfessor(@PathVariable Long coordenadorId){
         Long professorId = professorService.associarProfessor(coordenadorId);

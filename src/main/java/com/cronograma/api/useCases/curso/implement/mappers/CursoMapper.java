@@ -50,12 +50,16 @@ public interface CursoMapper {
 
     @Named("coordenadorParaCursoCoordenadorResponseDom")
     default CursoCoordenadorResponseDom coordenadorParaCursoCoordenadorResponseDom(Coordenador coordenador){
-        CursoCoordenadorResponseDom cursoCoordenadorResponseDom = new CursoCoordenadorResponseDom();
-        cursoCoordenadorResponseDom.setId(coordenador.getId());
-        cursoCoordenadorResponseDom.setCpf(coordenador.getUsuario().getCpf());
-        cursoCoordenadorResponseDom.setNome(coordenador.getUsuario().getNome());
-        cursoCoordenadorResponseDom.setTelefone(coordenador.getTelefone());
-        cursoCoordenadorResponseDom.setEmail(coordenador.getUsuario().getEmail());
-        return cursoCoordenadorResponseDom;
+        if (coordenador != null){
+            CursoCoordenadorResponseDom cursoCoordenadorResponseDom = new CursoCoordenadorResponseDom();
+            cursoCoordenadorResponseDom.setId(coordenador.getId());
+            cursoCoordenadorResponseDom.setCpf(coordenador.getUsuario().getCpf());
+            cursoCoordenadorResponseDom.setNome(coordenador.getUsuario().getNome());
+            cursoCoordenadorResponseDom.setTelefone(coordenador.getTelefone());
+            cursoCoordenadorResponseDom.setEmail(coordenador.getUsuario().getEmail());
+            return cursoCoordenadorResponseDom;
+        } else {
+            return null;
+        }
    }
 }

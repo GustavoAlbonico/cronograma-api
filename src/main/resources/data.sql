@@ -55,7 +55,9 @@ VALUES
 
   (20,'DIA_SEMANA_DISPONIVEL_CONTROLLER',null),
 
-  (21,'PROFESSOR_CONTROLLER','ALUNOS')
+  (21,'PROFESSOR_CONTROLLER','ALUNOS'),
+
+  (22,'PERIODO_CONTROLLER','rankingAcesso > 1')
 ON CONFLICT (id) DO NOTHING;
 
 --CONTROLLER_FUNCIONALIDADE
@@ -79,6 +81,7 @@ VALUES
   (3,2),--EDITAR
   (3,3),--CARREGAR  -- COORDENADOR
   (3,6),--EXCLUIR
+  (3,9),--ASSOCIAR
   (3,10),--CARREGAR_POR_ID
 
   (4,1),--CRIAR
@@ -96,6 +99,7 @@ VALUES
   (6,3),--CARREGAR  --PERIODO
   (6,6),--EXCLUIR
   (6,10),--CARREGAR_POR_ID
+  (6,17),--CARREGAR_POR_USUARIO
 
 
   (7,1),--CRIAR
@@ -152,7 +156,9 @@ VALUES
 ------
   (20,3),--CARREGAR --DIA_SEMANA_DISPONIVEL -- rankingAcesso < 4
 -----
-  (21,18)--POSSUI_DIA_SEMANA_DISPONIVEL -- PROFESSOR_CONTROLLER -- ALUNO
+  (21,18),--POSSUI_DIA_SEMANA_DISPONIVEL -- PROFESSOR_CONTROLLER -- ALUNO
+------
+  (22,17)--CARREGAR_POR_USUARIO --PERIODO_CONTROLLER -- rankingAcesso > 1
 ON CONFLICT (controller_id, funcionalidade_id) DO NOTHING;
 
 --NIVEL ACESSO
@@ -210,17 +216,21 @@ VALUES
   (3,17), --USUARIO_CONTROLLER
   (3,18), --CURSO_CONTROLLER
   (3,20), --DIA_SEMANA_DISPONIVEL_CONTROLLER
+  (3,22), --PERIODO_CONTROLLER
 
   (4,14), --PROFESSOR_CONTROLLER
   (4,15), --CRONOGRAMA_CONTROLLER       --PROFESSOR
   (4,17), --USUARIO_CONTROLLER
   (4,19), --CURSO_CONTROLLER
   (4,20), --DIA_SEMANA_DISPONIVEL_CONTROLLER
+  (4,22), --PERIODO_CONTROLLER
+
 
   (5,16), --CRONOGRAMA_CONTROLLER
   (5,17), --USUARIO_CONTROLLER      --ALUNOS
   (5,19), --CURSO_CONTROLLER
-  (5,21) --PROFESSOR_CONTROLLER
+  (5,21), --PROFESSOR_CONTROLLER
+  (5,22) --PERIODO_CONTROLLER
 ON CONFLICT (nivel_acesso_id, controller_id) DO NOTHING;
 
 -- USUÁRIO
@@ -605,19 +615,19 @@ ON CONFLICT (id) DO NOTHING;
 
 --ALUNO
 INSERT INTO aluno
-  (id,telefone, usuario_id, curso_id)
+  (id, usuario_id, curso_id)
 VALUES
-  (1,'11987654321', 31, 1), -- Felipe Soares
-  (2,'11987654322', 32, 1), -- Ana Clara Lima
-  (3,'11987654323', 33, 1), -- Rodrigo Araujo --MODA
-  (4,'11987654324', 34, 1), -- Juliana Mendes
-  (5,'11987654325', 35, 1), -- Beatriz Souza
+  (1, 31, 1), -- Felipe Soares
+  (2, 32, 1), -- Ana Clara Lima
+  (3, 33, 1), -- Rodrigo Araujo --MODA
+  (4, 34, 1), -- Juliana Mendes
+  (5, 35, 1), -- Beatriz Souza
 
-  (6,'11987654326', 36, 2), -- Caio Pereira
-  (7,'11987654327', 37, 2), -- Luana Martins
-  (8,'11987654328', 38, 2), -- Mateus Silva -- ADS
-  (9,'11987654329', 39, 2), -- Isabella Farias
-  (10,'11987654330', 40, 2) -- João Pedro Ribeiro
+  (6, 36, 2), -- Caio Pereira
+  (7, 37, 2), -- Luana Martins
+  (8, 38, 2), -- Mateus Silva -- ADS
+  (9, 39, 2), -- Isabella Farias
+  (10, 40, 2) -- João Pedro Ribeiro
 ON CONFLICT (id) DO NOTHING;
 
 --ALUNO_FASE

@@ -267,8 +267,10 @@ public class CursoService {
             errorMessages.add("Nome é um campo obrigatório!");
         }
 
-        if(curso.getSigla()== null || curso.getSigla().isBlank()){
+        if(curso.getSigla() == null || curso.getSigla().isBlank()){
             errorMessages.add("Sigla é um campo obrigatório!");
+        } else if (curso.getSigla().length() > 6) {
+            errorMessages.add("Sigla inválida, tamanho máximo 6 caracteres!");
         }
 
         if (curso.getFaseIds() == null || curso.getFaseIds().isEmpty()){
