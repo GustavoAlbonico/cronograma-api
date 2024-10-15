@@ -1,12 +1,14 @@
 package com.cronograma.api.utils.paginacao;
 
 import com.cronograma.api.exceptions.PaginacaoException;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.PageRequest;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class PaginacaoRequestUtil {
     private Integer exibir;
     private Integer paginaAtual;

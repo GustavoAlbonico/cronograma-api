@@ -29,7 +29,8 @@ public class DisciplinaController {
 
     @GetMapping("/carregar/curso/{cursoId}/fase/{faseId}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('DISCIPLINA_CONTROLLER','CARREGAR')")
-    public ResponseEntity<?> carregarDisciplina(@PathVariable Long cursoId, @PathVariable Long faseId, @RequestBody PaginacaoRequestUtil paginacaoRequestUtil){
+    public ResponseEntity<?> carregarDisciplina(@PathVariable Long cursoId, @PathVariable Long faseId, @RequestParam Integer exibir, @RequestParam Integer paginaAtual){
+        PaginacaoRequestUtil paginacaoRequestUtil =  new PaginacaoRequestUtil(exibir,paginaAtual);
         PaginacaoResponseUtil<List<DisciplinaResponseDom>> response = disciplinaService.carregarDisciplina(cursoId, faseId, paginacaoRequestUtil);
         return ResponseEntity.ok(response);
     }

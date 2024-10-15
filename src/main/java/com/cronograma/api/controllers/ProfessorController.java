@@ -39,7 +39,8 @@ public class ProfessorController {
 
     @GetMapping("/carregar")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PROFESSOR_CONTROLLER','CARREGAR')")
-    public ResponseEntity<?> carregarProfessor(@RequestBody PaginacaoRequestUtil paginacaoRequestUtil){
+    public ResponseEntity<?> carregarProfessor(@RequestParam Integer exibir, @RequestParam Integer paginaAtual){
+        PaginacaoRequestUtil paginacaoRequestUtil =  new PaginacaoRequestUtil(exibir,paginaAtual);
         PaginacaoResponseUtil<List<ProfessorResponseDom>> response = professorService.carregarProfessor(paginacaoRequestUtil);
         return ResponseEntity.ok(response);
     }

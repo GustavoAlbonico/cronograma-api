@@ -32,7 +32,8 @@ public class AlunoController {
 
     @GetMapping("/carregar/curso/{cursoId}/fase/{faseId}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('ALUNO_CONTROLLER','CARREGAR')")
-    public ResponseEntity<?> carregarAluno(@PathVariable Long cursoId, @PathVariable Long faseId, @RequestBody PaginacaoRequestUtil paginacaoRequestUtil){
+    public ResponseEntity<?> carregarAluno(@PathVariable Long cursoId, @PathVariable Long faseId, @RequestParam Integer exibir, @RequestParam Integer paginaAtual){
+        PaginacaoRequestUtil paginacaoRequestUtil =  new PaginacaoRequestUtil(exibir,paginaAtual);
         PaginacaoResponseUtil<List<AlunoResponseDom>> response = alunoService.carregarAluno(cursoId, faseId, paginacaoRequestUtil);
         return ResponseEntity.ok(response);
     }
