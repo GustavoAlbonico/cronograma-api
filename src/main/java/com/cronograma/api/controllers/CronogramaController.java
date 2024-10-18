@@ -3,6 +3,7 @@ package com.cronograma.api.controllers;
 import com.cronograma.api.useCases.cronograma.CronogramaService;
 import com.cronograma.api.useCases.cronograma.domains.CronogramaResponseDom;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class CronogramaController {
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('CRONOGRAMA_CONTROLLER','EXCLUIR')")
     public ResponseEntity<?> excluirCronograma(@PathVariable Long id){
         cronogramaService.excluirCronograma(id);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
 

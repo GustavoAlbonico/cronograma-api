@@ -52,13 +52,13 @@ public class PeriodoController {
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PERIODO_CONTROLLER','EDITAR')")
     public ResponseEntity<?> editarPeriodo(@PathVariable Long id,@RequestBody PeriodoRequestDom periodoRequestDom){
         periodoService.editarPeriodo(id,periodoRequestDom);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @DeleteMapping("/excluir/{id}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PERIODO_CONTROLLER','EXCLUIR')")
     public ResponseEntity<?> excluirPeriodo(@PathVariable Long id){
         periodoService.excluirPeriodo(id);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }

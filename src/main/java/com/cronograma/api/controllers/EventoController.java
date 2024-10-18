@@ -5,6 +5,7 @@ import com.cronograma.api.useCases.evento.EventoService;
 import com.cronograma.api.useCases.evento.domains.EventoCronogramaRequestDom;
 import com.cronograma.api.useCases.evento.domains.EventoResponseDom;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class EventoController {
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('EVENTO_CONTROLLER','CRIAR')")
     public ResponseEntity<?> criarEventoCronograma(@RequestBody EventoCronogramaRequestDom cronograma){
         eventoService.criarEventoCronograma(cronograma);
-        return ResponseEntity.status(201).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
     @GetMapping("/carregar")

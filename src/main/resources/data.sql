@@ -512,8 +512,15 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO curso
   (id,nome, sigla, coordenador_id)
 VALUES
-  (1,'Moda','MODA', 1),
-  (2,'Analise e Desenvolvimento de Sistemas','ADS', 2)
+  (1,'Design de Moda','MODA', 1),
+  (2,'Analise e Desenvolvimento de Sistemas','ADS', 2),
+  (3,'Administração','ADMIN', null),
+  (4,'Processos Gerencias','PG', null),
+  (5,'Gestão da Tecnologia da Informação','TGTI', null),
+  (6,'Gastronomia','GASTRO', null),
+  (7,'Analise de Dados','AD', null),
+  (8,'Gestão de Recursos Humanos','RH', null),
+  (9,'Banco de Dados','DB', null)
 ON CONFLICT (id) DO NOTHING;
 
 --CURSO_FASE

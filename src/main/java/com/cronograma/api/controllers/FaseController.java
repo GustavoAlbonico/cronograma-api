@@ -58,20 +58,20 @@ public class FaseController {
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('FASE_CONTROLLER','EDITAR')")
     public ResponseEntity<?> editarFase(@PathVariable Long id,@RequestBody FaseRequestDom fase){
         faseService.editarFase(id,fase);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @PutMapping("/inativar/{id}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('FASE_CONTROLLER','INATIVAR')")
     public ResponseEntity<?> inativarFase(@PathVariable Long id){
         faseService.inativarFase(id);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @PutMapping("/ativar/{id}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('FASE_CONTROLLER','ATIVAR')")
     public ResponseEntity<?> ativarFase(@PathVariable Long id){
         faseService.ativarFase(id);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }

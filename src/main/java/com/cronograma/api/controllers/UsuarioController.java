@@ -35,7 +35,7 @@ public class UsuarioController {
     @PostMapping("/esqueciminhasenha/{cpf}")
     public ResponseEntity<?> esqueciMinhaSenha(@PathVariable String cpf) throws MessagingException {
         usuarioService.esqueciMinhaSenha(cpf);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @PostMapping("/redefinirsenha/validartoken")
@@ -47,7 +47,7 @@ public class UsuarioController {
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('USUARIO_CONTROLLER','REDEFINIR_SENHA')")
     public ResponseEntity<?> redefinirsenha(@RequestBody UsuarioRedefinirSenhaRequestDom UsuarioRedefinirSenhaRequestDom) {
         usuarioService.redefinirsenha(UsuarioRedefinirSenhaRequestDom);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
 }

@@ -70,27 +70,27 @@ public class ProfessorController {
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PROFESSOR_CONTROLLER','FORMULARIO')")
     public ResponseEntity<?> formularioProfessor(@RequestBody ProfessorFormularioRequestDom professorFormularioRequestDom){
         professorService.formularioProfessor(professorFormularioRequestDom);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @PutMapping("/editar/{id}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PROFESSOR_CONTROLLER','EDITAR')")
     public ResponseEntity<?> editarProfessor(@PathVariable Long id,@RequestBody ProfessorRequestDom professorRequestDom){
         professorService.editarProfessor(id,professorRequestDom);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @PutMapping("/inativar/{id}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PROFESSOR_CONTROLLER','INATIVAR')")
     public ResponseEntity<?> inativarProfessor(@PathVariable Long id){
         professorService.inativarProfessor(id);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @PutMapping("/ativar/{id}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PROFESSOR_CONTROLLER','ATIVAR')")
     public ResponseEntity<?> ativarProfessor(@PathVariable Long id){
         professorService.ativarProfessor(id);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }

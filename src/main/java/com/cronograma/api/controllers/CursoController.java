@@ -66,20 +66,20 @@ public class CursoController {
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('CURSO_CONTROLLER','EDITAR')")
     public ResponseEntity<?> editarCurso(@PathVariable Long id, @RequestBody CursoRequestDom cursoRequestDom){
         cursoService.editarCurso(id,cursoRequestDom);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @PutMapping("/inativar/{id}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('CURSO_CONTROLLER','INATIVAR')")
     public ResponseEntity<?> inativarCurso(@PathVariable Long id){
         cursoService.inativarCurso(id);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @PutMapping("/ativar/{id}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('CURSO_CONTROLLER','ATIVAR')")
     public ResponseEntity<?> ativarCurso(@PathVariable Long id){
         cursoService.ativarCurso(id);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }

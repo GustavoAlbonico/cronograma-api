@@ -50,14 +50,14 @@ public class CoordenadorController {
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('COORDENADOR_CONTROLLER','EDITAR')")
     public ResponseEntity<?> editarCoordenador(@PathVariable Long id,@RequestBody CoordenadorRequestDom coordenadorRequestDom){
         coordenadorService.editarCoordenador(id, coordenadorRequestDom);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @DeleteMapping("/excluir/{id}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('COORDENADOR_CONTROLLER','EXCLUIR')")
     public ResponseEntity<?> excluirCoordenador(@PathVariable Long id){
         coordenadorService.excluirCoordenador(id);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
 }

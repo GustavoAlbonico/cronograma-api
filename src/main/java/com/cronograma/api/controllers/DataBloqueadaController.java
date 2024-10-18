@@ -42,13 +42,13 @@ public class DataBloqueadaController {
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('DATA_BLOQUEADA_CONTROLLER','EDITAR')")
     public ResponseEntity<?> editarDataBloqueada(@PathVariable Long id,@RequestBody DataBloqueadaRequestDom dataBloqueadaRequestDom){
         dataBloqueadaService.editarDataBloqueada(id, dataBloqueadaRequestDom);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @DeleteMapping("/excluir/{id}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('DATA_BLOQUEADA_CONTROLLER','EXCLUIR')")
     public ResponseEntity<?> excluirDataBloqueada(@PathVariable Long id){
         dataBloqueadaService.excluirDataBloqueada(id);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }

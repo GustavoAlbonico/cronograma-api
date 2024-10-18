@@ -46,20 +46,20 @@ public class DisciplinaController {
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('DISCIPLINA_CONTROLLER','EDITAR')")
     public ResponseEntity<?> editarDisciplina(@PathVariable Long id,@RequestBody DisciplinaRequestDom disciplinaRequestDom){
         disciplinaService.editarDisciplina(id,disciplinaRequestDom);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @PutMapping("/inativar/{id}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('DISCIPLINA_CONTROLLER','INATIVAR')")
     public ResponseEntity<?> inativarDisciplina(@PathVariable Long id){
         disciplinaService.inativarDisciplina(id);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @PutMapping("/ativar/{id}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('DISCIPLINA_CONTROLLER','ATIVAR')")
     public ResponseEntity<?> ativarDisciplina(@PathVariable Long id){
         disciplinaService.ativarDisciplina(id);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }

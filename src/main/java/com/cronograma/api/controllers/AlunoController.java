@@ -56,13 +56,13 @@ public class AlunoController {
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('ALUNO_CONTROLLER','EDITAR')")
     public ResponseEntity<?> editarAluno(@PathVariable Long id,@RequestBody AlunoRequestDom alunoRequestDom){
         alunoService.editarAluno(id, alunoRequestDom);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @DeleteMapping("/excluir/{id}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('ALUNO_CONTROLLER','EXCLUIR')")
     public ResponseEntity<?> excluirAluno(@PathVariable Long id){
         alunoService.excluirAluno(id);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }
