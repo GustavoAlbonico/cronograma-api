@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.ChronoField;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -65,12 +66,14 @@ public class CronogramaService {
         List<CronogramaDiaCronogramaResponseDom>  diasCronogramaResponse =
                 cronogramaDiaCronogramaMapper.listaDiaCronogramaParaListaCronogramaDiaCronogramaResponseDom(diasCronogramaEncontrado);
 
-        Map<MesEnum,Map<DiaSemanaEnum,List<CronogramaDiaCronogramaResponseDom>>> diasCronogramaResponseOrdenado = diasCronogramaResponse.stream()
+
+
+        Map<MesEnum,Map<Integer,List<CronogramaDiaCronogramaResponseDom>>> diasCronogramaResponseOrdenado = diasCronogramaResponse.stream()
                 .collect(Collectors.groupingBy(
                         diaCronograma -> MesEnum.monthParaMesEnum(diaCronograma.getData().getMonth()),
                         LinkedHashMap::new,
                         Collectors.groupingBy(
-                                CronogramaDiaCronogramaResponseDom::getDiaSemanaEnum,
+                                diaCronograma  -> calcularSemanaDoMes(diaCronograma.getData()),
                                 LinkedHashMap::new,
                                 Collectors.collectingAndThen(
                                         Collectors.toList(),
@@ -98,6 +101,15 @@ public class CronogramaService {
                 );
 
         return cronogramaResponseDom;
+    }
+
+    private static int calcularSemanaDoMes(LocalDate data) {
+        // Obter o primeiro dia do mês
+        LocalDate primeiroDiaDoMes = data.withDayOfMonth(1);
+        // Calcular a diferença em dias entre a data atual e o primeiro dia do mês
+        int diaDoMes = data.getDayOfMonth();
+        // Calcular a semana do mês
+        return (diaDoMes + primeiroDiaDoMes.getDayOfWeek().getValue() - 1) / 7 + 1; // Ajuste para 1-indexed
     }
 
     @Transactional

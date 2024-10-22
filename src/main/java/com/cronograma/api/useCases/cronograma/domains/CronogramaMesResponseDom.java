@@ -15,5 +15,5 @@ import java.util.*;
 @Setter
 public class CronogramaMesResponseDom {
     private MesEnum mesEnum;
-    private Map<DiaSemanaEnum,List<CronogramaDiaCronogramaResponseDom>> diasSemana =  new LinkedHashMap<>();
+    private Map<Integer,List<CronogramaDiaCronogramaResponseDom>> semanasMes =  new LinkedHashMap<>();
 }
