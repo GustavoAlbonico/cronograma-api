@@ -91,6 +91,7 @@ public class AlunoService {
                 .orElseThrow(() -> new AlunoException("Nenhuma Fase encontrada!"));
 
         Set<NivelAcesso> niveisAcesso = alunoNivelAcessoRepository.findByNome("ALUNO")
+                .filter(set -> !set.isEmpty())
                 .orElseThrow(() -> new AlunoException("Nenhum nivel de acesso encontrado!"));
 
 

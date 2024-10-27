@@ -82,6 +82,7 @@ public class UsuarioService {
 
     public Usuario criarUsuario(UsuarioRequestDom usuarioRequestDom, String nomeNivelAcesso){
        Set<NivelAcesso> niveisAcesso = usuarioNivelAcessoRepository.findByNome(nomeNivelAcesso)
+               .filter(set -> !set.isEmpty())
                 .orElseThrow(() -> new UsuarioException("Nenhum nivel de acesso encontrado!"));
 
        Usuario usuario = usuarioMapper.usuarioRequestDomParaUsuario(usuarioRequestDom,niveisAcesso,passwordEncoder);

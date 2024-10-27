@@ -137,9 +137,11 @@ public class CronogramaService {
                 buscarQuantidadeAulasDisponveisPorDiaDaSemana(periodoAtivo, datasBloqueadas);
 
         List<Fase> fases = cronogramaFaseRepository.buscarFasesPorCursoIdPorStatusEnum(cronograma.getCursoId(), StatusEnum.ATIVO.toString())
+                .filter(set -> !set.isEmpty())
                 .orElseThrow(() -> new CronogramaException("Nenhuma fase encontrada!"));
 
         Set<Disciplina> disciplinasEncontradas = cronogramaDisciplinaRepository.findAllByStatusEnumAndCursoId(StatusEnum.ATIVO,cronograma.getCursoId())
+                .filter(set -> !set.isEmpty())
                 .orElseThrow(() -> new CronogramaException("Nenhuma disciplina encontrada!"));
 
         Set<Disciplina> disciplinas = cronogramaDisciplinaMapper.disciplinasParaDisciplinasNovaInstancia(disciplinasEncontradas);

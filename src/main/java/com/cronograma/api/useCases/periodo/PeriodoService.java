@@ -146,6 +146,7 @@ public class PeriodoService {
 
     public Periodo buscarPeriodoAtivoAtual() {
         Set<Periodo> periodoEncontrado = periodoRepository.findAllByStatusEnum(StatusEnum.ATIVO)
+                .filter(set -> !set.isEmpty())
                 .orElseThrow(() -> new CronogramaException("É necessário ter um periodo ativo!"));
 
         if(periodoEncontrado.size() > 1){
