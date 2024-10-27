@@ -21,7 +21,8 @@ VALUES
   (15,'CARREGAR_ATIVO_POR_CURSO', 'carregar os dados ativos por curso'), --15
   (16,'CARREGAR_POR_PERIODO', 'carregar os dados por periodo, utlizado em visualizar de cronogramas'), --16
   (17,'CARREGAR_POR_USUARIO', 'carregar os dados por usuario, utilizado em index de alunos'),
-  (18,'POSSUI_DIA_SEMANA_DISPONIVEL', 'verifica se o professor possui dia semana disponvel (formulario)')
+  (18,'POSSUI_DIA_SEMANA_DISPONIVEL', 'verifica se o professor possui dia semana disponvel (formulario)'),
+  (19,'VISUALIZAR', 'altera o status da notificação para visualizado')
 ON CONFLICT (id) DO NOTHING;
 
 --CONTROLLER
@@ -93,6 +94,7 @@ VALUES
 
   (5,1),--CRIAR --EVENTO
   (5,3),--CARREGAR
+  (5,19),--VISUALIZAR
 
   (6,1),--CRIAR
   (6,2),--EDITAR

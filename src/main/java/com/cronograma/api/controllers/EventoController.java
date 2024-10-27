@@ -4,6 +4,7 @@ import com.cronograma.api.useCases.cronograma.domains.CronogramaRequestDom;
 import com.cronograma.api.useCases.evento.EventoService;
 import com.cronograma.api.useCases.evento.domains.EventoCronogramaRequestDom;
 import com.cronograma.api.useCases.evento.domains.EventoResponseDom;
+import com.cronograma.api.useCases.fase.domains.FaseRequestDom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,13 @@ public class EventoController {
     public ResponseEntity<?> carregarEvento(){
         List<EventoResponseDom> response = eventoService.carregarEvento();
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/visualizar/{id}")
+    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('EVENTO_CONTROLLER','VISUALIZAR')")
+    public ResponseEntity<?> visualizarEvento(@PathVariable Long id){
+        eventoService.visualizarEvento(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
 }

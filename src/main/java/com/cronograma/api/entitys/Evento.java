@@ -1,5 +1,6 @@
 package com.cronograma.api.entitys;
 
+import com.cronograma.api.entitys.enums.BooleanEnum;
 import com.cronograma.api.entitys.enums.EventoStatusEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -35,6 +36,10 @@ public class Evento {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EventoStatusEnum eventoStatusEnum;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private BooleanEnum visualizadoBooleanEnum;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne(fetch = FetchType.LAZY)

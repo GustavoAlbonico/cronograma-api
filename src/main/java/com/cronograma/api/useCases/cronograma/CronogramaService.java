@@ -104,12 +104,9 @@ public class CronogramaService {
     }
 
     private static int calcularSemanaDoMes(LocalDate data) {
-        // Obter o primeiro dia do mês
         LocalDate primeiroDiaDoMes = data.withDayOfMonth(1);
-        // Calcular a diferença em dias entre a data atual e o primeiro dia do mês
         int diaDoMes = data.getDayOfMonth();
-        // Calcular a semana do mês
-        return (diaDoMes + primeiroDiaDoMes.getDayOfWeek().getValue() - 1) / 7 + 1; // Ajuste para 1-indexed
+        return (diaDoMes + primeiroDiaDoMes.getDayOfWeek().getValue() - 1) / 7 + 1;
     }
 
     @Transactional

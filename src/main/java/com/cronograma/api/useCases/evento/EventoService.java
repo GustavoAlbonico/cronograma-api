@@ -1,10 +1,13 @@
 package com.cronograma.api.useCases.evento;
 
 import com.cronograma.api.entitys.Evento;
+import com.cronograma.api.entitys.Fase;
 import com.cronograma.api.entitys.Usuario;
+import com.cronograma.api.entitys.enums.BooleanEnum;
 import com.cronograma.api.entitys.enums.EventoStatusEnum;
 import com.cronograma.api.exceptions.CronogramaException;
 import com.cronograma.api.exceptions.EventoException;
+import com.cronograma.api.exceptions.FaseException;
 import com.cronograma.api.useCases.cronograma.CronogramaService;
 import com.cronograma.api.useCases.evento.domains.EventoCronogramaRequestDom;
 import com.cronograma.api.useCases.evento.domains.EventoRequestDom;
@@ -13,6 +16,7 @@ import com.cronograma.api.useCases.evento.implement.mappers.EventoMapper;
 import com.cronograma.api.useCases.evento.implement.repositorys.EventoCursoRepository;
 import com.cronograma.api.useCases.evento.implement.repositorys.EventoRepository;
 import com.cronograma.api.useCases.evento.implement.repositorys.EventoUsuarioRepository;
+import com.cronograma.api.useCases.fase.domains.FaseRequestDom;
 import com.cronograma.api.useCases.usuario.UsuarioService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +50,14 @@ public class EventoService {
                 .sorted(Comparator.comparing(EventoResponseDom::getData).reversed())
                 .toList();
     }
+
+    public void visualizarEvento(Long id){
+        Evento eventoEncontrado = eventoRepository.findById(id)
+                .orElseThrow( () -> new EventoException("Nenhum evento encontrado!"));
+
+        eventoEncontrado.setVisualizadoBooleanEnum(BooleanEnum.SIM);
+        eventoRepository.save(eventoEncontrado);
+    }
     private void validarUsuarioPertenceCurso(Long cursoId, final Usuario usuario){
         if(
             usuario.getCoordenador() != null &&
@@ -74,6 +86,7 @@ public class EventoService {
                     List.of("Gerando cronograma"),
                     "gerar cronograma",
                     EventoStatusEnum.EXECUTANDO,
+                    BooleanEnum.NAO,
                     cronograma.getCursoId(),
                     usuario.getId()
             );
@@ -82,12 +95,15 @@ public class EventoService {
             try {
                 cronogramaId = cronogramaService.gerarCronograma(cronograma);
                 evento.setEventoStatusEnum(EventoStatusEnum.SUCESSO);
+                evento.setVisualizadoBooleanEnum(BooleanEnum.NAO);
                 evento.setMensagens(List.of("Cronograma gerado com sucesso!"));
             } catch (CronogramaException cronogramaException) {
                 evento.setEventoStatusEnum(EventoStatusEnum.ERRO);
+                evento.setVisualizadoBooleanEnum(BooleanEnum.NAO);
                 evento.setMensagens(cronogramaException.getMessages());
             } catch (Exception exception) {
                 evento.setEventoStatusEnum(EventoStatusEnum.ERRO);
+                evento.setVisualizadoBooleanEnum(BooleanEnum.NAO);
                 evento.setMensagens(List.of("Erro não mapeado!"));
             }
             atualizarEvento(evento);

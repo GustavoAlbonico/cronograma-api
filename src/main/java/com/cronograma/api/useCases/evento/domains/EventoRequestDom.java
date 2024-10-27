@@ -1,4 +1,5 @@
 package com.cronograma.api.useCases.evento.domains;
+import com.cronograma.api.entitys.enums.BooleanEnum;
 import com.cronograma.api.entitys.enums.EventoStatusEnum;
 import lombok.*;
 
@@ -13,6 +14,7 @@ public class EventoRequestDom{
     private List<String> mensagens;
     private String acao;
     private EventoStatusEnum eventoStatusEnum;
+    private BooleanEnum visualizadoBooleanEnum;
     private Long cursoId;
     private Long usuarioId;
 }
