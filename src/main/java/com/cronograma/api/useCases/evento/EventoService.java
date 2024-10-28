@@ -47,7 +47,10 @@ public class EventoService {
 
         return eventosEncontrados.stream()
                 .map(eventoMapper::eventoParaEventoResponseDom)
-                .sorted(Comparator.comparing(EventoResponseDom::getData).reversed())
+                .sorted(
+                        Comparator.comparing(EventoResponseDom::getVisualizadoBooleanEnum)
+                                .thenComparing(EventoResponseDom::getSiglaCurso)
+                )
                 .toList();
     }
 
