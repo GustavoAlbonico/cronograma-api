@@ -66,7 +66,8 @@ public class CronogramaService {
         List<CronogramaDiaCronogramaResponseDom>  diasCronogramaResponse =
                 cronogramaDiaCronogramaMapper.listaDiaCronogramaParaListaCronogramaDiaCronogramaResponseDom(diasCronogramaEncontrado);
 
-
+        final Long cronogramaId = diasCronogramaEncontrado.stream().findFirst()
+                .orElseThrow(() -> new CronogramaException("Erro inesperado!")).getCronograma().getId();
 
         Map<MesEnum,Map<Integer,List<CronogramaDiaCronogramaResponseDom>>> diasCronogramaResponseOrdenado = diasCronogramaResponse.stream()
                 .collect(Collectors.groupingBy(
@@ -93,6 +94,7 @@ public class CronogramaService {
 
         CronogramaResponseDom cronogramaResponseDom =
                 new CronogramaResponseDom(
+                        cronogramaId,
                         curso.getNome(),
                         fase.getNumero(),
                         periodo.getDataInicial().getYear(),
