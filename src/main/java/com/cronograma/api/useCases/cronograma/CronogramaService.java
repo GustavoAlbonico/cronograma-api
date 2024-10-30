@@ -72,7 +72,7 @@ public class CronogramaService {
         Map<MesEnum,Map<Integer,List<CronogramaDiaCronogramaResponseDom>>> diasCronogramaResponseOrdenado = diasCronogramaResponse.stream()
                 .collect(Collectors.groupingBy(
                         diaCronograma -> MesEnum.monthParaMesEnum(diaCronograma.getData().getMonth()),
-                        LinkedHashMap::new,
+                        () -> new TreeMap<>(Comparator.comparingInt(MesEnum::ordinal)),
                         Collectors.groupingBy(
                                 diaCronograma  -> calcularSemanaDoMes(diaCronograma.getData()),
                                 LinkedHashMap::new,
@@ -95,6 +95,7 @@ public class CronogramaService {
         CronogramaResponseDom cronogramaResponseDom =
                 new CronogramaResponseDom(
                         cronogramaId,
+                        curso.getId(),
                         curso.getNome(),
                         fase.getNumero(),
                         periodo.getDataInicial().getYear(),
@@ -118,6 +119,17 @@ public class CronogramaService {
 
         cronogramaDiaCronogramaRepository.deleteAllByCronogramaId(id);
         cronogramaRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void excluirCronogramaPorPeriodoPorCurso(Long periodoId,Long cursoId){
+        Cronograma cronograma = cronogramaRepository.findByCursoIdAndPeriodoId(cursoId,periodoId)
+                .orElseThrow(() -> new CronogramaException("Cronograma não encontrado"));
+
+        validarUsuarioPertenceCurso(cronograma.getCurso().getId());
+
+        cronogramaDiaCronogramaRepository.deleteAllByCronogramaId(cronograma.getId());
+        cronogramaRepository.deleteById(cronograma.getId());
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

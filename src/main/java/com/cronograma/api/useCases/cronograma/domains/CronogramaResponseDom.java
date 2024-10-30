@@ -15,6 +15,7 @@ import java.util.List;
 public class CronogramaResponseDom {
 
     private Long id;
+    private Long cursoId;
     private String cursoNome;
     private Integer faseNumero;
     private Integer ano;

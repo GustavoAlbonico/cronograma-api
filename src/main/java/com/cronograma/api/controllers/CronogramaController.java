@@ -22,10 +22,10 @@ public class CronogramaController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/excluir/{id}")
+    @DeleteMapping("/excluir/periodo/{periodoId}/curso/{cursoId}")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('CRONOGRAMA_CONTROLLER','EXCLUIR')")
-    public ResponseEntity<?> excluirCronograma(@PathVariable Long id){
-        cronogramaService.excluirCronograma(id);
+    public ResponseEntity<?> excluirCronogramaPorPeriodoPorCurso(@PathVariable Long periodoId,@PathVariable Long cursoId){
+        cronogramaService.excluirCronogramaPorPeriodoPorCurso(periodoId,cursoId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
