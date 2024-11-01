@@ -24,8 +24,6 @@ public interface ProfessorPaginacaoMapper {
     ){
         List<ProfessorResponseDom> professoresResponseDom = professoresEncontrados.getContent()
                 .stream().map(professorMapper::professorParaProfessorResponseDom)
-                .sorted(Comparator.comparing(ProfessorResponseDom::getStatusEnum)
-                        .thenComparing(ProfessorResponseDom::getNome))
                 .toList();
 
         PaginacaoResponseUtil<List<ProfessorResponseDom>> paginacaoResponseUtil= new PaginacaoResponseUtil<>();

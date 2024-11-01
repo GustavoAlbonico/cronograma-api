@@ -21,7 +21,6 @@ public interface AlunoPaginacaoMapper {
     ){
         List<AlunoResponseDom> alunosResponseDom = alunosEncontrados.getContent()
                 .stream().map(this::alunoParaAlunoResponseDom)
-                .sorted(Comparator.comparing(AlunoResponseDom::getNome))
                 .toList();
 
         PaginacaoResponseUtil<List<AlunoResponseDom>> paginacaoResponseUtil= new PaginacaoResponseUtil<>();

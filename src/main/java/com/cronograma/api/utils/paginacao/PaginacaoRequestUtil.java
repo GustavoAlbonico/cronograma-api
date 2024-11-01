@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,13 +16,27 @@ public class PaginacaoRequestUtil {
     private Integer exibir;
     private Integer paginaAtual;
 
-    public PageRequest getPageRequest(){
+    public PageRequest getPageRequest(List<String> sortFields){
        this.validarCampos();
 
        return PageRequest.of(
                this.getPaginaAtual() - 1,
-               this.getExibir()
+               this.getExibir(),
+               Sort.by(
+                       sortFields.stream()
+                               .map(sortField -> new Sort.Order(Sort.Direction.ASC, sortField))
+                               .toArray(Sort.Order[]::new)
+               )
        );
+    }
+
+    public PageRequest getPageRequest(){
+        this.validarCampos();
+
+        return PageRequest.of(
+                this.getPaginaAtual() - 1,
+                this.getExibir()
+        );
     }
 
     private void validarCampos(){

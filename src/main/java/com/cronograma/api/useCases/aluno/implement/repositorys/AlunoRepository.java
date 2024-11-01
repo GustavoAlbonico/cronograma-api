@@ -12,11 +12,13 @@ import org.springframework.stereotype.Repository;
 public interface AlunoRepository extends JpaRepository<Aluno, Long> {
 
     @Query(value =
-            "SELECT DISTINCT aluno.* " +
+            "SELECT DISTINCT aluno.*, usuario.nome " +
             "FROM aluno " +
             "JOIN aluno_fase ON aluno_fase.aluno_id = aluno.id " +
+            "JOIN usuario ON aluno.usuario_id = usuario.id " +
             "WHERE aluno.curso_id = :cursoId " +
-            "AND aluno_fase.fase_id =:faseId"
-            ,nativeQuery = true)
-    Page<Aluno> buscarTodosPorCursoPorFase(@Param("cursoId") Long cursoId , @Param("faseId") Long faseId, PageRequest pageRequest);
+            "AND aluno_fase.fase_id = :faseId " +
+            "ORDER BY usuario.nome",
+            nativeQuery = true)
+    Page<Aluno> buscarTodosPorCursoPorFase(@Param("cursoId") Long cursoId, @Param("faseId") Long faseId, PageRequest pageRequest);
 }

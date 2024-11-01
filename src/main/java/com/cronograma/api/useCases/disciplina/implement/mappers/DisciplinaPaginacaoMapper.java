@@ -24,8 +24,6 @@ public interface DisciplinaPaginacaoMapper {
     ){
         List<DisciplinaResponseDom> disciplinasResponseDom = disciplinasEncontradas.getContent()
                 .stream().map(disciplinaMapper::disciplinaParaDisciplinaResponseDom)
-                .sorted(Comparator.comparing(DisciplinaResponseDom::getStatusEnum)
-                        .thenComparing(DisciplinaResponseDom::getNome))
                 .toList();
 
         PaginacaoResponseUtil<List<DisciplinaResponseDom>> paginacaoResponseUtil= new PaginacaoResponseUtil<>();

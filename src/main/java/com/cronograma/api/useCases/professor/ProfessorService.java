@@ -67,7 +67,7 @@ public class ProfessorService {
 
     @Transactional(readOnly = true)
     public PaginacaoResponseUtil<List<ProfessorResponseDom>> carregarProfessor(PaginacaoRequestUtil paginacaoRequestUtil){
-        Page<Professor> professoresEncontrados = professorRepository.findAll(paginacaoRequestUtil.getPageRequest());
+        Page<Professor> professoresEncontrados = professorRepository.findAll(paginacaoRequestUtil.getPageRequest(List.of("usuario.nome","statusEnum")));
         return professorPaginacaoMapper.pageProfessorParaPaginacaoResponseUtilProfessorResponseDom(professoresEncontrados,professorMapper);
     }
 

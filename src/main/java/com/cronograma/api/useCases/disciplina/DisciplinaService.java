@@ -52,7 +52,8 @@ public class DisciplinaService {
     @Transactional(readOnly = true)
     public PaginacaoResponseUtil<List<DisciplinaResponseDom>> carregarDisciplina(Long cursoId, Long faseId, PaginacaoRequestUtil paginacaoRequestUtil){
         validarUsuarioPertenceCurso(cursoId);
-        Page<Disciplina> disciplinasEncontradas = disciplinaRepository.findAllByCursoIdAndFaseId(cursoId,faseId,paginacaoRequestUtil.getPageRequest());
+        Page<Disciplina> disciplinasEncontradas =
+                disciplinaRepository.findAllByCursoIdAndFaseId(cursoId,faseId,paginacaoRequestUtil.getPageRequest(List.of("nome","statusEnum")));
         return disciplinaPaginacaoMapper.pageDisciplinaParaPaginacaoResponseUtilDisciplinaResponseDom(disciplinasEncontradas,disciplinaMapper);
     }
 
