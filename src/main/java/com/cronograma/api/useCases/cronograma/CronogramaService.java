@@ -625,7 +625,7 @@ public class CronogramaService {
                                 .findFirst()
                                 .orElse(null);
 
-                        return "Adicione " + diaSemanaEnum + " como dia da semana disponivel ao professor(a) " + professor.getUsuario().getNome() + " para tentar resolver o conflito!";
+                        return "Adicione " + DiaSemanaEnum.getDiaSemanaEnumLabel(diaSemanaEnum) + " como dia da semana disponivel ao professor(a) " + professor.getUsuario().getNome() + " para tentar resolver o conflito!";
                     }
                 }
             }

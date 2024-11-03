@@ -4,16 +4,13 @@ import com.cronograma.api.entitys.*;
 import com.cronograma.api.entitys.enums.DataStatusEnum;
 import com.cronograma.api.entitys.enums.DiaSemanaEnum;
 import com.cronograma.api.entitys.enums.StatusEnum;
-import com.cronograma.api.exceptions.CronogramaException;
 import com.cronograma.api.exceptions.DiaCronogramaException;
 import com.cronograma.api.useCases.cronograma.domains.CronogramaDisciplinaDom;
 import com.cronograma.api.useCases.diaCronograma.implement.mappers.DiaCronogramaMapper;
 import com.cronograma.api.useCases.diaCronograma.implement.repositorys.DiaCronogramaRepository;
 import com.cronograma.api.useCases.fase.implement.repositorys.FaseRepository;
 import com.cronograma.api.useCases.usuario.UsuarioService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -234,7 +231,7 @@ public class DiaCronogramaService {
             if (!professorPossuiDiaSemanaDisponivel) {
                 throw new DiaCronogramaException(
                         diaCronogramaEdicao.getDisciplina().getProfessor().getUsuario().getNome() +
-                                " não possui " + diaCronogramaAtual.getDiaSemanaEnum() + " como dia da semana disponivel!");
+                                " não possui " + DiaSemanaEnum.getDiaSemanaEnumLabel(diaCronogramaAtual.getDiaSemanaEnum()) + " como dia da semana disponivel!");
             }
         }
     }

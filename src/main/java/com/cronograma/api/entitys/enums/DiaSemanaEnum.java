@@ -22,4 +22,16 @@ public enum DiaSemanaEnum {
             default -> throw new IllegalArgumentException("Dia da semana inválido: " + dayOfWeek);
         };
     }
+
+    public static String getDiaSemanaEnumLabel(DiaSemanaEnum diaSemanaEnum) {
+        return switch (diaSemanaEnum) {
+            case SEGUNDA_FEIRA -> "Segunda-Feira";
+            case TERCA_FEIRA-> "Terça-Feira";
+            case QUARTA_FEIRA-> "Quarta-Feira";
+            case QUINTA_FEIRA-> "Quinta-Feira";
+            case SEXTA_FEIRA-> "Sexta-Feira";
+            case SABADO-> "Sábado";
+            default -> throw new IllegalArgumentException("Dia da semana inválido: " + diaSemanaEnum);
+        };
+    }
 }
