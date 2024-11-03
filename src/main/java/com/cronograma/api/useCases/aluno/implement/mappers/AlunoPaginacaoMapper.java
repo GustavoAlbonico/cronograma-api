@@ -41,8 +41,6 @@ public interface AlunoPaginacaoMapper {
     @Mapping(source = "usuario",target = "nome", qualifiedByName = "buscarNome")
     @Mapping(source = "usuario",target = "cpf", qualifiedByName = "buscarCpf")
     @Mapping(source = "usuario",target = "email", qualifiedByName = "buscarEmail")
-    @Mapping(target = "fases", ignore = true)
-    @Mapping(target = "curso", ignore = true)
     AlunoResponseDom alunoParaAlunoResponseDom(Aluno aluno);
 
     @Named("buscarNome")

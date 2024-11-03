@@ -274,7 +274,7 @@ VALUES
     (24,'roberto.medeiros@example.com', '67012012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Roberto Fermino Medeiros'), --24
     (25,'jorge.henrique.silva@example.com', '67007799056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Jorge Henrique da Silva Naspolini'), --25
     (26,'roni.edson@example.com', '00012012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Roni Edson dos Santos'), --26
-    (27,'bruno.kurzawe@example.com', '11012012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Bruno Kurzawe'), --27
+    (27,'tales.dasilva@example.com', '11012012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Tales da Silva'), --27
     (28,'liliane.fernandes@example.com', '67011012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Liliane Fernandes'), --28
     (29,'cledemilson.santos@example.com', '62222012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Cledemilson dos Santos'), --29
 
@@ -477,7 +477,7 @@ VALUES
 
   (4, 24), -- QUINTA_FEIRA --Roni Edson dos Santos
 
-  (6, 25), -- SABADO --Bruno Kurzawe
+  (6, 25), -- SABADO --Tales
 
   (1, 26), -- SEGUNDA_FEIRA  --Liliane Fernandes
 
