@@ -60,7 +60,9 @@ VALUES
 
   (22,'PERIODO_CONTROLLER','rankingAcesso > 2'),
 
-  (23,'PERIODO_CONTROLLER','COORDENADOR')
+  (23,'PERIODO_CONTROLLER','COORDENADOR'),
+
+  (24,'FASE_CONTROLLER','COORDENADOR')
 ON CONFLICT (id) DO NOTHING;
 
 --CONTROLLER_FUNCIONALIDADE
@@ -164,7 +166,8 @@ VALUES
 ------
   (22,17),--CARREGAR_POR_USUARIO --PERIODO_CONTROLLER -- rankingAcesso > 2
 ------
-  (23,3)--CARREGAR --PERIODO_CONTROLLER -- COORDENADOR
+  (23,3),--CARREGAR --PERIODO_CONTROLLER -- COORDENADOR
+  (24,15)--CARREGAR_ATIVO_POR_CURSO --FASE_CONTROLLER
 ON CONFLICT (controller_id, funcionalidade_id) DO NOTHING;
 
 --NIVEL ACESSO
@@ -223,6 +226,7 @@ VALUES
   (3,18), --CURSO_CONTROLLER
   (3,20), --DIA_SEMANA_DISPONIVEL_CONTROLLER
   (3,23), --PERIODO_CONTROLLER
+  (3,24), --FASE_CONTROLLER
 
   (4,14), --PROFESSOR_CONTROLLER
   (4,15), --CRONOGRAMA_CONTROLLER       --PROFESSOR
@@ -516,17 +520,13 @@ ON CONFLICT (id) DO NOTHING;
 
 --CURSO
 INSERT INTO curso
-  (id,nome, sigla, coordenador_id)
+  (id,nome, sigla, coordenador_id,status_enum)
 VALUES
-  (1,'Design de Moda','MODA', 1),
-  (2,'Analise e Desenvolvimento de Sistemas','ADS', 2),
-  (3,'Administração','ADMIN', null),
-  (4,'Processos Gerencias','PG', null),
-  (5,'Gestão da Tecnologia da Informação','TGTI', null),
-  (6,'Gastronomia','GASTRO', null),
-  (7,'Analise de Dados','AD', null),
-  (8,'Gestão de Recursos Humanos','RH', null),
-  (9,'Banco de Dados','DB', null)
+  (1,'Design de Moda','MODA', 1,'ATIVO'),
+  (2,'Analise e Desenvolvimento de Sistemas','ADS', 2,'ATIVO'),
+  (3,'Processos Gerencias','PG', null,'INATIVO'),
+  (4,'Gestão da Tecnologia da Informação','TGTI', null,'INATIVO'),
+  (5,'Gastronomia','GASTRO', null,'INATIVO')
 ON CONFLICT (id) DO NOTHING;
 
 --CURSO_FASE

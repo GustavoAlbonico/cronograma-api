@@ -53,7 +53,7 @@ public class DisciplinaService {
     public PaginacaoResponseUtil<List<DisciplinaResponseDom>> carregarDisciplina(Long cursoId, Long faseId, PaginacaoRequestUtil paginacaoRequestUtil){
         validarUsuarioPertenceCurso(cursoId);
         Page<Disciplina> disciplinasEncontradas =
-                disciplinaRepository.findAllByCursoIdAndFaseId(cursoId,faseId,paginacaoRequestUtil.getPageRequest(List.of("nome","statusEnum")));
+                disciplinaRepository.findAllByCursoIdAndFaseId(cursoId,faseId,paginacaoRequestUtil.getPageRequest(List.of("statusEnum","nome")));
         return disciplinaPaginacaoMapper.pageDisciplinaParaPaginacaoResponseUtilDisciplinaResponseDom(disciplinasEncontradas,disciplinaMapper);
     }
 
@@ -153,24 +153,24 @@ public class DisciplinaService {
         }
 
         if(disciplina.getCargaHoraria() == null){
-            errorMessages.add("Carga Horaria é um campo obrigatório!");
+            errorMessages.add("Carga Horária é um campo obrigatório!");
         } else if (disciplina.getCargaHoraria() < 1.0) {
-            errorMessages.add("Carga Horaria inválida!");
+            errorMessages.add("Carga Horária inválida!");
         }
 
         if(disciplina.getCargaHorariaDiaria() == null){
-            errorMessages.add("Carga Horaria Diaria é um campo obrigatório!");
+            errorMessages.add("Carga Horária Diária é um campo obrigatório!");
         } else if (disciplina.getCargaHorariaDiaria() < 1.0 || disciplina.getCargaHorariaDiaria() > 12.0) {
-            errorMessages.add("Carga Horaria Diaria inválida!");
+            errorMessages.add("Carga Horária Diária inválida!");
         }
 
         if(disciplina.getExtensaoBooleanEnum() == null){
-            errorMessages.add("Extensao é um campo obrigatório!");
+            errorMessages.add("Extensão é um campo obrigatório!");
         } else if (
           Arrays.stream(BooleanEnum.values()).noneMatch(booleanEnum ->
               booleanEnum.equals(disciplina.getExtensaoBooleanEnum()))
         ){
-            errorMessages.add("Extensao inválida!");
+            errorMessages.add("Extensão inválida!");
         }
 
         if(disciplina.getCorHexadecimal() == null || disciplina.getCorHexadecimal().isBlank()){
