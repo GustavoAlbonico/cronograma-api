@@ -115,9 +115,35 @@ public class UsuarioService {
                 .orElseThrow(() -> new AuthorizationException("Cpf não encontrado"));
         emailService.enviarEmailEsqueciMinhaSenha(usuario);
     }
-    public void redefinirsenha(UsuarioRedefinirSenhaRequestDom usuarioRedefinirSenhaRequestDom){
+    public void redefinirSenhaEmail(UsuarioRedefinirSenhaEmailRequestDom usuarioRedefinirSenhaEmailRequestDom){
         Usuario usuario = this.buscarUsuarioAutenticado();
+
+        List<String> errorMessages = validarSenha(usuarioRedefinirSenhaEmailRequestDom.getSenha(),usuario.getSenha());
+
+        if(!usuarioRedefinirSenhaEmailRequestDom.getSenha().equals(usuarioRedefinirSenhaEmailRequestDom.getConfirmarSenha())){
+            errorMessages.add("As senhas precisam ser iguais");
+        }
+
+        if(!errorMessages.isEmpty()){
+            throw new UsuarioException(errorMessages);
+        }
+
+        usuario.setSenha(passwordEncoder.encode(usuarioRedefinirSenhaEmailRequestDom.getSenha()));
+        usuarioRepository.save(usuario);
+    }
+
+    public void redefinirSenha(UsuarioRedefinirSenhaRequestDom usuarioRedefinirSenhaRequestDom){
+        Usuario usuario = this.buscarUsuarioAutenticado();
+
         List<String> errorMessages = validarSenha(usuarioRedefinirSenhaRequestDom.getSenha(),usuario.getSenha());
+
+        if(!usuarioRedefinirSenhaRequestDom.getSenha().equals(usuarioRedefinirSenhaRequestDom.getConfirmarSenha())){
+            errorMessages.add("As senhas precisam ser iguais");
+        }
+
+        if (!this.passwordEncoder.matches(usuarioRedefinirSenhaRequestDom.getSenhaAtual(), usuario.getSenha())){
+            errorMessages.add("Senha atual inválida!");
+        }
 
         if(!errorMessages.isEmpty()){
             throw new UsuarioException(errorMessages);

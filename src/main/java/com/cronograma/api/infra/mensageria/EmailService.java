@@ -25,7 +25,7 @@ public class EmailService {
 
     public void enviarEmailEsqueciMinhaSenha(Usuario usuario) throws MessagingException {//tratar
         String token = this.tokenService.gerarTokenRedefinirSenha(usuario);
-        String url = origin + "/usuario/redefinirsenha?auth=" + token;
+        String url = origin + "/redefinirsenha?auth=" + token;
 
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");

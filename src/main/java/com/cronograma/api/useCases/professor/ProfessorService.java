@@ -81,13 +81,9 @@ public class ProfessorService {
         Usuario usuario = usuarioService.criarUsuario(professorUsuarioRequestDom,"PROFESSOR");
 
         List<DiaSemanaDisponivel> diasSemanaDisponiveisEncontrados = null;
-        if(professorRequestDom.getDiaSemanaDisponivelIds() != null){
+        if(!professorRequestDom.getDiaSemanaDisponivelIds().isEmpty()){
             diasSemanaDisponiveisEncontrados =
                     professorDiaSemanaDisponivelRepository.findAllById(professorRequestDom.getDiaSemanaDisponivelIds());
-
-            if (diasSemanaDisponiveisEncontrados.isEmpty()){
-                throw new ProfessorException("Nenhum dia da semana encontrado!");
-            }
 
             if(diasSemanaDisponiveisEncontrados.size() < professorRequestDom.getDiaSemanaDisponivelIds().size()){
                 throw new ProfessorException("Uma ou mais dos dias da semana disponiveis informados não foram encontrados!");
@@ -109,13 +105,9 @@ public class ProfessorService {
                 professorMapper.professorRequestDomParaProfessorUsuarioRequestDom(professorRequestDom);
 
         List<DiaSemanaDisponivel> diasSemanaDisponiveisEncontrados = null;
-        if(professorRequestDom.getDiaSemanaDisponivelIds() != null){
+        if(!professorRequestDom.getDiaSemanaDisponivelIds().isEmpty()){
             diasSemanaDisponiveisEncontrados =
                     professorDiaSemanaDisponivelRepository.findAllById(professorRequestDom.getDiaSemanaDisponivelIds());
-
-            if (diasSemanaDisponiveisEncontrados.isEmpty()){
-                throw new ProfessorException("Nenhum dia da semana encontrado!");
-            }
 
             if(diasSemanaDisponiveisEncontrados.size() < professorRequestDom.getDiaSemanaDisponivelIds().size()){
                 throw new ProfessorException("Uma ou mais dos dias da semana disponiveis informados não foram encontrados!");
@@ -133,7 +125,7 @@ public class ProfessorService {
                .orElseThrow(() -> new ProfessorException("Nenhum coordenador encontrado!"));
 
        if (coordenadorEncontrado.getUsuario().getProfessor() != null){
-           throw new ProfessorException("O coordenador já está associado a um professor");
+           throw new ProfessorException("O coordenador já está associado!");
        }
 
        Professor professor = professorMapper.coordenadorEncontradoParaProfessor(coordenadorEncontrado);

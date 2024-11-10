@@ -5,8 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UsuarioRedefinirSenhaRequestDom {
-    private String senhaAtual;
+public class UsuarioRedefinirSenhaEmailRequestDom {
     private String senha;
     private String confirmarSenha;
 }

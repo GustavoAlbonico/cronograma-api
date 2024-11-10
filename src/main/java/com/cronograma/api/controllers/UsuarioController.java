@@ -1,10 +1,7 @@
 package com.cronograma.api.controllers;
 
 import com.cronograma.api.useCases.usuario.UsuarioService;
-import com.cronograma.api.useCases.usuario.domains.UsuarioCadastroRequestDom;
-import com.cronograma.api.useCases.usuario.domains.UsuarioLoginRequestDom;
-import com.cronograma.api.useCases.usuario.domains.UsuarioRedefinirSenhaRequestDom;
-import com.cronograma.api.useCases.usuario.domains.UsuarioResponseDom;
+import com.cronograma.api.useCases.usuario.domains.*;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,13 +37,20 @@ public class UsuarioController {
 
     @PostMapping("/redefinirsenha/validartoken")
     public ResponseEntity<?> redefinirSenhaValidarToken() {
-        return ResponseEntity.ok(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
+
+    @PutMapping("/redefinirsenhaemail")
+    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('USUARIO_CONTROLLER','REDEFINIR_SENHA')")
+    public ResponseEntity<?> redefinirSenhaEmail(@RequestBody UsuarioRedefinirSenhaEmailRequestDom usuarioRedefinirSenhaEmailRequestDom) {
+        usuarioService.redefinirSenhaEmail(usuarioRedefinirSenhaEmailRequestDom);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @PutMapping("/redefinirsenha")
     @PreAuthorize("@nivelAcessoService.validarNivelAcesso('USUARIO_CONTROLLER','REDEFINIR_SENHA')")
-    public ResponseEntity<?> redefinirsenha(@RequestBody UsuarioRedefinirSenhaRequestDom UsuarioRedefinirSenhaRequestDom) {
-        usuarioService.redefinirsenha(UsuarioRedefinirSenhaRequestDom);
+    public ResponseEntity<?> redefinirSenha(@RequestBody UsuarioRedefinirSenhaRequestDom UsuarioRedefinirSenhaRequestDom) {
+        usuarioService.redefinirSenha(UsuarioRedefinirSenhaRequestDom);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
