@@ -21,7 +21,7 @@ VALUES
   (15,'CARREGAR_ATIVO_POR_CURSO', 'carregar os dados ativos por curso'), --15
   (16,'CARREGAR_POR_PERIODO', 'carregar os dados por periodo, utlizado em visualizar de cronogramas'), --16
   (17,'CARREGAR_POR_USUARIO', 'carregar os dados por usuario, utilizado em index de alunos'),
-  (18,'POSSUI_DIA_SEMANA_DISPONIVEL', 'verifica se o professor possui dia semana disponvel (formulario)'),
+  (18,'CARREGAR_DIA_SEMANA_DISPONIVEL', 'verifica se o professor possui dia semana disponvel (formulario)'),
   (19,'VISUALIZAR', 'altera o status da notificação para visualizado')
 ON CONFLICT (id) DO NOTHING;
 
@@ -80,7 +80,6 @@ VALUES
   (2,8),--CARREGAR_ATIVO
   (2,9),--ASSOCIAR
   (2,10),--CARREGAR_POR_ID
-  (2,18),--POSSUI_DIA_SEMANA_DISPONIVEL
 
   (3,1),--CRIAR
   (3,2),--EDITAR
@@ -148,7 +147,7 @@ VALUES
   (13,2),--EDITAR  --DIA_CRONOGRAMA_CONTROLLER
 ----------
   (14,11),--FORMULARIO -- PROFESSOR_CONTROLLER
-  (14,18),--POSSUI_DIA_SEMANA_DISPONIVEL            -- PROFESSOR
+  (14,18),--CARREGAR_DIA_SEMANA_DISPONIVEL            -- PROFESSOR
   (15,3),--CARREGAR  --CRONOGRAMA_CONTROLLER
 ------------------
   (16,3),--CARREGAR  --CRONOGRAMA_CONTROLLER  --ALUNO
@@ -161,8 +160,6 @@ VALUES
   (19,16),--CARREGAR_POR_PERIODO  --CURSO -- rankingAcesso > 2
 ------
   (20,3),--CARREGAR --DIA_SEMANA_DISPONIVEL -- rankingAcesso < 4
------
-  (21,18),--POSSUI_DIA_SEMANA_DISPONIVEL -- PROFESSOR_CONTROLLER -- ALUNO
 ------
   (22,17),--CARREGAR_POR_USUARIO --PERIODO_CONTROLLER -- rankingAcesso > 2
 ------

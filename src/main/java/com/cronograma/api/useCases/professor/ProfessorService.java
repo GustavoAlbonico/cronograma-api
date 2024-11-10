@@ -1,6 +1,7 @@
 package com.cronograma.api.useCases.professor;
 
 import com.cronograma.api.entitys.*;
+import com.cronograma.api.entitys.enums.DiaSemanaEnum;
 import com.cronograma.api.entitys.enums.StatusEnum;
 import com.cronograma.api.exceptions.CoordenadorException;
 import com.cronograma.api.exceptions.FaseException;
@@ -38,6 +39,7 @@ public class ProfessorService {
     private final ProfessorCoordenadorRepository professorCoordenadorRepository;
     private final ProfessorDiaSemanaDisponivelRepository professorDiaSemanaDisponivelRepository;
     private final ProfessorNivelAcessoRepository professorNivelAcessoRepository;
+    private final ProfessorDiaCronogramaRepository professorDiaCronogramaRepository;
 
     private final ProfessorMapper professorMapper;
     private final ProfessorPaginacaoMapper professorPaginacaoMapper;
@@ -110,9 +112,12 @@ public class ProfessorService {
                     professorDiaSemanaDisponivelRepository.findAllById(professorRequestDom.getDiaSemanaDisponivelIds());
 
             if(diasSemanaDisponiveisEncontrados.size() < professorRequestDom.getDiaSemanaDisponivelIds().size()){
-                throw new ProfessorException("Uma ou mais dos dias da semana disponiveis informados não foram encontrados!");
+                throw new ProfessorException("Um ou mais dos dias da semana disponiveis informados não foram encontrados!");
             }
+
         }
+
+        validarDiasSemanaDisponveisEstaEmUso(id,diasSemanaDisponiveisEncontrados);
 
         professorEncontradoMapper.professorRequestDomParaProfessorEncontrado(professorRequestDom,professorEncontrado,diasSemanaDisponiveisEncontrados);
 
@@ -142,8 +147,8 @@ public class ProfessorService {
     public void formularioProfessor(ProfessorFormularioRequestDom professorFormularioRequestDom){
         Professor professorEncontrado = usuarioService.buscarUsuarioAutenticado().getProfessor();
 
-        if (!professorEncontrado.getDiasSemanaDisponivel().isEmpty()){
-            throw new ProfessorException("Os dias da semana disponíveis já foram informados neste periodo!");
+        if(professorFormularioRequestDom.getDiaSemanaDisponivelIds().isEmpty()){
+            throw new ProfessorException("Não é possivel enviar um formulário vazio!");
         }
 
         List<DiaSemanaDisponivel> diasSemanaDisponiveisEncontrados =
@@ -154,26 +159,19 @@ public class ProfessorService {
         }
 
         if(diasSemanaDisponiveisEncontrados.size() < professorFormularioRequestDom.getDiaSemanaDisponivelIds().size()){
-            throw new ProfessorException("Uma ou mais dos dias da semana disponiveis informados não foram encontrados!");
+            throw new ProfessorException("Um ou mais dos dias da semana disponiveis informados não foram encontrados!");
         }
+
+        validarDiasSemanaDisponveisEstaEmUso(professorEncontrado.getId(),diasSemanaDisponiveisEncontrados);
 
         professorFormularioMapper.professorFormularioRequestDomParaProfessor(professorFormularioRequestDom, professorEncontrado,diasSemanaDisponiveisEncontrados);
         professorRepository.save(professorEncontrado);
     }
 
     @Transactional(readOnly = true)
-    public boolean possuiDiaSemanaDisponivelProfessor(){
+    public ProfessorResponseDom carregarDiaSemanaDisponivelProfessor(){
         Usuario usuario = usuarioService.buscarUsuarioAutenticado();
-
-        if (usuario.getProfessor() == null){
-            return true;
-        }
-
-        if(!usuario.getProfessor().getDiasSemanaDisponivel().isEmpty()){
-            return true;
-        }
-
-        return false;
+        return professorMapper.professorParaProfessorResponseDomDiasSemanaDisponiveis(usuario.getProfessor());
     }
 
     public void inativarProfessor(Long id){
@@ -265,6 +263,38 @@ public class ProfessorService {
             throw new CoordenadorException(errorMessages);
         }
 
+    }
+
+    private void validarDiasSemanaDisponveisEstaEmUso(Long professorId,List<DiaSemanaDisponivel> diasSemanaDisponiveisEncontrados){
+
+        List<DiaSemanaEnum> diasSemanaEnumEmUso =
+                professorDiaCronogramaRepository.buscarTodosDiasSemanaEnumPorCronogramaGeradoPorPeriodoAtivoPorProfessor(professorId);
+
+        List<DiaSemanaEnum> errorDiasSemanaEmUso;
+
+        if(diasSemanaDisponiveisEncontrados == null){
+            errorDiasSemanaEmUso = diasSemanaEnumEmUso;
+        } else {
+            errorDiasSemanaEmUso = diasSemanaEnumEmUso.stream()
+                    .filter(diaSemanaEnum -> diasSemanaDisponiveisEncontrados.stream()
+                            .noneMatch(diaSemanaDisponivel -> diaSemanaDisponivel.getDiaSemanaEnum().equals(diaSemanaEnum)))
+                    .toList();
+        }
+
+        if(!errorDiasSemanaEmUso.isEmpty()){
+            final String diasSemanaEmUso = String.join(
+                    (errorDiasSemanaEmUso.size() == 2 ? " e " :", "),
+                    errorDiasSemanaEmUso.stream().map(DiaSemanaEnum::getDiaSemanaEnumLabel).toList()
+            );
+
+            throw new ProfessorException(
+                    diasSemanaEmUso +
+                    (errorDiasSemanaEmUso.size() > 1 ? " estão" :" está") +
+                    " sendo utilizado" +
+                    (errorDiasSemanaEmUso.size() > 1 ? "s" :"") +
+                    " em um cronograma do período atual!"
+            );
+        }
     }
 
 }

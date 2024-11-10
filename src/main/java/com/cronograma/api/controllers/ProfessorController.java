@@ -45,10 +45,10 @@ public class ProfessorController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/possui/diasemanadisponivel")
-    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PROFESSOR_CONTROLLER','POSSUI_DIA_SEMANA_DISPONIVEL')")
-    public ResponseEntity<?> possuiDiaSemanaDisponivelProfessor(){
-        Boolean response = professorService.possuiDiaSemanaDisponivelProfessor();
+    @GetMapping("/carregar/diasemanadisponivel")
+    @PreAuthorize("@nivelAcessoService.validarNivelAcesso('PROFESSOR_CONTROLLER','CARREGAR_DIA_SEMANA_DISPONIVEL')")
+    public ResponseEntity<?> carregarDiaSemanaDisponivelProfessor(){
+        ProfessorResponseDom response = professorService.carregarDiaSemanaDisponivelProfessor();
         return ResponseEntity.ok(response);
     }
 

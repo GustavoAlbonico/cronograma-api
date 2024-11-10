@@ -75,4 +75,13 @@ public interface ProfessorMapper {
     @Mapping(target = "id", ignore = true)
     Professor coordenadorEncontradoParaProfessor(Coordenador coordenadorEncontrado);
 
+
+    @Mapping( target = "id",ignore = true)
+    @Mapping( target = "cpf",ignore = true)
+    @Mapping( target = "telefone",ignore = true)
+    @Mapping( target = "email",ignore = true)
+    @Mapping( target = "statusEnum",ignore = true)
+    @Mapping(source = "diasSemanaDisponivel", target = "diasSemanaDisponiveis")
+    ProfessorResponseDom professorParaProfessorResponseDomDiasSemanaDisponiveis(Professor professor);
+
 }
