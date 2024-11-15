@@ -5,13 +5,11 @@ import com.cronograma.api.entitys.DiaSemanaDisponivel;
 import com.cronograma.api.entitys.Professor;
 import com.cronograma.api.entitys.Usuario;
 import com.cronograma.api.entitys.enums.StatusEnum;
-import com.cronograma.api.useCases.professor.domains.ProfessorFormularioRequestDom;
-import com.cronograma.api.useCases.professor.domains.ProfessorRequestDom;
-import com.cronograma.api.useCases.professor.domains.ProfessorResponseDom;
-import com.cronograma.api.useCases.professor.domains.ProfessorUsuarioRequestDom;
+import com.cronograma.api.useCases.professor.domains.*;
 import com.cronograma.api.utils.regex.RegexUtil;
 import org.mapstruct.*;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
@@ -83,5 +81,16 @@ public interface ProfessorMapper {
     @Mapping( target = "statusEnum",ignore = true)
     @Mapping(source = "diasSemanaDisponivel", target = "diasSemanaDisponiveis")
     ProfessorResponseDom professorParaProfessorResponseDomDiasSemanaDisponiveis(Professor professor);
+
+    @AfterMapping
+    default void afterProfessorParaProfessorResponseDomDiasSemanaDisponiveis(
+            @MappingTarget ProfessorResponseDom professorResponseDom
+    ){
+        professorResponseDom.setDiasSemanaDisponiveis(
+                professorResponseDom.getDiasSemanaDisponiveis().stream()
+                        .sorted(Comparator.comparing(ProfessorDiaSemanaDisponivelResponseDom::getDiaSemanaEnum))
+                        .toList()
+        );
+    }
 
 }

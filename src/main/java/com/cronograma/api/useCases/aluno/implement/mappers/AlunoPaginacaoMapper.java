@@ -2,7 +2,9 @@ package com.cronograma.api.useCases.aluno.implement.mappers;
 
 import com.cronograma.api.entitys.Aluno;
 import com.cronograma.api.entitys.Usuario;
+import com.cronograma.api.useCases.aluno.domains.AlunoFaseResponseDom;
 import com.cronograma.api.useCases.aluno.domains.AlunoResponseDom;
+import com.cronograma.api.useCases.diaSemanaDisponivel.domains.DiaSemanaDisponivelResponseDom;
 import com.cronograma.api.utils.paginacao.PaginacaoResponseUtil;
 import org.mapstruct.*;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,13 @@ public interface AlunoPaginacaoMapper {
     ){
         List<AlunoResponseDom> alunosResponseDom = alunosEncontrados.getContent()
                 .stream().map(this::alunoParaAlunoResponseDom)
+                .peek(alunoParaAlunoResponseDom ->
+                        alunoParaAlunoResponseDom.setFases(
+                                alunoParaAlunoResponseDom.getFases().stream()
+                                        .sorted(Comparator.comparing(AlunoFaseResponseDom::getNumero))
+                                        .toList()
+                        )
+                )
                 .toList();
 
         PaginacaoResponseUtil<List<AlunoResponseDom>> paginacaoResponseUtil= new PaginacaoResponseUtil<>();
