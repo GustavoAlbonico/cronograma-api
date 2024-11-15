@@ -267,15 +267,16 @@ VALUES
     (20,'jossuan@gmail.com', '67890123457', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Jossuan Diniz'), --20
     (21,'daniel.goulart@gmail.com', '30067890123', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Daniel Goulart'), --21
     (22,'rogerio.cortina@gmail.com', '45008901234', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Rogério Cortina'), --22
-    (23,'muriel.benhardt@gmail.com', '56009012345', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Muriel Bernhardt'), --23
+
+    (23,'muriel.benhardt@gmail.com', '56009012345', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Muriel Bernhardt'), --23 --COORDE PROF
+
     (24,'roberto.medeiros@gmail.com', '67012012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Roberto Fermino Medeiros'), --24
     (25,'jorge.henrique.silva@gmail.com', '67007799056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Jorge Henrique da Silva Naspolini'), --25
     (26,'roni.edson@gmail.com', '00012012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Roni Edson dos Santos'), --26
     (27,'fabricio.souza@gmail.com', '11012012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Fabricio de Souza Claudino Junior'), --27
     (28,'liliane.fernandes@gmail.com', '67011012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Liliane Fernandes'), --28
     (29,'cledemilson.santos@gmail.com', '62222012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Cledemilson dos Santos'), --29
-
-    (30,'lucas.bonfanteprofessor@gmail.com', '67012014456', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Lucas Bonfante Rebelo'), --30 --COORDE PROF
+    (30,'lucas.bonfanteprofessor@gmail.com', '67012014456', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Lucas Bonfante Rebelo'), --30
 
     (31,'felipe.soares@gmail.com', '88012345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Felipe Soares'), --31
     (32,'ana.clara.lima@gmail.com', '99012345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Ana Clara Lima'), --32
@@ -314,16 +315,17 @@ VALUES
   (4,20),
   (4,21),
   (4,22),
-  (4,23),
+
+  (3,23),
+  (4,23), --MURIEL
+
   (4,24),
   (4,25),
   (4,26),
   (4,27),
   (4,28),
   (4,29),
-
-  (3,30),
-  (4,30), --LUCAS
+  (4,30),
 
   (5,31),
   (5,32),
@@ -500,7 +502,7 @@ INSERT INTO coordenador
   (id,telefone, usuario_id)
 VALUES
   (1,'48595962856', 2),
-  (2,'44994700616', 30)
+  (2,'44994700615', 23)
 ON CONFLICT (id) DO NOTHING;
 
 --FASE

@@ -111,7 +111,7 @@ public class UsuarioService {
     }
 
     public void esqueciMinhaSenha(String cpf) throws MessagingException {
-        Usuario usuario = this.usuarioRepository.findByCpfAndStatusEnum(cpf, StatusEnum.ATIVO)
+        Usuario usuario = this.usuarioRepository.findByCpfAndStatusEnum(RegexUtil.retornarNumeros(cpf), StatusEnum.ATIVO)
                 .orElseThrow(() -> new AuthorizationException("Cpf não encontrado"));
         emailService.enviarEmailEsqueciMinhaSenha(usuario);
     }

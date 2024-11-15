@@ -45,12 +45,17 @@ public interface EventoMapper{
     }
 
     @Mapping(source = "curso", target = "siglaCurso", qualifiedByName = "buscarSiglaCurso")
+    @Mapping(source = "curso", target = "cursoId", qualifiedByName = "buscarCursoId")
     @Mapping(source = "data",target = "data", qualifiedByName = "formatarData")
     EventoResponseDom eventoParaEventoResponseDom(Evento evento);
 
     @Named("buscarSiglaCurso")
     default String buscarSiglaCurso(Curso curso){
         return curso.getSigla();
+    }
+    @Named("buscarCursoId")
+    default Long buscarCursoId(Curso curso){
+        return curso.getId();
     }
 
     @Named("formatarData")

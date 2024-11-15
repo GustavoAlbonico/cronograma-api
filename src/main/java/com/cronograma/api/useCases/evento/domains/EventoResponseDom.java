@@ -16,4 +16,5 @@ public class EventoResponseDom {
     private List<String> mensagens;
     private String siglaCurso;
     private BooleanEnum visualizadoBooleanEnum;
+    private Long cursoId;
 }
