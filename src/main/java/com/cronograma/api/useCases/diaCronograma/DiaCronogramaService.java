@@ -80,7 +80,7 @@ public class DiaCronogramaService {
                     if(datasBloqueadas.stream().anyMatch(dataBloqueada -> dataBloqueada.getData().isEqual(dataInicialAuxiliarLocal))){
                         diaCronograma.setDataStatusEnum(DataStatusEnum.BLOQUEADA);
                         dataDisponivel = false;
-                    } else {
+                    } else if(entry.getValue().containsKey(diaDaSemana)) {
                         for (CronogramaDisciplinaDom cronogramaDisciplina : entry.getValue().get(diaDaSemana)){
                             double quantidadeDiasAula = cronogramaDisciplina.getQuantidadeDiasAula();
 

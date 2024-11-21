@@ -5,7 +5,6 @@ import com.cronograma.api.entitys.enums.BooleanEnum;
 import com.cronograma.api.entitys.enums.StatusEnum;
 import com.cronograma.api.exceptions.CursoException;
 import com.cronograma.api.exceptions.DisciplinaException;
-import com.cronograma.api.exceptions.EventoException;
 import com.cronograma.api.useCases.disciplina.domains.DisciplinaRequestDom;
 import com.cronograma.api.useCases.disciplina.domains.DisciplinaResponseDom;
 import com.cronograma.api.useCases.disciplina.implement.mappers.DisciplinaMapper;

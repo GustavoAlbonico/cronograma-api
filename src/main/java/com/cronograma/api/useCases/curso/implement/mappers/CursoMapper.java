@@ -3,7 +3,6 @@ package com.cronograma.api.useCases.curso.implement.mappers;
 import com.cronograma.api.entitys.Coordenador;
 import com.cronograma.api.entitys.Curso;
 import com.cronograma.api.entitys.Fase;
-import com.cronograma.api.useCases.coordenador.domains.CoordenadorResponseDom;
 import com.cronograma.api.useCases.curso.domains.*;
 import org.mapstruct.*;
 

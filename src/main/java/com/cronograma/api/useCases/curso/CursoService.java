@@ -128,7 +128,10 @@ public class CursoService {
                     for (CursoPorPeriodoFaseResponseDom fasePorPeriodo : cursosPorPeriodo.getFases()){
                         if(
                             usuario.getProfessor().getDisciplinas().stream()
-                                   .anyMatch(disciplina -> disciplina.getFase().getId().equals(fasePorPeriodo.getId()))
+                                   .anyMatch(disciplina ->
+                                           disciplina.getFase().getId().equals(fasePorPeriodo.getId()) &&
+                                           disciplina.getCurso().getId().equals(cursosPorPeriodo.getId())
+                                   )
                         ){
                             fasePorPeriodo.setPossuiFase(true);
                         }

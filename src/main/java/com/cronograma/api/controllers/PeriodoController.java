@@ -1,7 +1,5 @@
 package com.cronograma.api.controllers;
 
-import com.cronograma.api.useCases.fase.domains.FaseRequestDom;
-import com.cronograma.api.useCases.fase.domains.FaseResponseDom;
 import com.cronograma.api.useCases.periodo.PeriodoService;
 import com.cronograma.api.useCases.periodo.domains.PeriodoRequestDom;
 import com.cronograma.api.useCases.periodo.domains.PeriodoResponseDom;

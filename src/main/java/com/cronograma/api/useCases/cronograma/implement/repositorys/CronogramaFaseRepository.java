@@ -1,7 +1,6 @@
 package com.cronograma.api.useCases.cronograma.implement.repositorys;
 
 import com.cronograma.api.entitys.Fase;
-import com.cronograma.api.entitys.enums.StatusEnum;
 import com.cronograma.api.useCases.fase.implement.repositorys.FaseRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

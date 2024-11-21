@@ -1,6 +1,5 @@
 package com.cronograma.api.useCases.cronograma.domains;
 
-import com.cronograma.api.entitys.enums.DiaSemanaEnum;
 import com.cronograma.api.entitys.enums.MesEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

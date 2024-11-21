@@ -2,9 +2,7 @@ package com.cronograma.api.useCases.cronograma;
 
 import com.cronograma.api.entitys.*;
 import com.cronograma.api.entitys.enums.*;
-import com.cronograma.api.exceptions.AuthorizationException;
 import com.cronograma.api.exceptions.CronogramaException;
-import com.cronograma.api.exceptions.PeriodoException;
 import com.cronograma.api.useCases.cronograma.domains.*;
 import com.cronograma.api.useCases.cronograma.implement.mappers.CronogramaDiaCronogramaMapper;
 import com.cronograma.api.useCases.cronograma.implement.mappers.CronogramaDisciplinaMapper;
@@ -20,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.ChronoField;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -152,11 +149,11 @@ public class CronogramaService {
 
         List<Fase> fases = cronogramaFaseRepository.buscarFasesPorCursoIdPorStatusEnum(cronograma.getCursoId(), StatusEnum.ATIVO.toString())
                 .filter(set -> !set.isEmpty())
-                .orElseThrow(() -> new CronogramaException("Nenhuma fase encontrada!"));
+                .orElseThrow(() -> new CronogramaException("O curso não possui disciplina cadastrada!"));
 
         Set<Disciplina> disciplinasEncontradas = cronogramaDisciplinaRepository.findAllByStatusEnumAndCursoId(StatusEnum.ATIVO,cronograma.getCursoId())
                 .filter(set -> !set.isEmpty())
-                .orElseThrow(() -> new CronogramaException("Nenhuma disciplina encontrada!"));
+                .orElseThrow(() -> new CronogramaException("O curso não possui disciplina cadastrada!"));
 
         Set<Disciplina> disciplinas = cronogramaDisciplinaMapper.disciplinasParaDisciplinasNovaInstancia(disciplinasEncontradas);
 

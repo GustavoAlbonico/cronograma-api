@@ -4,7 +4,6 @@ import com.cronograma.api.entitys.Coordenador;
 import com.cronograma.api.entitys.DiaSemanaDisponivel;
 import com.cronograma.api.entitys.Professor;
 import com.cronograma.api.entitys.Usuario;
-import com.cronograma.api.entitys.enums.StatusEnum;
 import com.cronograma.api.useCases.professor.domains.*;
 import com.cronograma.api.utils.regex.RegexUtil;
 import org.mapstruct.*;

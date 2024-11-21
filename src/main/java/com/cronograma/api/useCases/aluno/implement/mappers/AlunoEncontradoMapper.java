@@ -4,7 +4,6 @@ import com.cronograma.api.entitys.Aluno;
 import com.cronograma.api.entitys.Curso;
 import com.cronograma.api.entitys.Fase;
 import com.cronograma.api.useCases.aluno.domains.AlunoRequestDom;
-import com.cronograma.api.utils.regex.RegexUtil;
 import org.mapstruct.*;
 
 import java.util.HashSet;

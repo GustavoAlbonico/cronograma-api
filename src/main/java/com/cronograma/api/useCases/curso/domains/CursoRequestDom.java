@@ -1,6 +1,5 @@
 package com.cronograma.api.useCases.curso.domains;
 
-import com.cronograma.api.entitys.enums.StatusEnum;
 import lombok.Getter;
 import lombok.Setter;
 

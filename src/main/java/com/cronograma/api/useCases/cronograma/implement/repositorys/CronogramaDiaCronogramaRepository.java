@@ -1,7 +1,6 @@
 package com.cronograma.api.useCases.cronograma.implement.repositorys;
 
 import com.cronograma.api.entitys.DiaCronograma;
-import com.cronograma.api.entitys.Disciplina;
 import com.cronograma.api.useCases.diaCronograma.implement.repositorys.DiaCronogramaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

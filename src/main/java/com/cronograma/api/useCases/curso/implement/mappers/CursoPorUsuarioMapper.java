@@ -4,7 +4,6 @@ import com.cronograma.api.entitys.Curso;
 import com.cronograma.api.entitys.Fase;
 import com.cronograma.api.entitys.enums.StatusEnum;
 import com.cronograma.api.useCases.curso.domains.CursoPorUsuarioResponseDom;
-import com.cronograma.api.useCases.curso.domains.CursoResponseDom;
 import org.mapstruct.*;
 
 import java.util.Comparator;

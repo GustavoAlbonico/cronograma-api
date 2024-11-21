@@ -3,10 +3,7 @@ package com.cronograma.api.useCases.cronograma.implement.mappers;
 import com.cronograma.api.entitys.Cronograma;
 import com.cronograma.api.entitys.Curso;
 import com.cronograma.api.entitys.Periodo;
-import com.cronograma.api.exceptions.CronogramaException;
 import com.cronograma.api.useCases.cronograma.domains.CronogramaRequestDom;
-import com.cronograma.api.useCases.cronograma.implement.repositorys.CronogramaCursoRepository;
-import com.cronograma.api.useCases.cronograma.implement.repositorys.CronogramaPeriodoRepository;
 import org.mapstruct.*;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,

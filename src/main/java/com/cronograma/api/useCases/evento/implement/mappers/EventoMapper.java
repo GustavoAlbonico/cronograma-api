@@ -8,7 +8,6 @@ import com.cronograma.api.useCases.evento.domains.EventoRequestDom;
 import com.cronograma.api.useCases.evento.domains.EventoResponseDom;
 import com.cronograma.api.useCases.evento.implement.repositorys.EventoCursoRepository;
 import com.cronograma.api.useCases.evento.implement.repositorys.EventoUsuarioRepository;
-import jdk.jfr.Name;
 import org.mapstruct.*;
 
 import java.time.LocalDateTime;

@@ -2,7 +2,6 @@ package com.cronograma.api.useCases.aluno;
 
 import com.cronograma.api.entitys.*;
 import com.cronograma.api.exceptions.AlunoException;
-import com.cronograma.api.exceptions.UsuarioException;
 import com.cronograma.api.useCases.aluno.domains.*;
 import com.cronograma.api.useCases.aluno.implement.mappers.AlunoEncontradoMapper;
 import com.cronograma.api.useCases.aluno.implement.mappers.AlunoImportarMapper;

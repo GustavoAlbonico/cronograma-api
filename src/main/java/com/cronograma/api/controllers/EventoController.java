@@ -1,10 +1,8 @@
 package com.cronograma.api.controllers;
-import com.cronograma.api.useCases.cronograma.CronogramaService;
-import com.cronograma.api.useCases.cronograma.domains.CronogramaRequestDom;
+
 import com.cronograma.api.useCases.evento.EventoService;
 import com.cronograma.api.useCases.evento.domains.EventoCronogramaRequestDom;
 import com.cronograma.api.useCases.evento.domains.EventoResponseDom;
-import com.cronograma.api.useCases.fase.domains.FaseRequestDom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

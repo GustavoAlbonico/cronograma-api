@@ -4,7 +4,6 @@ import com.cronograma.api.entitys.Aluno;
 import com.cronograma.api.entitys.Usuario;
 import com.cronograma.api.useCases.aluno.domains.AlunoFaseResponseDom;
 import com.cronograma.api.useCases.aluno.domains.AlunoResponseDom;
-import com.cronograma.api.useCases.diaSemanaDisponivel.domains.DiaSemanaDisponivelResponseDom;
 import com.cronograma.api.utils.paginacao.PaginacaoResponseUtil;
 import org.mapstruct.*;
 import org.springframework.data.domain.Page;

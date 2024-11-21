@@ -1,6 +1,5 @@
 package com.cronograma.api.useCases.coordenador.domains;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 

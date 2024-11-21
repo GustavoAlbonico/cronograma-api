@@ -2,7 +2,6 @@ package com.cronograma.api.useCases.professor.implement.mappers;
 
 import com.cronograma.api.entitys.Professor;
 import com.cronograma.api.useCases.diaSemanaDisponivel.domains.DiaSemanaDisponivelResponseDom;
-import com.cronograma.api.useCases.fase.domains.FaseResponseDom;
 import com.cronograma.api.useCases.professor.domains.ProfessorResponseDom;
 import com.cronograma.api.utils.paginacao.PaginacaoResponseUtil;
 import org.mapstruct.Context;

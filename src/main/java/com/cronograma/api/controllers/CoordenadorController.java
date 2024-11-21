@@ -3,8 +3,6 @@ package com.cronograma.api.controllers;
 import com.cronograma.api.useCases.coordenador.CoordenadorService;
 import com.cronograma.api.useCases.coordenador.domains.CoordenadorRequestDom;
 import com.cronograma.api.useCases.coordenador.domains.CoordenadorResponseDom;
-import com.cronograma.api.useCases.fase.domains.FaseRequestDom;
-import com.cronograma.api.useCases.fase.domains.FaseResponseDom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
