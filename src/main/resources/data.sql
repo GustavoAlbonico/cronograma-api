@@ -260,7 +260,9 @@ VALUES
     (13,'eduardo.ribeiro@gmail.com', '12345566000', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Eduardo Ribeiro'), --13
     (14,'katiane.araujo@gmail.com', '01234501010', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Katiane Araújo'), --14
     (15,'josilene.della@gmail.com', '01010167890', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Josilene Della'), --15
-    (16,'dayana.ricken@gmail.com', '23456789013', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Dayana Ricken'), --16
+
+    (16,'dayana.ricken@gmail.com', '23456789013', '$2a$10$ymh2UwJFfh10/FPTQkcRS.Vk3TB1mGVz4wMfCNe1WaZ1SJVuJPKIK', 'Dayana Ricken'), --16
+
     (17,'fernando.gabriel@gmail.com', '34567890124', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Fernando Gabriel'), --17
     (18,'marcelo.mazon@gmail.com', '45678901235', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Marcelo Mazon'), --18
     (19,'christine.vieira@gmail.com', '56789012346', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Christine Vieira'), --19
@@ -268,7 +270,7 @@ VALUES
     (21,'daniel.goulart@gmail.com', '30067890123', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Daniel Goulart'), --21
     (22,'rogerio.cortina@gmail.com', '45008901234', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Rogério Cortina'), --22
 
-    (23,'muriel.benhardt@gmail.com', '56009012345', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Muriel Bernhardt'), --23 --COORDE PROF
+    (23,'muriel.benhardt@gmail.com', '56009012345', '$2a$10$ymh2UwJFfh10/FPTQkcRS.Vk3TB1mGVz4wMfCNe1WaZ1SJVuJPKIK', 'Muriel Bernhardt'), --23 --COORDE PROF
 
     (24,'roberto.medeiros@gmail.com', '67012012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Roberto Fermino Medeiros'), --24
     (25,'jorge.henrique.silva@gmail.com', '67007799056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Jorge Henrique da Silva Naspolini'), --25
@@ -278,16 +280,17 @@ VALUES
     (29,'cledemilson.santos@gmail.com', '62222012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Cledemilson dos Santos'), --29
     (30,'lucas.bonfanteprofessor@gmail.com', '67012014456', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Lucas Bonfante Rebelo'), --30
 
-    (31,'felipe.soares@gmail.com', '88012345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Felipe Soares'), --31
-    (32,'ana.clara.lima@gmail.com', '99012345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Ana Clara Lima'), --32
-    (33,'rodrigo.araujo@gmail.com', '11112345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Rodrigo Araujo'), --33
-    (34,'juliana.mendes@gmail.com', '22212345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Juliana Mendes'), --34
-    (35,'beatriz.souza@gmail.com', '33312345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Beatriz Souza'), --35
-    (36,'caio.pereira@gmail.com', '44412345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Caio Pereira'), --36  --ALUNO
-    (37,'luana.martins@gmail.com', '55512345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Luana Martins'), --37
-    (38,'mateus.silva@gmail.com', '66612345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Mateus Silva'), --38
-    (39,'isabella.farias@gmail.com', '77712345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Isabella Farias'), --39
-    (40,'joao.pedro.ribeiro@gmail.com', '88812345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'João Pedro Ribeiro') --40
+    (31,'joao.pedro.ribeiro@gmail.com', '88012345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'JOÃO PEDRO FARIAS'), --31
+    (32,'ana.clara.lima@gmail.com', '99012345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'ANA CLARA LIMA'), --32
+    (33,'rodrigo.araujo@gmail.com', '11112345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'RODRIGO ARAUJO'), --33
+    (34,'juliana.mendes@gmail.com', '22212345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'JULIANA MENDES'), --34
+    (35,'beatriz.souza@gmail.com', '33312345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'BEATRIZ SOUZA'), --35
+    (36,'caio.pereira@gmail.com', '44412345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'CAIO PEREIRA'), --36  --ALUNO
+    (37,'luana.martins@gmail.com', '55512345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'LUANA MARTINS'), --37
+    (38,'mateus.silva@gmail.com', '66612345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'MATEUS SILVA'), --38
+    (39,'isabella.farias@gmail.com', '77712345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'ISABELA FARIAS'), --39
+
+    (40,'gustavoalbonico123@gmail.com', '88812345678', '$2a$10$ymh2UwJFfh10/FPTQkcRS.Vk3TB1mGVz4wMfCNe1WaZ1SJVuJPKIK', 'GUSTAVO ALBÔNICO GONÇALVES') --40
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO  usuario_nivel_acesso
@@ -550,21 +553,21 @@ INSERT INTO disciplina
   (id,nome, carga_horaria, carga_horaria_diaria, cor_hexadecimal, extensao_boolean_enum, curso_id, fase_id, professor_id)
 VALUES
 --MODA
-  (1,'Extensão em Design de Moda I', 50, 4, '#1E90FF', 'SIM', 1, 2, 1),
-  (2,'Desenho de Moda I', 60, 4, '#006400', 'NAO', 1, 2, 2),
-  (3,'História da Arte e da Moda', 60, 4, '#DAA520', 'NAO', 1, 2, 3),
-  (4,'Marketing de Moda e Comportamento do Consumido', 70, 4, '#8A2BE2', 'NAO', 1, 2, 4),
-  (5,'Ateliê de Confecção I - INICIO', 40, 4, '#FF1493', 'NAO', 1, 2, 5),
-  (6,'Coolhunting - FINAL', 40, 4, '#F0E68C', 'NAO', 1, 2, 6),
-  (7,'Técnicas de Modelagem I', 80, 4, '#F0E68C', 'NAO', 1, 2, 7),
+  (1,'Extensão em Design de Moda I', 50, 4, '#234B1E', 'SIM', 1, 2, 1),
+  (2,'Desenho de Moda I', 60, 4, '#FF2F00', 'NAO', 1, 2, 2),
+  (3,'História da Arte e da Moda', 60, 4, '#2C1963', 'NAO', 1, 2, 3),
+  (4,'Marketing de Moda e Comportamento do Consumido', 70, 4, '#33FF8C', 'NAO', 1, 2, 4),
+  (5,'Ateliê de Confecção I - INICIO', 40, 4, '#FF8C33', 'NAO', 1, 2, 5),
+  (6,'Coolhunting - FINAL', 40, 4, '#A633FF', 'NAO', 1, 2, 6),
+  (7,'Técnicas de Modelagem I', 80, 4, '#FF33A6', 'NAO', 1, 2, 7),
 
-  (8,'Materiais e Beneficiamento', 80, 4, '#99004C', 'NAO', 1, 4, 7),
-  (9,'Ateliê de Confecção III', 80, 4, '#003300', 'NAO', 1, 4, 8),
-  (10,'Moulage', 60, 4, '#FF6666', 'NAO', 1, 4, 9),
-  (11,'Criatividade, Inovação e Sustentabilidade', 60, 4, '#003319', 'NAO', 1, 4, 10),
-  (12,'Extensão em Design de Moda IV', 40, 4, '#660033', 'SIM', 1, 4, 1),
-  (13,'Desenho Técnico de Moda - INICIO', 40, 4, '#00FF80', 'NAO', 1, 4, 3),
-  (14,'Pesquisa de Mercado - FINAL', 40, 4, '#00FF80', 'NAO', 1, 4, 11),
+  (8,'Materiais e Beneficiamento', 80, 4, '#3357FF', 'NAO', 1, 4, 7),
+  (9,'Ateliê de Confecção III', 80, 4, '#234B1E', 'NAO', 1, 4, 8),
+  (10,'Moulage', 60, 4, '#00FAFF', 'NAO', 1, 4, 9),
+  (11,'Criatividade, Inovação e Sustentabilidade', 60, 4, '#234B1E', 'NAO', 1, 4, 10),
+  (12,'Extensão em Design de Moda IV', 40, 4, '#2C1963', 'SIM', 1, 4, 1),
+  (13,'Desenho Técnico de Moda - INICIO', 40, 4, '#FF8C33', 'NAO', 1, 4, 3),
+  (14,'Pesquisa de Mercado - FINAL', 40, 4, '#A633FF', 'NAO', 1, 4, 11),
 
   (15,'Desenvolvimento de Portfólio', 40, 4, '#3357FF', 'NAO', 1, 6, 1),
   (16,'Produção Audiovisual', 40, 4, '#FF33A6', 'NAO', 1, 6, 1),
@@ -577,45 +580,45 @@ VALUES
   (23,'Desenvolvimento e Produção de Coleção2 ', 40, 4, '#00FAFF', 'NAO', 1, 6, 13),
 
 --ADS
-  (24,'Fundamentos da Pesquisa', 40, 4, '#FF3333', 'NAO', 2, 1, 14),
-  (25,'Introdução a Computação', 36, 4, '#33FFFF', 'NAO',2, 1, 15),
-  (26,'Modelagem de Dados', 76, 4, '#FFFF33', 'NAO', 2, 1, 16),
-  (27,'Introdução a Programação de Computadores', 152, 4, '#FF33FF', 'NAO', 2, 1, 17),
-  (28,'Engenharia de Requisitos', 76, 4, '#33FF33', 'NAO', 2, 1, 18),
-  (29,'Extensão em Análise e Desenvolvimento de Sistemas I', 45, 4, '#3399FF', 'SIM', 2, 1, 14),
+  (24,'Fundamentos da Pesquisa', 40, 4, '#00FAFF', 'NAO', 2, 1, 14),
+  (25,'Introdução a Computação', 36, 4, '#234B1E', 'NAO',2, 1, 15),
+  (26,'Modelagem de Dados', 76, 4, '#FF2F00', 'NAO', 2, 1, 16),
+  (27,'Introdução a Programação de Computadores', 152, 4, '#2C1963', 'NAO', 2, 1, 17),
+  (28,'Engenharia de Requisitos', 76, 4, '#33FF8C', 'NAO', 2, 1, 18),
+  (29,'Extensão em Análise e Desenvolvimento de Sistemas I', 45, 4, '#A633FF', 'SIM', 2, 1, 14),
 
-  (30,'Estrutura de Dados', 40, 4, '#99004C', 'NAO', 2, 2, 16),
-  (31,'UX/UI Design de Sistema', 36, 4, '#003300', 'NAO',2, 2, 19),
-  (32,'Programação Orientada a Objetos', 76, 4, '#FF6666', 'NAO', 2, 2, 20),
-  (33,'Análise Orientada a Objetos', 76, 4, '#003319', 'NAO', 2, 2, 21),
-  (34,'Desenvolvimento Web', 76, 4, '#660033', 'NAO', 2, 2, 22),
-  (35,'Sistema Gerenciador de Banco de Dados ', 76, 4, '#00FF80', 'NAO', 2, 2, 16),
-  (36,'Extensão em Análise e Desenvolvimento de Sistemas II', 45, 4, '#00FF80', 'SIM', 2, 2, 16),
+  (30,'Estrutura de Dados', 40, 4, '#234B1E', 'NAO', 2, 2, 16),
+  (31,'UX/UI Design de Sistema', 36, 4, '#00FAFF', 'NAO',2, 2, 19),
+  (32,'Programação Orientada a Objetos', 76, 4, '#3357FF', 'NAO', 2, 2, 20),
+  (33,'Análise Orientada a Objetos', 76, 4, '#FF33A6', 'NAO', 2, 2, 21),
+  (34,'Desenvolvimento Web', 76, 4, '#A633FF', 'NAO', 2, 2, 22),
+  (35,'Sistema Gerenciador de Banco de Dados ', 76, 4, '#FF8C33', 'NAO', 2, 2, 16),
+  (36,'Extensão em Análise e Desenvolvimento de Sistemas II', 45, 4, '#33FF8C', 'SIM', 2, 2, 16),
 
-  (37,'Arquitetura de Software', 36, 4, '#99004C', 'NAO', 2, 3, 20),
-  (38,'Tecnologias e Sistemas de Informação Gerencial', 40, 4, '#003300', 'NAO',2, 3, 16),
-  (39,'Desenvolvimento Back End', 76, 4, '#FF6666', 'NAO', 2, 3, 22),
-  (40,'Cloud & ITOps', 76, 4, '#003319', 'NAO', 2, 3, 15),
-  (41,'Qualidade e testes de software', 76, 4, '#660033', 'NAO', 2, 3, 21),
-  (42,'Desenvolvimento Front End', 76, 4, '#00FF80', 'NAO', 2, 3, 23),
-  (43,'Extensão em Análise e Desenvolvimento de Sistemas III', 45, 4, '#00FF80', 'SIM', 2, 3, 22),
+  (37,'Arquitetura de Software', 36, 4, '#2C1963', 'NAO', 2, 3, 20),
+  (38,'Tecnologias e Sistemas de Informação Gerencial', 40, 4, '#FF2F00', 'NAO',2, 3, 16),
+  (39,'Desenvolvimento Back End', 76, 4, '#234B1E', 'NAO', 2, 3, 22),
+  (40,'Cloud & ITOps', 76, 4, '#00FAFF', 'NAO', 2, 3, 15),
+  (41,'Qualidade e testes de software', 76, 4, '#3357FF', 'NAO', 2, 3, 21),
+  (42,'Desenvolvimento Front End', 76, 4, '#FF33A6', 'NAO', 2, 3, 23),
+  (43,'Extensão em Análise e Desenvolvimento de Sistemas III', 45, 4, '#A633FF', 'SIM', 2, 3, 22),
 
-  (44,'Desenvolvimento para sistemas embarcados', 40, 4, '#99004C', 'NAO', 2, 4, 15),
-  (45,'Gerenciamento de projetos de software', 36, 4, '#003300', 'NAO',2, 4, 18),
-  (46,'Engenharia de software', 76, 4, '#FF6666', 'NAO', 2, 4, 19),
-  (47,'Desenvolvimento Full Stack', 76, 4, '#003319', 'NAO', 2, 4, 23),
-  (48,'Codificação segura', 76, 4, '#660033', 'NAO', 2, 4, 24),
-  (49,'Desenvolvimento Full Stack', 76, 4, '#00FF80', 'NAO', 2, 4, 22),
-  (50,'Extensão em Análise e Desenvolvimento de Sistemas IIII', 45, 4, '#00FF80', 'SIM', 2, 4, 25),
+  (44,'Desenvolvimento para sistemas embarcados', 40, 4, '#234B1E', 'NAO', 2, 4, 15),
+  (45,'Gerenciamento de projetos de software', 36, 4, '#00FAFF', 'NAO',2, 4, 18),
+  (46,'Engenharia de software', 76, 4, '#FF2F00', 'NAO', 2, 4, 19),
+  (47,'Desenvolvimento Full Stack', 76, 4, '#2C1963', 'NAO', 2, 4, 23),
+  (48,'Codificação segura', 76, 4, '#33FF8C', 'NAO', 2, 4, 24),
+  (49,'Desenvolvimento Full Stack', 76, 4, '#FF8C33', 'NAO', 2, 4, 22),
+  (50,'Extensão em Análise e Desenvolvimento de Sistemas IIII', 45, 4, '#A633FF', 'SIM', 2, 4, 25),
 
-  (51,'Tópicos Especiais em ADS', 76, 4, '#9933FF', 'NAO', 2, 5, 26),
-  (52,'Desenvolvimento para dispositivos móveis', 76, 4, '#FF3399', 'NAO',2, 5, null),
-  (53,'Metodologia do Trabalho Científico', 40, 4, '#99FF33', 'NAO', 2, 5, 14),
-  (54,'Desenvolvimento de aplicação (Sistema)', 76, 4, '#FF6633', 'NAO', 2, 5, 22),
-  (55,'Legislação Aplicada a Informação', 36, 4, '#6633FF', 'NAO', 2, 5, 27),
-  (56,'Desenvolvimento de Aplicação (Projeto)', 40, 4, '#33FF66', 'NAO', 2, 5, 21),
-  (57,'Certificações em ADS', 36, 4, '#FF3366', 'NAO', 2, 5, 27),
-  (58,'InovADS (integradora)', 20, 4, '#66FF33', 'NAO', 2, 5, 28)
+  (51,'Tópicos Especiais em ADS', 76, 4, '#3357FF', 'NAO', 2, 5, 26),
+  (52,'Desenvolvimento para dispositivos móveis', 76, 4, '#FF33A6', 'NAO',2, 5, null),
+  (53,'Desenvolvimento de aplicação (Sistema)', 76, 4, '#FF8C33', 'NAO', 2, 5, 22),
+  (54,'Legislação Aplicada a Informação', 36, 4, '#33FF8C', 'NAO', 2, 5, 27),
+  (55,'Desenvolvimento de Aplicação (Projeto)', 40, 4, '#2C1963', 'NAO', 2, 5, 21),
+  (56,'Certificações em ADS', 36, 4, '#FF2F00', 'NAO', 2, 5, 27),
+  (57,'InovADS (integradora)', 20, 4, '#234B1E', 'NAO', 2, 5, 28)
+--  (58,'Metodologia do Trabalho Científico', 40, 4, '#A633FF', 'NAO', 2, 5, 14)
 ON CONFLICT (id) DO NOTHING;
 
 -- PERIODO
@@ -629,7 +632,7 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO aluno
   (id, usuario_id, curso_id)
 VALUES
-  (1, 31, 1), -- Felipe Soares
+  (1, 31, 1), --
   (2, 32, 1), -- Ana Clara Lima
   (3, 33, 1), -- Rodrigo Araujo --MODA
   (4, 34, 1), -- Juliana Mendes
@@ -639,7 +642,7 @@ VALUES
   (7, 37, 2), -- Luana Martins
   (8, 38, 2), -- Mateus Silva -- ADS
   (9, 39, 2), -- Isabella Farias
-  (10, 40, 2) -- João Pedro Ribeiro
+  (10, 40, 2) -- Gustavo Albonico Goncalves
 ON CONFLICT (id) DO NOTHING;
 
 --ALUNO_FASE
@@ -658,7 +661,7 @@ VALUES
   (7,5),
   (8,1), --ADS
   (9,2),
-  (10,3)
+  (10,5)
 ON CONFLICT (aluno_id, fase_id) DO NOTHING;
 
 
