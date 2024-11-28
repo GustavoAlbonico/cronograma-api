@@ -261,7 +261,7 @@ VALUES
     (14,'katiane.araujo@gmail.com', '01234501010', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Katiane Araújo'), --14
     (15,'josilene.della@gmail.com', '01010167890', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Josilene Della'), --15
 
-    (16,'dayana.ricken@gmail.com', '23456789013', '$2a$10$ymh2UwJFfh10/FPTQkcRS.Vk3TB1mGVz4wMfCNe1WaZ1SJVuJPKIK', 'Dayana Ricken'), --16
+    (16,'dayana.ricken@gmail.com', '21726708047', '$2a$10$ymh2UwJFfh10/FPTQkcRS.Vk3TB1mGVz4wMfCNe1WaZ1SJVuJPKIK', 'Dayana Ricken'), --16
 
     (17,'fernando.gabriel@gmail.com', '34567890124', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Fernando Gabriel'), --17
     (18,'marcelo.mazon@gmail.com', '45678901235', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Marcelo Mazon'), --18
@@ -270,7 +270,7 @@ VALUES
     (21,'daniel.goulart@gmail.com', '30067890123', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Daniel Goulart'), --21
     (22,'rogerio.cortina@gmail.com', '45008901234', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Rogério Cortina'), --22
 
-    (23,'muriel.benhardt@gmail.com', '56009012345', '$2a$10$ymh2UwJFfh10/FPTQkcRS.Vk3TB1mGVz4wMfCNe1WaZ1SJVuJPKIK', 'Muriel Bernhardt'), --23 --COORDE PROF
+    (23,'muriel.benhardt@gmail.com', '70958576017', '$2a$10$ymh2UwJFfh10/FPTQkcRS.Vk3TB1mGVz4wMfCNe1WaZ1SJVuJPKIK', 'Muriel Bernhardt'), --23 --COORDE PROF
 
     (24,'roberto.medeiros@gmail.com', '67012012056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Roberto Fermino Medeiros'), --24
     (25,'jorge.henrique.silva@gmail.com', '67007799056', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'Jorge Henrique da Silva Naspolini'), --25
@@ -290,7 +290,7 @@ VALUES
     (38,'mateus.silva@gmail.com', '66612345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'MATEUS SILVA'), --38
     (39,'isabella.farias@gmail.com', '77712345678', '$2a$10$eEu4GznDM4NL/.y7siGO2eJMEi8CKbzPasF/J.IfK2MjvZbp1EMuu', 'ISABELA FARIAS'), --39
 
-    (40,'gustavoalbonico123@gmail.com', '88812345678', '$2a$10$ymh2UwJFfh10/FPTQkcRS.Vk3TB1mGVz4wMfCNe1WaZ1SJVuJPKIK', 'GUSTAVO ALBÔNICO GONÇALVES') --40
+    (40,'gustavoalbonico123@gmail.com', '68786055046', '$2a$10$ymh2UwJFfh10/FPTQkcRS.Vk3TB1mGVz4wMfCNe1WaZ1SJVuJPKIK', 'GUSTAVO ALBÔNICO GONÇALVES') --40
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO  usuario_nivel_acesso

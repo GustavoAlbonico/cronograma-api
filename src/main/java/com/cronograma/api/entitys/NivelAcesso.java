@@ -25,7 +25,7 @@ public class NivelAcesso {
     @Column(nullable = false)
     private Integer rankingAcesso;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "nivel_acesso_controller",
             joinColumns = @JoinColumn(name = "nivel_acesso_id"),

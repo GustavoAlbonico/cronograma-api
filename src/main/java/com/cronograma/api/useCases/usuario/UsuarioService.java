@@ -172,7 +172,8 @@ public class UsuarioService {
     }
 
     public Usuario buscarUsuarioAutenticado(){
-        return (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long usuarioId = ((Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        return usuarioRepository.findById(usuarioId).get();
     }
 
     private void validarCampos(UsuarioCadastroRequestDom usuario){
