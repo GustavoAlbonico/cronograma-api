@@ -56,8 +56,13 @@ public class CronogramaService {
 
         List<Disciplina> disciplinas = cronogramaDisciplinaRepository.buscarTodasDisciplinasPorPeriodoPorCursoIdPorFaseId(periodoId,cursoId,faseId);
 
-        List<CronogramaDisciplinaResponseDom> disciplinasReponse =
-                cronogramaDisciplinaMapper.listaDisciplinaParaListaCronogramaDisciplinaResponseDom(disciplinas);
+        List<CronogramaDisciplinaResponseDom> disciplinasResponse =
+                cronogramaDisciplinaMapper.listaDisciplinaParaListaCronogramaDisciplinaResponseDom(disciplinas)
+                        .stream()
+                        .sorted(Comparator.comparing(CronogramaDisciplinaResponseDom::getCargaHoraria).reversed()
+                                .thenComparing(CronogramaDisciplinaResponseDom::getProfessorNome)
+                                .thenComparing(CronogramaDisciplinaResponseDom::getNome)
+                        ).toList();
 
         List<DiaCronograma> diasCronogramaEncontrado = cronogramaDiaCronogramaRepository.buscarTodosPorPeriodoPorCursoIdPorFaseId(periodoId,cursoId,faseId);
         List<CronogramaDiaCronogramaResponseDom>  diasCronogramaResponse =
@@ -96,7 +101,7 @@ public class CronogramaService {
                         curso.getNome(),
                         fase.getNumero(),
                         periodo.getDataInicial().getYear(),
-                        disciplinasReponse,
+                        disciplinasResponse,
                         cronogramaMesesResponseDoms
                 );
 
