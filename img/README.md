@@ -1,0 +1,1 @@
+Ignorar essa pasta, é apenas para o armazenamentos das imagens de demostração relacionadas ao github
