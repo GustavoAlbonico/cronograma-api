@@ -43,5 +43,5 @@ Maria Eduarda [linkedin](https://www.linkedin.com/in/maria-eduarda-rebelo-961306
      - Clone o projeto.
      - Abra o projeto com a IDEA.
      - npm i para instalar as dependências.
-     - Verifique se em cronograma-app/src/api "const api = new Axios({ baseURL: "http://localhost:**8080**" });" está na mesma **porta** que seu back está rodando
+     - Verifique se em cronograma-app/src/api "const api = new Axios({ baseURL: "http://localhost:8080" });" está na mesma **porta** que seu back está rodando
      - npm start para iniciar o projeto.
