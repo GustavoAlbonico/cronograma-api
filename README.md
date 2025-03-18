@@ -24,13 +24,13 @@ Maria Eduarda [linkedin](https://www.linkedin.com/in/maria-eduarda-rebelo-961306
 - [Post com video de demonstração do sistema](https://www.linkedin.com/feed/update/urn:li:activity:7282042694523064320/).
 - [Post explicando as tecnologias](https://www.linkedin.com/feed/update/urn:li:activity:7284558012415942656/).
 - [Login](https://www.linkedin.com/feed/update/urn:li:activity:7282042694523064320/)
-    <a href="https://www.linkedin.com/feed/update/urn:li:activity:7282042694523064320/"><p><img src="./img/login.png" width="600"/></p></a>
+    <a href="https://www.linkedin.com/feed/update/urn:li:activity:7282042694523064320/"><p><img src="./assets/img/login.png" width="600"/></p></a>
 - [Disciplinas](https://www.linkedin.com/feed/update/urn:li:activity:7282042694523064320/)
-    <a href="https://www.linkedin.com/feed/update/urn:li:activity:7282042694523064320/"><p><img src="./img/disciplinas.png" width="600"/></p></a>
+    <a href="https://www.linkedin.com/feed/update/urn:li:activity:7282042694523064320/"><p><img src="./assets/img/disciplinas.png" width="600"/></p></a>
 - [Cronograma](https://www.linkedin.com/feed/update/urn:li:activity:7282042694523064320/)
-    <a href="https://www.linkedin.com/feed/update/urn:li:activity:7282042694523064320/"><p><img src="./img/cronograma.png" width="600"/></p></a>
+    <a href="https://www.linkedin.com/feed/update/urn:li:activity:7282042694523064320/"><p><img src="./assets/img/cronograma.png" width="600"/></p></a>
 - [Cronograma](https://www.linkedin.com/feed/update/urn:li:activity:7282042694523064320/)
-    <a href="https://www.linkedin.com/feed/update/urn:li:activity:7282042694523064320/"><p><img src="./img/cronograma-trocar-dia.png" width="600"/></p></a>
+    <a href="https://www.linkedin.com/feed/update/urn:li:activity:7282042694523064320/"><p><img src="./assets/img/cronograma-trocar-dia.png" width="600"/></p></a>
 
 **Tutorial para rodar a aplicação completa:**
    - Back [API](https://github.com/GustavoAlbonico/cronograma-api)
@@ -39,6 +39,7 @@ Maria Eduarda [linkedin](https://www.linkedin.com/in/maria-eduarda-rebelo-961306
      - Configure o arquivo .yml com as informações do seu banco
      - Crie o banco de dados com o nome informado no arquivo .yml
      - Iniciei o projeto (Vai ser inseridos alguns dados automaticamente quando iniciar o projeto).
+     - Arquivo com todas rotas para IMPORTAR via POSTMAN [Download](https://raw.githubusercontent.com/GustavoAlbonico/cronograma-api/assets/CRONOGRAMA.postman_collection.json).
    - Front [APP](https://github.com/juliatibes/cronograma-app).
      - Clone o projeto.
      - Abra o projeto com a IDEA.

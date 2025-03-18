@@ -1,0 +1,1326 @@
+{
+	"info": {
+		"_postman_id": "9c120620-43c7-45aa-a103-2a3899f4c3a0",
+		"name": "CRONOGRAMA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "32077539",
+		"_collection_link": "https://desesperados.postman.co/workspace/Desesperados-Workspace~687c9f53-a7e7-49f4-908e-eb78a28cd1cc/collection/32077539-9c120620-43c7-45aa-a103-2a3899f4c3a0?action=share&source=collection_link&creator=32077539"
+	},
+	"item": [
+		{
+			"name": "FEITO",
+			"item": [
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "Cadastro",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3NTYwOTY2fQ.ryTIaT7E37tdFbwx_ZTgj89lpxBqaHgRTkPeFglH53k"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\":\"Coordenador Master\",\r\n    \"senha\": \"123\",\r\n    \"cpf\":\"12345678912\",\r\n    \"niveisAcessoId\":[2]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/usuario/cadastro"
+							},
+							"response": []
+						},
+						{
+							"name": "Login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cpf\":\"99999999999\",\r\n    \"senha\":\"123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/usuario/login"
+							},
+							"response": []
+						},
+						{
+							"name": "Esqueci minha senha",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": "http://localhost:8080/usuario/esqueciminhasenha/99999999999"
+							},
+							"response": []
+						},
+						{
+							"name": "Redefinir senha",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3ODE2MzM1fQ.U3iIM4jm7AYk5o6YDVnJHfoh1zJWP-P8gwOqBUgFuPo"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"senha\":\"123@D456\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/usuario/redefinirsenha"
+							},
+							"response": []
+						},
+						{
+							"name": "Redefinir Senha Validar Token",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3ODE2MzM1fQ.U3iIM4jm7AYk5o6YDVnJHfoh1zJWP-P8gwOqBUgFuPo"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"url": "http://localhost:8080/usuario/redefinirsenha/validartoken"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Periodo",
+					"item": [
+						{
+							"name": "Criar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI4NDk3Mjg0fQ.602UqvTNZfKTKLfDRd8jLi-9ArzaXnMxAGlMWot1XSI"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\":\"2º Semestre\",\r\n    \"dataInicial\":\"2024-07-29\",\r\n    \"dataFinal\":\"2024-12-13\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/periodo/criar"
+							},
+							"response": []
+						},
+						{
+							"name": "Editar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI4NDk3Mjg0fQ.602UqvTNZfKTKLfDRd8jLi-9ArzaXnMxAGlMWot1XSI"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\":\"3º Semestre\",\r\n    \"dataInicial\":\"2024-07-29\",\r\n    \"dataFinal\":\"2024-12-13\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/periodo/editar/3"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI4NDk3Mjg0fQ.602UqvTNZfKTKLfDRd8jLi-9ArzaXnMxAGlMWot1XSI"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/periodo/carregar"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar Por Id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI4NDk3Mjg0fQ.602UqvTNZfKTKLfDRd8jLi-9ArzaXnMxAGlMWot1XSI"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/periodo/carregar/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar por usuario",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI4NTg5ODk3fQ.2pvP3bzti01CSQHsNsuZlSp3vCFJHTzdiBraxR5ORbs"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/periodo/carregar/usuario"
+							},
+							"response": []
+						},
+						{
+							"name": "Excluir",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI4NDk3Mjg0fQ.602UqvTNZfKTKLfDRd8jLi-9ArzaXnMxAGlMWot1XSI"
+									}
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": "http://localhost:8080/periodo/excluir/1"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Fase",
+					"item": [
+						{
+							"name": "Criar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI3NTM3OTg3fQ.zcgS2jOPce50Zy57bV3QEgffjNBA6wTTAcaEtZIJ0RI"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"numero\": 7\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/fase/criar"
+							},
+							"response": []
+						},
+						{
+							"name": "Editar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI3NTM3OTg3fQ.zcgS2jOPce50Zy57bV3QEgffjNBA6wTTAcaEtZIJ0RI"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"numero\":4\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/fase/editar/20"
+							},
+							"response": []
+						},
+						{
+							"name": "Inativar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI3NTM3OTg3fQ.zcgS2jOPce50Zy57bV3QEgffjNBA6wTTAcaEtZIJ0RI"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"url": "http://localhost:8080/fase/inativar/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Ativar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI3NTM3OTg3fQ.zcgS2jOPce50Zy57bV3QEgffjNBA6wTTAcaEtZIJ0RI"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"url": "http://localhost:8080/fase/ativar/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3NTc4MDYzfQ.5bTfURaBJelISqPOERPOSwJKp50Gy5ty-hKAU_9FTlo"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/fase/carregar"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar ativo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3NTc4MDYzfQ.5bTfURaBJelISqPOERPOSwJKp50Gy5ty-hKAU_9FTlo"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/fase/carregar/ativo"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar ativo por curso",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3NTc4MDYzfQ.5bTfURaBJelISqPOERPOSwJKp50Gy5ty-hKAU_9FTlo"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/fase/carregar/ativo/curso/2"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar por id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3NTc4MDYzfQ.5bTfURaBJelISqPOERPOSwJKp50Gy5ty-hKAU_9FTlo"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/fase/carregar/1"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Curso",
+					"item": [
+						{
+							"name": "Criar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3OTY5NDEyfQ.-9ROg-r-rz2JYKnHs-pv64O9UsdvkLDBOMshPVlXngg"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\":\"Analise e desenvolvimento de sistemas 2\",\r\n    \"sigla\":\"ADS\",\r\n    \"coordenadorId\": 3,\r\n    \"faseIds\": [1]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/curso/criar"
+							},
+							"response": []
+						},
+						{
+							"name": "Editar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3OTkyODE5fQ.Ty7o_bDdDfKvPeizhQ9c7lLNm65OfiZXxkWu_FLKYcw"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\":\"MODA\",\r\n    \"sigla\":\"MODA\",\r\n    \"coordenadorId\": 2,\r\n    \"faseIds\": [1,2,4,6]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/curso/editar/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Inativar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3OTg1NTgxfQ.NNOMMQwloaHYmZMsjBugHytly2vS9gGwqDus6Gc4I1A"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"url": "http://localhost:8080/curso/inativar/2"
+							},
+							"response": []
+						},
+						{
+							"name": "Ativar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3OTg1NTgxfQ.NNOMMQwloaHYmZMsjBugHytly2vS9gGwqDus6Gc4I1A"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"url": "http://localhost:8080/curso/ativar/2"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3NTc4MDYzfQ.5bTfURaBJelISqPOERPOSwJKp50Gy5ty-hKAU_9FTlo"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/fase/carregar"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar Ativo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3NTc4MDYzfQ.5bTfURaBJelISqPOERPOSwJKp50Gy5ty-hKAU_9FTlo"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/curso/carregar/ativo"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar Por Id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3OTkyODE5fQ.Ty7o_bDdDfKvPeizhQ9c7lLNm65OfiZXxkWu_FLKYcw"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/curso/carregar/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar por periodo(cronograma visualizar)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI4MDczMzk2fQ.bzOKi_PJ1KBnVVUKbeDFEDX4dKeC3tDB9oh-XqwO3gM"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/curso/carregar/periodo/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar por usuario(aluno/disciplina index)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI4MTcwNzU5fQ.sCaQZSdDkZYJvEeR8581QNSDhSdTpPP9P5ZRDJQzrdk"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/curso/carregar/usuario"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Coordenador",
+					"item": [
+						{
+							"name": "Criar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3ODExNjY0fQ.D6cKMDl4V_4G2uQU2NaHAPeTR4fs1FpFo8C2SHuoEM4"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cpf\":\"15246245621\",\r\n    \"nome\": \"Jose da silva\",\r\n    \"telefone\":\"(48) 98588-1540\",\r\n    \"email\": \"teste@hotmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/coordenador/criar"
+							},
+							"response": []
+						},
+						{
+							"name": "Associar Professor",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI4ODc1NzA4fQ.QkfocfXqCn6iiSOgjU-1rsPo9dtEuqlYBlT5g12qTgA"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/coordenador/associar/professor/8"
+							},
+							"response": []
+						},
+						{
+							"name": "Editar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3ODExNjY0fQ.D6cKMDl4V_4G2uQU2NaHAPeTR4fs1FpFo8C2SHuoEM4"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cpf\":\"15246245621\",\r\n    \"nome\": \"Jose da silva\",\r\n    \"telefone\":\"(48) 98588-1540\",\r\n    \"email\": \"jose@hotmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/coordenador/editar/3"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3NjU5NjgxfQ.X3yY_Ttk7LPgpeKlGer6kg-oqZBzzIBGwv9X0RFABHI"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/coordenador/carregar"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar por id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3NjUxMjc5fQ.c47-nr_jSu_-7xh7hYvStOn9IiYYF5TQqhvscnp-EUU"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/coordenador/carregar/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Excluir",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI4MTcwOTczfQ.bxeB9RtARD7MnN687LrJ5rV_wVz5XoHZcDWskq4VoiM"
+									}
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": "http://localhost:8080/coordenador/excluir/2"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Professor",
+					"item": [
+						{
+							"name": "Criar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3ODk5MTcxfQ.PgkjECLn6ZBAJ0cxx2FwRey7Eq0RpUKJNKOLDXIdqwI"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cpf\":\"15246245636\",\r\n    \"nome\": \"Jose da silva\",\r\n    \"telefone\":\"(48) 98588-1540\",\r\n    \"email\": \"teste@hotmail.com\",\r\n    \"diaSemanaDisponivelIds\": [1,2,3]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/professor/criar"
+							},
+							"response": []
+						},
+						{
+							"name": "Associar Coordenador",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI4ODc1NzA4fQ.QkfocfXqCn6iiSOgjU-1rsPo9dtEuqlYBlT5g12qTgA"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"url": "http://localhost:8080/professor/associar/coordenador/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Editar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3OTAzODEwfQ.2RKtO4iM2QNWybb2ri0aDpVYQW1JJIhGZHNs7PxcHOk"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cpf\":\"15246245621\",\r\n    \"nome\": \"Jose da silva\",\r\n    \"telefone\":\"(48) 98588-1540\",\r\n    \"email\": \"otario@hotmail.com\",\r\n    \"diaSemanaDisponivelIds\": [1,4,6]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/professor/editar/30"
+							},
+							"response": []
+						},
+						{
+							"name": "Ativar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI3OTA0MDc2fQ.hNtlolgeyc4xrNN3Jifytjhczr0_tSFbhmI7W9r-JoQ"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"url": "http://localhost:8080/professor/ativar/29"
+							},
+							"response": []
+						},
+						{
+							"name": "Inativar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI3OTA0MDc2fQ.hNtlolgeyc4xrNN3Jifytjhczr0_tSFbhmI7W9r-JoQ"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"url": "http://localhost:8080/professor/inativar/29"
+							},
+							"response": []
+						},
+						{
+							"name": "Formulario",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": "http://localhost:8080/professor/formulario"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar (Com paginacao)",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3NzMzMDg2fQ.F6xsWmOs5r5afEB2RI0YnBNvWhOEay771Q6EFAzd-ps"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"exibir\":10,\r\n    \"paginaAtual\":1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/professor/carregar"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar por id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3NzIwMjI2fQ.Dap-YlCqL5zteaGppwEO4rHpzIrrwlXNXrdsk9QvYxY"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/professor/carregar/30"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar ativo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI3NzIwMDMwfQ.3Qdlfun1_Nu7tklrHNBuS-dlAqF9WCn3mU3_1nygO1o"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/professor/carregar/ativo"
+							},
+							"response": []
+						},
+						{
+							"name": "Possui dia semana disponivel",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/professor/possui/diasemanadisponivel"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Aluno",
+					"item": [
+						{
+							"name": "Criar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI4MjMwNzg1fQ._7fMW9p_A0im7kGzkMNQ2gXqgafmecRaESUfYDOszx8"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cpf\":\"15246245621\",\r\n    \"nome\": \"Jose da silva\",\r\n    \"email\": \"teste@hotmail.com\",\r\n    \"cursoId\": 1,\r\n    \"faseIds\": [1]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/aluno/criar"
+							},
+							"response": []
+						},
+						{
+							"name": "Importar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI4ODc1NzA4fQ.QkfocfXqCn6iiSOgjU-1rsPo9dtEuqlYBlT5g12qTgA"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "faseId",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "cursoId",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "arquivo",
+											"type": "file",
+											"src": "postman-cloud:///1ef89ccd-cc75-4780-a07c-3af970a743f3"
+										}
+									]
+								},
+								"url": "http://localhost:8080/aluno/importar"
+							},
+							"response": []
+						},
+						{
+							"name": "Editar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI4MTYzMDI5fQ.DMceeRazlr9sYQaem237dmju4fpJrmpCIckPeBwxJP8"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cpf\":\"40006245621\",\r\n    \"nome\": \"Carlos da silva\",\r\n    \"email\": \"carlos@hotmail.com\",\r\n    \"cursoId\": 2,\r\n    \"faseIds\": [3]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/aluno/editar/11"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar (Paginacao)",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI4MTYzMDI5fQ.DMceeRazlr9sYQaem237dmju4fpJrmpCIckPeBwxJP8"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"exibir\":5,\r\n    \"paginaAtual\":1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/aluno/carregar/curso/1/fase/2"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar por id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI4MTYzMDI5fQ.DMceeRazlr9sYQaem237dmju4fpJrmpCIckPeBwxJP8"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/aluno/carregar/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Excluir",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": "http://localhost:8080/aluno/excluir/1"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Disciplina",
+					"item": [
+						{
+							"name": "Criar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI4MjU5OTMwfQ.5eCxs0UA4sAvdGycxOhhgCTWO_-1MbzjCmvCpfRIcUY"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\":\"Extensao\",\r\n    \"cargaHoraria\": 80,\r\n    \"cargaHorariaDiaria\": 4,\r\n    \"corHexadecimal\":\"#1525252\",\r\n    \"extensaoBooleanEnum\":\"SIM\",\r\n    \"cursoId\":1,\r\n    \"faseId\":2,\r\n    \"professorId\":4\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/disciplina/criar"
+							},
+							"response": []
+						},
+						{
+							"name": "Editar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI4MjU5OTMwfQ.5eCxs0UA4sAvdGycxOhhgCTWO_-1MbzjCmvCpfRIcUY"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\":\"Extensao 2\",\r\n    \"cargaHoraria\": 82,\r\n    \"cargaHorariaDiaria\": 2,\r\n    \"corHexadecimal\":\"#7777252\",\r\n    \"extensaoBooleanEnum\":\"NAO\",\r\n    \"cursoId\":2,\r\n    \"faseId\":1,\r\n    \"professorId\":7\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/disciplina/editar/2"
+							},
+							"response": []
+						},
+						{
+							"name": "Ativar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI4MjYzNDc0fQ.dRVWOoeH6Fu5vlj8_dF0BbBmew-IsN39-fPRuayxm_c"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"url": "http://localhost:8080/disciplina/ativar/2"
+							},
+							"response": []
+						},
+						{
+							"name": "Inativar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI4MjYzNDc0fQ.dRVWOoeH6Fu5vlj8_dF0BbBmew-IsN39-fPRuayxm_c"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"url": "http://localhost:8080/disciplina/inativar/2"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar (Com paginacao)",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI4MjYzNDc0fQ.dRVWOoeH6Fu5vlj8_dF0BbBmew-IsN39-fPRuayxm_c"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"exibir\":5,\r\n    \"paginaAtual\":2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/disciplina/carregar/curso/2/fase/2"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar por id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI4MjYzNDc0fQ.dRVWOoeH6Fu5vlj8_dF0BbBmew-IsN39-fPRuayxm_c"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/disciplina/carregar/40"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Data Bloqueada",
+					"item": [
+						{
+							"name": "Criar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI4MjUxMDk1fQ.iRRfumkzylhpUjGDS2jjFrBFNNEMyF9gAC8oIOeI0A8"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"motivo\":\"feriado nacional\",\r\n    \"data\": \"2024-02-10\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/databloqueada/criar"
+							},
+							"response": []
+						},
+						{
+							"name": "Editar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI4MjUxMDk1fQ.iRRfumkzylhpUjGDS2jjFrBFNNEMyF9gAC8oIOeI0A8"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"motivo\":\"feriado aaa\",\r\n    \"data\": \"2024-02-10\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/databloqueada/editar/5"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar por id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI4MjUxMDk1fQ.iRRfumkzylhpUjGDS2jjFrBFNNEMyF9gAC8oIOeI0A8"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/databloqueada/carregar/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI4MjUxMDk1fQ.iRRfumkzylhpUjGDS2jjFrBFNNEMyF9gAC8oIOeI0A8"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/databloqueada/carregar"
+							},
+							"response": []
+						},
+						{
+							"name": "Excluir",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI4MTcwOTczfQ.bxeB9RtARD7MnN687LrJ5rV_wVz5XoHZcDWskq4VoiM"
+									}
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": "http://localhost:8080/databloqueada/excluir/2"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Cronograma",
+					"item": [
+						{
+							"name": "Criar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI4NTA1NzI2fQ.sT8Xc1rxHtut1OZ0t_g4ditycnwdpBFwzC5uFxoiB_c"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cursoId\":2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/evento/criar/cronograma"
+							},
+							"response": []
+						},
+						{
+							"name": "Editar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI3NTM3NzA3fQ.NZrIyCjgXoH311s1dxkxPYZioZhKV9RuaS5vkddwNQQ"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"url": "http://localhost:8080/diacronograma/editar/180/170"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar Evento",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzMwMDcxOTk0fQ.AxcsbGrfoDIIpRzN28gy83UBlYcCD8oBAmz5McLsa6c"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/evento/carregar"
+							},
+							"response": []
+						},
+						{
+							"name": "Visualizar Evento",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzMwMDcxOTk0fQ.AxcsbGrfoDIIpRzN28gy83UBlYcCD8oBAmz5McLsa6c"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"url": "http://localhost:8080/evento/visualizar/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Carregar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6Ijk5OTk5OTk5OTk5IiwiZXhwIjoxNzI4NDk3Mjg0fQ.602UqvTNZfKTKLfDRd8jLi-9ArzaXnMxAGlMWot1XSI"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/cronograma/carregar/periodo/1/curso/2/fase/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Excluir",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": "http://localhost:8080/cronograma/excluir/3"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Dia Semana Disponivel",
+					"item": [
+						{
+							"name": "Carregar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcm9ub2dyYW1hLWFwaSIsInN1YiI6IjY3MDEyMDE0NDU2IiwiZXhwIjoxNzI4MjM3MDI2fQ.TxdbgBqvhW_7fTZcKXVbSU5lCtHeepZy6rjjjcf8hDQ"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/diasemanadisponivel/carregar"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "A FAZER",
+			"item": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
