@@ -39,7 +39,7 @@ Maria Eduarda [linkedin](https://www.linkedin.com/in/maria-eduarda-rebelo-961306
      - Configure o arquivo .yml com as informações do seu banco
      - Crie o banco de dados com o nome informado no arquivo .yml
      - Iniciei o projeto (Vai ser inseridos alguns dados automaticamente quando iniciar o projeto).
-     - Arquivo com todas rotas para IMPORTAR via POSTMAN [Download](https://raw.githubusercontent.com/GustavoAlbonico/cronograma-api/assets/CRONOGRAMA.postman_collection.json).
+     - [ARQUIVO](./assets/CRONOGRAMA.postman_collection.json) com todas rotas para IMPORTAR no POSTMAN.
    - Front [APP](https://github.com/juliatibes/cronograma-app).
      - Clone o projeto.
      - Abra o projeto com a IDEA.
